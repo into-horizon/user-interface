@@ -113,7 +113,8 @@ const Product = ({ productHandler, getProductReviews,addCartItemHandler,updateCa
       <CCol xs={8} className='shadow-box'>
         <CRow xs={{ cols: 1, gutterY: 5 }}>
           <hr />
-          {Children.toArray(reviews.map(review =>
+{          console.log("🚀 ~ file: product.jsx:117 ~ Product ~ reviews:", reviews)
+}          {Children.toArray(reviews?.data?.map(review =>
             <CCol>
 
               <CAvatar src={review.profile_picture} className="mg-1"></CAvatar>
