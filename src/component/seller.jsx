@@ -10,7 +10,6 @@ import Store from '../services/Store'
 import { CSpinner, CButton } from "@coreui/react";
 import { getStoreProductsHandler } from "../store/products";
 import { Col, Row } from "react-bootstrap"
-import { CLoadingButton } from '@coreui/react-pro'
 import { cilPlus, cilShieldAlt, cilXCircle, cilUserFollow, cilUserUnfollow } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { followStoreHandler, unFollowStoreHandler } from "../store/following";

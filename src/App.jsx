@@ -1,45 +1,16 @@
-import logo from "./logo.svg";
-import Form from "./component/Form";
-import React, { Suspense, useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-  useParams,
-  useHistory,
-  generatePath,
-} from "react-router-dom";
+import React, { Suspense, useEffect, useState, lazy } from "react";
+import { Routes, Route, useLocation, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import SignupForm from "./component/SignupForm";
-import SignInForm from "./component/SignInForm";
-import Verification from "./component/verification";
 import Home from "./component/Home";
-import Header from "./component/header";
-import Main from "./pages/main";
-import Page404 from "./pages/Page404";
-import PageInvalidToken from "./pages/pageInvalidtoken";
-import Footer from "./component/footer";
-import Cart from "./component/cart";
-import Wishlist from "./component/wishlist";
-import Product from "./component/product";
-import Settings from "./component/Settings";
-import Products from "./component/products/products";
-import Account from "./component/account/account";
-import Address from "./component/address/address";
-import Email from "./component/email/changeEmail";
-import Notification from "./component/notification/notification";
 import { useTranslation } from "react-i18next";
-import { Rings } from "react-loader-spinner";
 import "@coreui/coreui/dist/css/coreui.min.css";
 import Loader from "./component/loader";
 import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
-import Seller from "./component/seller";
+// import Seller from "./component/seller";
 import { parentCategoryHandler } from "./store/parent";
 import { connect, useDispatch } from "react-redux";
-import UnAuthRoutes from "./routes/UnAuthRoutes";
 import AuthRoutes from "./routes/AuthRoutes";
 import cookie from "react-cookies";
 import { myProfileHandler } from "./store/auth";
@@ -49,43 +20,70 @@ import { getItemsHandler, resetWishlist } from "./store/wishlist";
 import { myAddressHandler } from "./store/address";
 import { getFollowingStores } from "./store/following";
 import ApiService from "./services/ApiService";
+import Toast from "./component/Toast";
+import GlobalToast from "./component/Toast";
+import { getTopStores } from "./store/landingPage";
+import { Button, Nav } from "react-bootstrap";
+import CIcon from "@coreui/icons-react";
+import {
+  cilArrowCircleRight,
+  cilCart,
+  cilHeart,
+  cilSearch,
+  cilUser,
+} from "@coreui/icons";
+import { CTooltip } from "@coreui/react";
 
-function App({
+const Main = lazy(() => import("./pages/main"));
+const Page404 = lazy(() => import("./pages/Page404"));
+const Verification = lazy(() => import("./component/verification"));
+const Cart = lazy(() => import("./component/cart"));
+const Wishlist = lazy(() => import("./component/wishlist"));
+const Product = lazy(() => import("./component/product"));
+const Products = lazy(() => import("./component/products/products"));
+const Seller = lazy(() => import("./component/seller"));
+const Footer = lazy(() => import("./component/footer"));
+const Header = lazy(() => import("./component/header"));
+
+const App = ({
   parentCategoryHandler,
   myProfileHandler,
   getCartItemsHandler,
   getItemsHandler,
-  myAddressHandler,
   getFollowingStores,
-}) {
+  getTopStores,
+}) => {
   const { login } = useSelector((state) => state.sign);
-  const history = useHistory();
   const { t, i18n } = useTranslation();
+  const location = useLocation();
   const [loader, setLoading] = useState(true);
   const dispatch = useDispatch();
   let token = cookie.load("access_token");
   let path = cookie.load("redirectTo", { path: "/" });
   useEffect(() => {
-    Promise.all([parentCategoryHandler(), token && myProfileHandler()])
-      .then(([q, p]) => {})
-      .finally(() => setLoading(false));
+    Promise.all([parentCategoryHandler()]).finally(() => setLoading(false));
     const lang = localStorage.getItem("i18nextLng");
     if (lang === "en" || lang === "ar") {
       i18n.changeLanguage(lang);
     } else {
       i18n.changeLanguage("en");
     }
+    getTopStores();
   }, []);
+  const setDefaultHeaders = async () => await ApiService.setDefaultHeaders();
+
   useEffect(() => {
-    (async () => await ApiService.setDefaultHeaders())().then(() => {
+    setDefaultHeaders().then(() => {
       if (login) {
         Promise.all([
           getCartItemsHandler(),
           getItemsHandler(),
-          myAddressHandler(),
+          dispatch(myAddressHandler({ limit: 5, offset: 0 })),
           getFollowingStores(),
           myProfileHandler(),
         ]);
+      } else if (token && !login) {
+        myProfileHandler();
       } else {
         dispatch(resetCartItems(cookie.load("cart") ?? []));
         dispatch(resetWishlist(cookie.load("wishlist") ?? []));
@@ -101,107 +99,115 @@ function App({
       document.documentElement.setAttribute("dir", "rtl");
     }
   }, [i18n.language]);
+  useEffect(() => {
+    setDefaultHeaders();
+  }, [location.pathname]);
   return (
-    <div className="body">
+    <>
+      <GlobalToast />
       {loader ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: "10% 0",
-          }}
-        >
-          <Rings height="30rem" width="50rem" color="blue" />
-        </div>
+        <Loader />
       ) : (
-        <div>
-          <Header />
-          <Switch>
-            <Route exact path="/">
-              <Main />
-            </Route>
-            <Route exact path="/pageInvalidToken">
-              <PageInvalidToken />
-            </Route>
-            {/* <AuthRoutes />
-            <UnAuthRoutes /> */}
-            {/* <Route exact path='/signup' >
-            <SignupForm />
-            </Route>
-
-            <Route exact path='/signIn'>
-            <SignInForm />
-            
-          </Route> */}
-            {/* <Route exact path='/settings'>
-              <Settings />
-              
-            </Route> */}
-            {/* <Route path='/settings/account'>
-            <Settings />
-            
-            
-            </Route>
-            <Route exact path='/settings/email'>
-            <Settings />
-            
-            </Route>
-            <Route exact path='/settings/password'>
-            <Settings />
-            
-            </Route>
-            <Route exact path='/settings/notification'>
-            <Settings />
-            
-            </Route>
-            <Route exact path='/settings/address'>
-            
-            <Settings />
-            
-          </Route> */}
-            <Route exact path="/verification">
-              <Verification />
-            </Route>
-
-            <Route exact path="/cart">
-              <Cart />
-            </Route>
-            <Route exact path="/home">
-              <Home />
-            </Route>
-            <Route exact path="/wishlist">
-              <Wishlist />
-            </Route>
-            <Route exact path={`/products`}>
-              <Products />
-            </Route>
-            <Route exact path="/product/:id">
-              <Product />
-            </Route>
-            <Route exact path="/store/:id" component={Seller} />
-            <Route path="/" render={(props) => <AuthRoutes {...props} />} />
-            <Route path="*">
-              <Page404 />
-            </Route>
-          </Switch>
-
-          <Route path="/loader">
-            <Loader />
-          </Route>
-          <Footer />
-        </div>
+        <>
+          <Suspense fallback={<Loader />}>
+            <Header />
+            <Suspense fallback={<Loader />}>
+              <Routes>
+                <Route path="/" element={<Main />} />
+                <Route path="/verification" element={<Verification />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/product/:id" element={<Product />} />
+                <Route path="/store/:id" element={<Seller />} />
+                <Route path="/*" element={<AuthRoutes />} />
+                <Route path="*" element={<Page404 />} />
+              </Routes>
+            </Suspense>
+            <div
+              xs={12}
+              style={{ zIndex: 100 }}
+              className="lg-hide w-100 bg-light position-fixed bottom-0"
+            >
+              <Nav variant="pills">
+                <CTooltip content="cart">
+                  <Nav.Item className="mx-auto">
+                    <Link className="nav-link btn btn-secondary" to={"/cart"}>
+                      <CIcon icon={cilCart} size="lg"/>
+                    </Link>
+                  </Nav.Item>
+                </CTooltip>
+                <CTooltip content="wishlist">
+                  <Nav.Item className="mx-auto">
+                    <Link
+                      className="nav-link btn btn-secondary"
+                      to={"/wishlist"}
+                    >
+                      <CIcon icon={cilHeart} size="lg"/>
+                    </Link>
+                  </Nav.Item>
+                </CTooltip>
+                {login ? (
+                  <CTooltip content="settings">
+                    <Nav.Item className="mx-auto">
+                      <Link
+                        className="nav-link btn btn-secondary"
+                        to={"/settings"}
+                      >
+                        <CIcon icon={cilUser} size="lg"/>
+                      </Link>
+                    </Nav.Item>
+                  </CTooltip>
+                ) : (
+                  <CTooltip content="login">
+                    <Nav.Item className="mx-auto">
+                      <Link
+                        className="nav-link btn btn-secondary"
+                        to={"/signin"}
+                      >
+                        <CIcon icon={cilArrowCircleRight} size="lg"/>
+                      </Link>
+                    </Nav.Item>
+                  </CTooltip>
+                )}
+                <CTooltip content="search for a product">
+                  <Nav.Item className="mx-auto">
+                    <Link
+                      className="nav-link btn btn-secondary"
+                      to={"/products"}
+                    >
+                      <CIcon icon={cilSearch} size="lg"/>
+                    </Link>
+                  </Nav.Item>
+                </CTooltip>
+                <Nav.Item className="mx-auto">
+                  <Nav.Link
+                    as={Button}
+                    onClick={() =>
+                      i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
+                    }
+                    size="lg"
+                  >
+                    {i18n.language === "ar" ? "English" : "عربي"}
+                  </Nav.Link>
+                </Nav.Item>
+              </Nav>
+            </div>
+            <Footer />
+          </Suspense>
+        </>
       )}
-    </div>
+    </>
   );
-}
+};
 const mapDispatchToProps = {
   parentCategoryHandler,
   myProfileHandler,
   getCartItemsHandler,
   getItemsHandler,
-  myAddressHandler,
   getFollowingStores,
+  getTopStores,
 };
 export default connect(null, mapDispatchToProps)(App);
 // export default App;

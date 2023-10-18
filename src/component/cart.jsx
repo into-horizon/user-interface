@@ -1,6 +1,6 @@
 import React, { Children } from "react";
 import { connect } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useNavigate } from "react-router-dom";
 import {
   addItem,
   decrementQuantity,
@@ -18,7 +18,7 @@ const Cart = ({
   deleteCartItemHandler,
   login,
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const qtyChangeHandler = (item) => {
     if (item.quantity === 1) {
@@ -36,7 +36,7 @@ const Cart = ({
     //   <Redirect to='/'/>
     // )
     !login && cookie.save("redirectTo", "/checkout", { path: "/" });
-    history.push("/checkout");
+    navigate("/checkout");
   };
   return (
     <div className="cart">

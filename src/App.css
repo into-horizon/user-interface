@@ -2,9 +2,10 @@ html {
   overflow-y: scroll
 }
 
-.mg-1{
-  margin:  1rem 0;
+.mg-1 {
+  margin: 1rem 0;
 }
+
 body {
   min-height: 100vh;
   margin: auto;
@@ -16,7 +17,8 @@ body {
   min-height: 100vh;
 }
 
-a, .pointer {
+a,
+.pointer {
   cursor: pointer;
 }
 
@@ -514,9 +516,9 @@ a, .pointer {
   color: #fff;
 }
 
-.nav-link {
+/* .nav-link {
   margin: 0 10px;
-}
+} */
 
 
 
@@ -760,7 +762,7 @@ table tr {
   /* background-color: rgb(244, 244, 244); */
   border-top: 1px solid white;
   box-shadow: 0 5px 10px #888888;
-  border-radius: 1rem ;
+  border-radius: 1rem;
 }
 
 /* th{
@@ -880,7 +882,8 @@ table tr {
   padding: 0 .3rem;
   border-radius: 5px;
 }
-.pointer{
+
+.pointer {
   cursor: pointer;
 }
 
@@ -905,12 +908,12 @@ table tr {
   padding: 2.5%;
 }
 
-.productAction {
-  /* display: flex;
+/* .productAction {
+  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; */
-}
+  flex-direction: column;
+} */
 
 .WLB {
   padding: .6rem;
@@ -923,8 +926,8 @@ table tr {
 
 .icCart button:nth-child(1) {
   padding: .5rem;
-  border-radius: 1rem 0 0 1rem ;
-border: 0;
+  border-radius: 1rem 0 0 1rem;
+  border: 0;
   border-right: 0;
   background-color: skyblue
 }
@@ -936,9 +939,11 @@ border: 0;
   border-left: 0;
   background-color: skyblue
 }
-.icCart button:hover{
- background-color:rgba(135, 207, 235, 0.842)
+
+.icCart button:hover {
+  background-color: rgba(135, 207, 235, 0.842)
 }
+
 .icCart {
   display: flex;
   flex-direction: row;
@@ -1036,9 +1041,9 @@ border: 0;
   background-color: #fff !important;
 }
 
-.nav-item {
+/* .nav-item {
   margin: auto;
-}
+} */
 
 fieldset {
 
@@ -1077,22 +1082,24 @@ fieldset {
 
 .addressCard {
   border: 1px solid rgb(206, 202, 202);
-  background-color: rgba(233, 207, 207, 0.517) ;
-  border-radius: 5px 
+  background-color: rgba(233, 207, 207, 0.517);
+  border-radius: 5px
 }
 
-.orderSum{
-  border: 1px solid rgb(206, 202, 202) ;
+.orderSum {
+  border: 1px solid rgb(206, 202, 202);
   border-radius: 5px;
   background-color: skyblue
 }
-.followerSpan{
+
+.followerSpan {
   border: 1px solid rgb(219, 209, 209);
   border-radius: 5px;
   padding: .5rem;
   background-color: #fff
 }
-.card-title{
+
+.card-title {
   text-align: center
 }
 
@@ -1100,18 +1107,18 @@ fieldset {
   text-align: center
 }
 
-.card-btns{
+.card-btns {
   /* box-shadow: 0 5px 10px #888888;
   border-radius: 5px; */
   padding: 10% 1%;
 }
 
-.shadow-box{
+.shadow-box {
   box-shadow: 0 5px 10px #888888;
   border-radius: 5px;
 }
 
-.pd-1rem{
+.pd-1rem {
   padding: 1rem;
 }
 
@@ -1130,9 +1137,396 @@ fieldset {
   z-index: 999;
   display: none;
 }
+
 .notification-list.show {
   display: block;
 }
+
 .notification-list.hide {
   display: none;
+}
+
+
+.sidebar {
+  --cui-sidebar-bg: #fff;
+  /* --cui-sidebar-color: black; */
+  --cui-sidebar-nav-link-color: blue;
+  --ci-primary-color: blue;
+  --cui-sidebar-nav-link-hover-color: skyblue;
+
+
+}
+
+.sidebar-backdrop,
+.modal-backdrop {
+  --cui-backdrop-bg: transparent;
+}
+
+.inner2 {
+
+  background: #fff;
+  max-width: 850px;
+  display: flex;
+  padding: 2.5%;
+  margin: auto;
+}
+
+.center-btn {
+  margin: auto !important;
+  display: block !important;
+}
+
+.image-holder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding-right: 2.5%;
+
+}
+
+.form {
+  width: 50%;
+}
+
+form.form {
+  margin: auto;
+}
+
+.mb-3 input {
+  border: 1px solid #333;
+  /* border: none; */
+  border-bottom: 1px solid #333;
+  display: block;
+  /* width:100%;
+  height:30px; */
+  padding-right: 0;
+  margin-bottom: 25px;
+
+  /* border-radius: 40px; */
+}
+
+a.btn.btn-sign {
+  color: blueviolet;
+  text-align: center;
+
+}
+
+@media (max-width: 767px) {
+  .inner2 {
+    display: block;
+  }
+
+  .inner2 .image-holder {
+    width: 100%
+  }
+
+  .inner2 form {
+    width: 100%;
+    padding: 40px 0 30px
+  }
+}
+
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  background: url(./assets/sigin.jpg);
+  background-size: cover;
+  font-family: arial;
+  color: #333;
+  font-size: 13px;
+  margin: 0;
+}
+
+input,
+select,
+button {
+  font-family: arial;
+  color: #333;
+  font-size: 14px;
+}
+
+h3,
+h4 {
+  margin: 0;
+}
+
+img {
+  max-width: 100%
+}
+
+:focus {
+  outline: none;
+}
+
+.wrapper {
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0 100px;
+
+}
+
+.inner {
+  padding: 20px;
+  background: #fff;
+  max-width: 850px;
+  margin: auto;
+  display: flex;
+}
+
+
+
+.image {
+  height: 100%;
+}
+
+.inner form {
+  width: 50%;
+  padding-top: 36px;
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.inner h3 {
+  text-transform: uppercase;
+  font-size: 25px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  display: flex;
+}
+
+.form-group input {
+  width: 50%;
+}
+
+.form-group input:first-child {
+  margin-right: 25px;
+}
+
+.form-wrapper {
+  position: relative;
+}
+
+input.form-control-input {
+  border: 1px solid #333;
+  /* border: none; */
+  border-bottom: 1px solid #333;
+  border-radius: none;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding-right: 0;
+  margin-bottom: 25px;
+}
+
+input.PhoneInputInput {
+  border: 1px solid #333;
+  /* border: none; */
+  border-bottom: 1px solid #333;
+  border-radius: none;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding-right: 0;
+  margin-bottom: 25px;
+}
+
+.PhoneInputCountry {
+  margin-bottom: 25px;
+}
+
+select.PhoneInputCountrySelect {
+  border: 1px solid #333;
+  /* border: none; */
+  border-bottom: 1px solid #333;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding-right: 0;
+  margin-bottom: 100px;
+  border-radius: none;
+}
+
+select.form-control-input {
+  border: 1px solid #333;
+  /* border: none; */
+  border-bottom: 1px solid #333;
+  border-radius: none;
+  display: block;
+  width: 100%;
+  height: 30px;
+  padding-right: 0;
+  margin-bottom: 25px;
+  /* padding: 0.275rem 0.75rem; */
+  color: gray;
+  cursor: pointer;
+  /* -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; */
+  /* background: url(https://stackoverflow.com/favicon.ico) 95% / 10% no-repeat ; */
+}
+
+.ahmad {
+  border: none;
+  width: 164px;
+  height: 51px;
+  margin: auto;
+  margin-top: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+  background: #333;
+  font-size: 15px;
+  color: #fff;
+}
+
+.image-holder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.image-hplder {
+  width: 50%;
+}
+
+.SMI {
+  /* display: block; */
+  text-align: center;
+}
+
+
+@media (max-width: 767px) {
+  .inner {
+    display: block;
+  }
+
+  .inner .image-holder {
+    width: 100%
+  }
+
+  .inner form {
+    width: 100%;
+    padding: 40px 0 30px
+  }
+}
+
+.dropdown {
+  height: min-content;
+}
+
+
+.text-align-center {
+  text-align: center !important;
+}
+
+.text-align-left {
+  text-align: left !important;
+}
+
+.text-align-right {
+  text-align: right !important;
+}
+
+.main>div:nth-child(odd) {
+  background-color: #e9e6e6 !important;
+}
+
+@media screen and (max-width : 1400px) {
+  .xxl-show {
+    display: none;
+  }
+}
+
+@media screen and (min-width : 1400px) {
+  .xxl-hide {
+    display: none;
+  }
+}
+
+@media screen and (max-width : 1200px) {
+  .xl-show {
+    display: none;
+  }
+}
+
+@media screen and (min-width : 1200px) {
+  .xl-hide {
+    display: none;
+  }
+}
+
+@media screen and (max-width : 992px) {
+  .lg-show {
+    display: none !important;
+  }
+  .footer{
+    margin-bottom: 40px;
+  }
+}
+
+@media screen and (min-width : 992px) {
+
+  .filter-container,
+  .lg-hide {
+    display: none;
+  }
+ 
+}
+
+@media screen and (max-width : 768px) {
+  .md-show {
+    display: none;
+  }
+}
+
+@media screen and (min-width : 768px) {
+  .md-hide {
+    display: none;
+  }
+}
+
+@media screen and (max-width : 576px) {
+  .sm-show {
+    display: none;
+  }
+}
+
+@media screen and (min-width : 576px) {
+  .sm-hide {
+    display: none;
+  }
+}
+
+@media screen and (min-width : 992px) {
+
+  .filter-btn,
+  .lg-hide {
+    display: none;
+  }
+}
+
+.notifications-list{
+  width: 15rem !important;
+}
+
+
+
+.offcanvas-backdrop {
+  background-color: transparent;
 }

@@ -2,8 +2,8 @@ import axios from "axios";
 import { isJwtExpired } from "jwt-check-expiration";
 import cookie from "react-cookies";
 let api = process.env.REACT_APP_API;
-
-axios.defaults.baseURL = api;
+const apiAxios = axios.create();
+apiAxios.defaults.baseURL = api;
 export default class ApiService {
   static headers(token) {
     return token
@@ -22,16 +22,18 @@ export default class ApiService {
 
   static async token() {
     const token = cookie.load("access_token");
-
+    const _refresh_token = cookie.load("refresh_token");
+    const _session_id = cookie.load("session_id");
     if (!token) return;
     else if (!isJwtExpired(token)) {
       return token;
     } else {
+      apiAxios.defaults.headers.common["Authorization"] = _refresh_token;
+      apiAxios.defaults.headers.common["session_id"] = _session_id;
       let { refresh_token, access_token, status, session_id } =
-        await new ApiService().post("auth/refresh", undefined, {
-          Authentication: `Bearer ${cookie.load("refresh_token")}`,
-        });
+        await new ApiService().post("auth/refresh");
       if (status === 200) {
+        apiAxios.defaults.headers.common["Authorization"] = access_token;
         cookie.remove("access_token", { path: "/" });
         cookie.remove("refresh_token", { path: "/" });
         cookie.save("access_token", access_token, { path: "/" });
@@ -42,7 +44,7 @@ export default class ApiService {
     }
   }
   async get(endpoint, params) {
-    let res = await axios({
+    let res = await apiAxios({
       method: "get",
       url: `/${endpoint}`,
       params: params,
@@ -53,18 +55,18 @@ export default class ApiService {
   }
 
   async post(endpoint, data, headers, params = null) {
-    let res = await axios({
+    let res = await apiAxios({
       method: "post",
       url: `/${endpoint}`,
-      data: data,
-      params: params,
-      headers: headers,
+      data,
+      params,
+      headers,
     });
     return res.data;
   }
 
   async update(endpoint, data, params = null) {
-    let res = await axios({
+    let res = await apiAxios({
       method: "put",
       url: `/${endpoint}`,
       params: params,
@@ -75,7 +77,7 @@ export default class ApiService {
   }
 
   async delete(endpoint, data, params) {
-    let res = await axios({
+    let res = await apiAxios({
       method: "delete",
       url: `/${endpoint}`,
       params: params,
@@ -89,13 +91,8 @@ export default class ApiService {
     return session_id;
   }
   static async setDefaultHeaders() {
-    console.log("setDefaultHeaders");
-    axios.defaults.headers.common = ApiService.headers(
+    apiAxios.defaults.headers.common = ApiService.headers(
       await ApiService.token()
-    );
-    console.log(
-      "🚀 ~ file: ApiService.js:96 ~ ApiService ~ setDefaultHeaders ~ axios.defaults.headers.common:",
-      axios.defaults.headers.common
     );
   }
 }

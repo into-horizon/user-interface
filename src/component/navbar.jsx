@@ -10,45 +10,50 @@ import {
   Form,
   FormControl,
   Button,
+  Row,
+  Col,
 } from "react-bootstrap";
 import { connect } from "react-redux";
 import { parentCategoryHandler } from "../store/parent";
-import { useHistory, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 const MainNavbar = ({ parentData }) => {
   const { t, i18n } = useTranslation();
   const { parentCategory, childCategory, grandChildCategory } = parentData;
   const [lang, setLang] = useState("");
-  const history = useHistory();
-  // useEffect(() => {
-
-  // }, [i18n.language])
+  const navigate = useNavigate();
 
   return (
-    <div>
-      <Navbar bg="light" variant="light">
-        <Container>
-          <Nav className="me-auto">
+    <Navbar bg="light" variant="light" className="min-vw-100 ">
+      <Row className="justify-content-center w-100">
+        <Col md={12} lg={8} xl={8} xxl={6}>
+          <Nav className="px-1">
             {Children.toArray(
-             (parentCategory)?.slice(0, 6).map((parent) => {
+              parentCategory?.slice(0, 6).map((parent) => {
                 const children = childCategory.filter(
                   (element) => element.parent_id === parent.id
                 );
                 return (
                   children.length > 0 && (
-                    <NavDropdown title={parent[`${i18n.language}title`]}>
+                    <NavDropdown
+                      title={parent[`${i18n.language}title`]}
+                      className="text-capitalize mx-auto"
+                    >
                       {Children.toArray(
                         children.map((child) => {
                           const grandChildren = grandChildCategory.filter(
                             (element) => element.parent_id === child.id
                           );
                           return grandChildren.length > 0 ? (
-                            <NavDropdown title={child[`${i18n.language}title`]}>
+                            <NavDropdown
+                              title={child[`${i18n.language}title`]}
+                              className="text-capitalize"
+                            >
                               {Children.toArray(
                                 grandChildren.map((grandchild) => (
                                   <Link
                                     to={`/products?grandchild_category_id=${grandchild.id}`}
-                                    className="nav-link"
+                                    className="nav-link text-capitalize"
                                   >
                                     {grandchild[`${i18n.language}title`]}
                                   </Link>
@@ -58,7 +63,7 @@ const MainNavbar = ({ parentData }) => {
                           ) : (
                             <Link
                               to={`/products?child_category_id=${child.id}`}
-                              className="nav-link"
+                              className="nav-link text-capitalize"
                             >
                               {child[`${i18n.language}title`]}
                             </Link>
@@ -71,11 +76,13 @@ const MainNavbar = ({ parentData }) => {
               })
             )}
           </Nav>
+        </Col>
+        <Col lg={4} xl={2} xxl={2} className="lg-show">
           <Form
-            className="d-flex"
+            className="d-flex "
             onSubmit={(e) => {
               e.preventDefault();
-              history.push(`/products?key=${e.target.key.value}`);
+              navigate(`/products?key=${e.target.key.value}`);
             }}
           >
             <FormControl
@@ -89,9 +96,9 @@ const MainNavbar = ({ parentData }) => {
               Search
             </Button>
           </Form>
-        </Container>
-      </Navbar>
-    </div>
+        </Col>
+      </Row>
+    </Navbar>
   );
 };
 const mapStateToProps = (state) => ({
