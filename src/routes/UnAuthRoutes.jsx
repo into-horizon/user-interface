@@ -4,7 +4,6 @@ import {Redirect, Route, Switch} from 'react-router-dom'
 import routes from './routes'
 export const UnAuthRoutes = ({login, match: {url}}) => {
 console.log("🚀 ~ file: UnAuthRoutes.jsx ~ line 6 ~ UnAuthRoutes ~ login", login)
-    console.log("🚀 ~ file: UnAuthRoutes.jsx ~ line 11 ~ UnAuthRoutes ~  routes.filter(r => !r.auth)",  routes.filter(r => !r.auth))
   return (
     <>
     { 
