@@ -75,59 +75,65 @@ const Header = (props) => {
                 <CIcon icon={cilHeart} size="xxl" className="my-auto" />
               </Link>
 
-              <Nav.Link
-                // as={Button}
-                className="nav-link position-relative px-0 mx-2 "
-                key="notification"
-                onClick={() => setDisplayList((x) => !x)}
-              >
-                <CIcon icon={cilBell} size="xxl" className="" />
-                <CBadge color="danger" position="top-end" shape="rounded-pill">
-                  9 <span className="visually-hidden">unread messages</span>
-                </CBadge>
-
-                {displayList && (
-                  <CListGroup
-                    style={{ width: "16rem !important" }}
-                    className="position-absolute notifications-list"
+              {login && (
+                <Nav.Link
+                  as={'div'}
+                  className="nav-link position-relative px-0 mx-2 pointer "
+                  key="notification"
+                  onClick={() => setDisplayList((x) => !x)}
+                >
+                  <CIcon icon={cilBell} size="xxl" className="" />
+                  <CBadge
+                    color="danger"
+                    position="top-end"
+                    shape="rounded-pill"
                   >
-                    <CListGroupItem component="a" href="#">
-                      <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small>3 days ago</small>
-                      </div>
-                      <p className="mb-1">
-                        Donec id elit non mi porta gravida at eget metus.
-                        Maecenas sed diam eget risus varius blandit.
-                      </p>
-                    </CListGroupItem>
-                    <CListGroupItem component="a" href="#">
-                      <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small className="text-medium-emphasis">
-                          3 days ago
-                        </small>
-                      </div>
-                      <p className="mb-1">
-                        Donec id elit non mi porta gravida at eget metus.
-                        Maecenas sed diam eget risus varius blandit.
-                      </p>
-                    </CListGroupItem>
-                    <CListGroupItem component="a" href="#">
-                      <div className="d-flex w-100 justify-content-between">
-                        <h5 className="mb-1">List group item heading</h5>
-                        <small className="text-medium-emphasis">
-                          3 days ago
-                        </small>
-                      </div>
-                      <p className="mb-1">
-                        Donec id elit non mi porta gravida at eget metus.
-                        Maecenas sed diam eget risus varius blandit.
-                      </p>
-                    </CListGroupItem>
-                  </CListGroup>
-                )}
-              </Nav.Link>
+                    9 <span className="visually-hidden">unread messages</span>
+                  </CBadge>
+
+                  {displayList && (
+                    <CListGroup
+                      style={{ width: "16rem !important" }}
+                      className="position-absolute notifications-list"
+                    >
+                      <CListGroupItem component="a" href="#">
+                        <div className="d-flex w-100 justify-content-between">
+                          <h5 className="mb-1">List group item heading</h5>
+                          <small>3 days ago</small>
+                        </div>
+                        <p className="mb-1">
+                          Donec id elit non mi porta gravida at eget metus.
+                          Maecenas sed diam eget risus varius blandit.
+                        </p>
+                      </CListGroupItem>
+                      <CListGroupItem component="a" href="#">
+                        <div className="d-flex w-100 justify-content-between">
+                          <h5 className="mb-1">List group item heading</h5>
+                          <small className="text-medium-emphasis">
+                            3 days ago
+                          </small>
+                        </div>
+                        <p className="mb-1">
+                          Donec id elit non mi porta gravida at eget metus.
+                          Maecenas sed diam eget risus varius blandit.
+                        </p>
+                      </CListGroupItem>
+                      <CListGroupItem component="a" href="#">
+                        <div className="d-flex w-100 justify-content-between">
+                          <h5 className="mb-1">List group item heading</h5>
+                          <small className="text-medium-emphasis">
+                            3 days ago
+                          </small>
+                        </div>
+                        <p className="mb-1">
+                          Donec id elit non mi porta gravida at eget metus.
+                          Maecenas sed diam eget risus varius blandit.
+                        </p>
+                      </CListGroupItem>
+                    </CListGroup>
+                  )}
+                </Nav.Link>
+              )}
 
               <Link
                 to="/cart"
@@ -137,7 +143,6 @@ const Header = (props) => {
                 <CIcon icon={cilCart} size="xxl" />
                 <CBadge
                   style={{ position: "absolute", top: -10, right: "22%" }}
-                  size="xl"
                 >
                   <h6>
                     {cart.reduce((x, y) => {

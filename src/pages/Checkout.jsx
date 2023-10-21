@@ -110,120 +110,116 @@ export const Checkout = ({
   }, [placedOrder.id]);
 
   return (
-    <div className="p-1rem cart">
-      <AddressModal />
-      <CRow>
-        <CCol md={3}>
-          <h5>your items</h5>
-          {Children.toArray(
-            cart.map((item) => (
-              <section className="mb-3" style={{ maxWidth: "540px" }}>
-                <CRow className="g-0 card">
-                  <CRow>
-                    <CCol md={4}>
-                      <CCardImage
-                        src={
-                          item.picture ??
-                          item.pictures?.product_picture ??
-                          image
-                        }
-                      />
-                    </CCol>
-                    <CCol md={8}>
-                      <CCardBody>
-                        <CCardTitle>{item.entitle}</CCardTitle>
-                        <CCardText>
-                          <ul>
-                            <li>{`price: ${item.price}`}</li>
-                            <li>{`quantity: ${item.quantity}`}</li>
-                            {item.size && <li>{`size ${item.size}`}</li>}
-                            {item.color && <li>{`color: ${item.color}`}</li>}
-                          </ul>
-                        </CCardText>
-                      </CCardBody>
-                    </CCol>
-                  </CRow>
+    <CRow className="justify-content-center align-items-center cart gap-1">
+      <CCol xs={11} lg={6} xl={4}>
+        <h5>your items</h5>
+        {Children.toArray(
+          cart.map((item) => (
+            <section className="mb-3" style={{ maxWidth: "540px" }}>
+              <CRow className="g-0 card">
+                <CRow>
+                  <CCol xs={4}>
+                    <CCardImage
+                      src={
+                        item.picture ?? item.pictures?.product_picture ?? image
+                      }
+                    />
+                  </CCol>
+                  <CCol xs={8} lg={6}>
+                    <CCardBody>
+                      <CCardTitle>{item.entitle}</CCardTitle>
+                      <CCardText>
+                        <ul>
+                          <li>{`price: ${item.price}`}</li>
+                          <li>{`quantity: ${item.quantity}`}</li>
+                          {item.size && <li>{`size ${item.size}`}</li>}
+                          {item.color && <li>{`color: ${item.color}`}</li>}
+                        </ul>
+                      </CCardText>
+                    </CCardBody>
+                  </CCol>
                 </CRow>
-              </section>
-            ))
-          )}
-        </CCol>
-        <Col md={{ span: 4, offset: 1 }}>
-          <Row>
-            <Col md={10}>
-              <CFormSelect
-                aria-label="Default select example"
-                value={selectedAddress?.id}
-                onChange={(e) =>
-                  setSelectedAddress(
-                    addresses.find((address) => address.id === e.target.value)
-                  )
-                }
-              >
-                {React.Children.toArray(
-                  addresses?.map((address) => (
-                    <option
-                      value={address.id}
-                    >{`${address.first_name} ${address.last_name} - ${address.street_name}`}</option>
-                  ))
-                )}
-              </CFormSelect>
-            </Col>
-            <Col md={2}>
-              <AddressModal
-                BtnComponent={(props) => (
-                  <CTooltip content="add new address">
-                    <CButton {...props}>
-                      <CIcon icon={cilPlus} />
-                    </CButton>
-                  </CTooltip>
-                )}
-                handleSubmit={async (address, close) => {
-                  await addAddressHandler(address);
-                  close();
-                }}
-              />
-            </Col>
-          </Row>
-          {selectedAddress && (
-            <Col md={12} className="p-1rem m-2rem addressCard">
-              <ul>
-                <li>
-                  {`name: ${selectedAddress?.first_name} ${selectedAddress?.last_name}`}
-                </li>
-                <li>{`city: ${selectedAddress?.city} - ${selectedAddress?.country}`}</li>
-                <li>{`street: ${selectedAddress?.street_name}`}</li>
-                <li>{`mobile: ${selectedAddress?.mobile}`}</li>
-                <li>{`building number: ${selectedAddress?.building_number}`}</li>
-                <li>{`apartment number: ${selectedAddress?.apartment_number}`}</li>
-              </ul>
-            </Col>
-          )}
-          <CRow className="p-1rem">
-            <h5 className="m-1rem">Select Payment Method</h5>
-            <CFormCheck
-              type="radio"
-              name="payment"
-              label="Cash on Delivery"
-              defaultChecked
+              </CRow>
+            </section>
+          ))
+        )}
+      </CCol>
+      <CCol xs={11} lg={6} xl={4}>
+        <Row>
+          <Col xs={10}>
+            <CFormSelect
+              value={selectedAddress?.id}
+              onChange={(e) =>
+                setSelectedAddress(
+                  addresses.find((address) => address.id === e.target.value)
+                )
+              }
+            >
+              {React.Children.toArray(
+                addresses?.map((address) => (
+                  <option
+                    value={address.id}
+                  >{`${address.first_name} ${address.last_name} - ${address.street_name}`}</option>
+                ))
+              )}
+            </CFormSelect>
+          </Col>
+          <Col xs={2}>
+            <AddressModal
+              BtnComponent={(props) => (
+                <CTooltip content="add new address">
+                  <CButton {...props}>
+                    <CIcon icon={cilPlus} />
+                  </CButton>
+                </CTooltip>
+              )}
+              handleSubmit={async (address, close) => {
+                await addAddressHandler(address);
+                close();
+              }}
             />
-            <CFormCheck
-              type="radio"
-              name="payment"
-              label="Credit card"
-              disabled
-            />
-            <CFormCheck
-              type="radio"
-              name="payment"
-              label="e-fawateercom"
-              disabled
-            />
-          </CRow>
-        </Col>
-        <Col md={{ span: 3, offset: 1 }} className="p-1rem">
-          <CForm style={{ display: "flex" }} onSubmit={discountCodeHandler}>
-            <Col md={{ span: 8, offset: 1 }}>
+          </Col>
+        </Row>
+        {selectedAddress && (
+          <Col md={12} className="p-1rem m-2rem addressCard">
+            <ul>
+              <li>
+                {`name: ${selectedAddress?.first_name} ${selectedAddress?.last_name}`}
+              </li>
+              <li>{`city: ${selectedAddress?.city} - ${selectedAddress?.country}`}</li>
+              <li>{`street: ${selectedAddress?.street_name}`}</li>
+              <li>{`mobile: ${selectedAddress?.mobile}`}</li>
+              <li>{`building number: ${selectedAddress?.building_number}`}</li>
+              <li>{`apartment number: ${selectedAddress?.apartment_number}`}</li>
+            </ul>
+          </Col>
+        )}
+        <CRow className="p-1rem">
+          <h5 className="m-1rem">Select Payment Method</h5>
+          <CFormCheck
+            type="radio"
+            name="payment"
+            label="Cash on Delivery"
+            defaultChecked
+          />
+          <CFormCheck
+            type="radio"
+            name="payment"
+            label="Credit card"
+            disabled
+          />
+          <CFormCheck
+            type="radio"
+            name="payment"
+            label="e-fawateercom"
+            disabled
+          />
+        </CRow>
+      </CCol>
+      <CCol xs={10} lg={5} xl={3} className="">
+        <CForm onSubmit={discountCodeHandler}>
+          <CRow className="justify-content-center align-items-center">
+            <CCol xs={8}>
               <CFormInput
                 style={{ margin: 0 }}
                 placeholder="promo code"
@@ -231,8 +227,8 @@ export const Checkout = ({
                 value={discount?.discount_code}
                 required
               />
-            </Col>
-            <Col md={4}>
+            </CCol>
+            <CCol xs={4}>
               {discount.id ? (
                 <CButton type="submit" color="danger">
                   <CIcon icon={cilXCircle}></CIcon>remove
@@ -242,40 +238,38 @@ export const Checkout = ({
                   <CIcon icon={cilCheckAlt}></CIcon>apply
                 </CButton>
               )}
+            </CCol>
+            <Col xs={12}>
+              <strong
+                className={`${status === 200 ? "text-success" : "text-danger"}`}
+              >
+                {message}
+              </strong>
             </Col>
-          </CForm>
-          <Col>
-            <strong style={{ color: status === 200 ? "green" : "red" }}>
-              {message}
-            </strong>
-          </Col>
-          <Col md={12}>
-            <div className="p-1rem m-2rem orderSum">
-              <h5>order summary</h5>
-              <ul>
-                <li>{`Subtotal: ${total.subtotal}`}</li>
-                <li>{`Delivery: ${total.shipping}`}</li>
-                <li>{`Tax: 0.0`}</li>
-                {total.discount > 0 && (
-                  <li>{`discount: ${total.discount} `}</li>
-                )}
-                <li>{`Total: ${(
-                  Number(total.subtotal) +
-                  Number(total.shipping) -
-                  Number(total.discount)
-                ).toFixed(2)}`}</li>
-              </ul>
-            </div>
-          </Col>
-          <Col md={12}>
-            <CButton style={{ width: "100%" }} onClick={orderHandler}>
-              place your order
-            </CButton>
-          </Col>
-          <span>{placedOrder?.id}</span>
+          </CRow>
+        </CForm>
+          <div className="p-3 my-3 bg-info border-5 rounded w-100" >
+            <h5>order summary</h5>
+            <ul>
+              <li>{`Subtotal: ${total.subtotal}`}</li>
+              <li>{`Delivery: ${total.shipping}`}</li>
+              <li>{`Tax: 0.0`}</li>
+              {total.discount > 0 && <li>{`discount: ${total.discount} `}</li>}
+              <li>{`Total: ${(
+                Number(total.subtotal) +
+                Number(total.shipping) -
+                Number(total.discount)
+              ).toFixed(2)}`}</li>
+            </ul>
+          </div>
+        <Col md={12}>
+          <CButton style={{ width: "100%" }} onClick={orderHandler}>
+            place your order
+          </CButton>
         </Col>
-      </CRow>
-    </div>
+        <span>{placedOrder?.id}</span>
+      </CCol>
+    </CRow>
   );
 };
 
