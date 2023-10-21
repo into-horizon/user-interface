@@ -13,7 +13,7 @@ import MainNavbar from "../component/navbar";
 import ProfileCard from "../component/productCard";
 import ProductView from "../component/featuredDeals";
 import featuredDeals from "../static-data/FeaturedAucklandDeals";
-import escapes from "../static-data/escapes";
+// import escapes from "../static-data/escapes";
 import Automotive from "../static-data/Automotive";
 import CarouselItem from "../component/carousel";
 import { useSelector } from "react-redux";
@@ -22,13 +22,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { selectStores } from "../store/landingPage";
 import StarRatings from "react-star-ratings";
 import CIcon from "@coreui/icons-react";
-import { cilArrowCircleRight, cilCart, cilHeart, cilSearch, cilUser } from "@coreui/icons";
+import {
+  cilArrowCircleRight,
+  cilCart,
+  cilHeart,
+  cilSearch,
+  cilUser,
+} from "@coreui/icons";
+import Product from "../services/Product";
 
 const Main = () => {
   const { parentCategory, childCategory } = useSelector(
     (state) => state.parent
   );
   const stores = useSelector(selectStores);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   let o = 68;
   const [offset, setOffset] = useState(o);
@@ -44,6 +52,23 @@ const Main = () => {
       setOffset(0);
     }
   });
+  const getProducts =  () => {
+    return parentCategory.slice(0, 3).map(async (category) => {
+      const {
+        data: { data: products },
+      } = await Product.productsSearch({
+        parent_category_id: category.id,
+        limit: 4,
+      });
+      setCategories((state) => [
+        ...state,
+        { id: category.id,title: category.entitle, products },
+      ]);
+    });
+  };
+  useEffect(() => {
+    getProducts();
+  }, [parentCategory]);
 
   return (
     <Row className=" justify-content-center main">
@@ -130,37 +155,15 @@ const Main = () => {
           </Col>
         </Row>
       </Col>
-
-      <Col xs={12}>
-        <Row className="justify-content-center">
-          <Col xs={12} xl={10}>
-            <ProductView
-              title={"Featured Auckland Deals"}
-              product={featuredDeals}
-              xclass="FDP"
-            />
-          </Col>
-        </Row>
-      </Col>
-      <Col xs={12}>
-        <Row className="justify-content-center">
-          <Col xs={12} xl={10}>
-            <ProductView title={"Escapes"} product={escapes} xclass="FDP" />
-          </Col>
-        </Row>
-      </Col>
-      <Col xs={12}>
-        <Row className="justify-content-center">
-          <Col xs={12} xl={10}>
-            <ProductView
-              title={"Automotive"}
-              product={Automotive}
-              xclass="FDP"
-            />
-          </Col>
-        </Row>
-      </Col>
-
+      {Children.toArray(categories?.map((item) => (
+        <Col xs={12}>
+          <Row className="justify-content-center">
+            <Col xs={12} xl={10}>
+              <ProductView {...item} />
+            </Col>
+          </Row>
+        </Col>
+      )))}
     </Row>
   );
 };

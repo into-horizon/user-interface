@@ -17,6 +17,8 @@ import { connect } from "react-redux";
 import { parentCategoryHandler } from "../store/parent";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import CIcon from "@coreui/icons-react";
+import { cilSearch } from "@coreui/icons";
 const MainNavbar = ({ parentData }) => {
   const { t, i18n } = useTranslation();
   const { parentCategory, childCategory, grandChildCategory } = parentData;
@@ -77,13 +79,14 @@ const MainNavbar = ({ parentData }) => {
             )}
           </Nav>
         </Col>
-        <Col lg={4} xl={2} xxl={2} className="lg-show">
+        <Col lg={4} xl={2} xxl={2} className="lg-show" >
           <Form
-            className="d-flex "
+            className="d-flex"
             onSubmit={(e) => {
               e.preventDefault();
               navigate(`/products?key=${e.target.key.value}`);
             }}
+            
           >
             <FormControl
               type="search"
@@ -93,7 +96,7 @@ const MainNavbar = ({ parentData }) => {
               id="key"
             />
             <Button variant="outline-success" type="submit">
-              Search
+              <CIcon icon={cilSearch}/>
             </Button>
           </Form>
         </Col>

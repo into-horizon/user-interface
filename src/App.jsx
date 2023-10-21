@@ -134,7 +134,9 @@ const App = ({
                 <CTooltip content="cart">
                   <Nav.Item className="mx-auto">
                     <Link className="nav-link btn btn-secondary" to={"/cart"}>
-                      <CIcon icon={cilCart} size="lg"/>
+                      <CIcon icon={cilCart} size="xl" />
+                      <br />
+                      Cart
                     </Link>
                   </Nav.Item>
                 </CTooltip>
@@ -144,7 +146,9 @@ const App = ({
                       className="nav-link btn btn-secondary"
                       to={"/wishlist"}
                     >
-                      <CIcon icon={cilHeart} size="lg"/>
+                      <CIcon icon={cilHeart} size="xl" />
+                    <br />
+                    wishlist
                     </Link>
                   </Nav.Item>
                 </CTooltip>
@@ -155,7 +159,9 @@ const App = ({
                         className="nav-link btn btn-secondary"
                         to={"/settings"}
                       >
-                        <CIcon icon={cilUser} size="lg"/>
+                        <CIcon icon={cilUser} size="xl" />
+                        <br />
+                        settings
                       </Link>
                     </Nav.Item>
                   </CTooltip>
@@ -166,7 +172,9 @@ const App = ({
                         className="nav-link btn btn-secondary"
                         to={"/signin"}
                       >
-                        <CIcon icon={cilArrowCircleRight} size="lg"/>
+                        <CIcon icon={cilArrowCircleRight} size="xl" />
+                        <br />
+                        login
                       </Link>
                     </Nav.Item>
                   </CTooltip>
@@ -177,17 +185,19 @@ const App = ({
                       className="nav-link btn btn-secondary"
                       to={"/products"}
                     >
-                      <CIcon icon={cilSearch} size="lg"/>
+                      <CIcon icon={cilSearch} size="xl" />
+                      <br />
+                      Search
                     </Link>
                   </Nav.Item>
                 </CTooltip>
-                <Nav.Item className="mx-auto">
+                <Nav.Item className="m-auto">
                   <Nav.Link
                     as={Button}
                     onClick={() =>
                       i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
                     }
-                    size="lg"
+                    className="m-auto"
                   >
                     {i18n.language === "ar" ? "English" : "عربي"}
                   </Nav.Link>
