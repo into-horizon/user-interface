@@ -2,51 +2,28 @@ import React, { useState, useEffect } from "react";
 import "./productCard.css";
 import { connect } from "react-redux";
 import {
-  addItem,
-  decrementQuantity,
-  incrementQuantity,
-  deleteItem,
   addCartItemHandler,
   updateCartItemHandler,
 } from "../store/cart";
-import { addProduct, deleteProduct } from "../store/wishlist";
-import { If, Then, Else } from "react-if";
-// import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import { useDispatch } from "react-redux";
 import Form from "react-bootstrap/Form";
 import image from "../assets/no-image.png";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  ListGroup,
-  ListGroupItem,
-  Row,
-} from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import CIcon from "@coreui/icons-react";
 import { cilBasket } from "@coreui/icons";
 import { CTooltip } from "@coreui/react";
 
-const ProfileCard = ({
+const ProductCard = ({
   cart,
   wishlist,
-  itemType,
   addCartItemHandler,
   product,
-  key,
-  xclass,
   addItemHandler,
   deleteItemHandler,
-  pic,
   updateCartItemHandler,
 }) => {
-  const dispatch = useDispatch();
-  const [addbag, setaddbag] = useState(1);
   const [heart, setheart] = useState(1);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
@@ -64,12 +41,6 @@ const ProfileCard = ({
     } else {
       addCartItemHandler({ ...product, quantity: 1, color: color, size: size });
     }
-    toast("added to your cart");
-  };
-  const DecBag = () => {
-    if (addbag >= 1) {
-      setaddbag(addbag - 1);
-    }
   };
   const Heart = (product) => {
     if (heart) {
@@ -82,11 +53,6 @@ const ProfileCard = ({
   };
 
   useEffect(() => {
-    // if (wishlist.find( x=> x.id === product.id || x.product_id === product.id)) {
-    //   setheart(0);
-    // } else {
-    //   setheart(1)
-    // }
     const arr = JSON.parse(product.size_and_color);
     if (arr?.length > 0) {
       let _colors = arr
@@ -112,10 +78,6 @@ const ProfileCard = ({
         setColors(() => _colors);
         setColor(() => _colors[0]);
       }
-      // setColors(() => _colors)
-      // setColor(() => _colors[0])
-      // setSizes(() => _sizes)
-      // setSize(()=> _sizes[0])
     }
   }, []);
   useEffect(() => {
@@ -147,7 +109,7 @@ const ProfileCard = ({
 
   return (
     <>
-      <Card style={{ width: "18rem" }} className="position-relative m-auto">
+      <Card className="position-relative m-auto w-100 h-100">
         <small className="position-absolute" style={{ top: 10, left: 10 }}>
           <i
             onClick={() => Heart(product)}
@@ -156,11 +118,8 @@ const ProfileCard = ({
         </small>
         <Card.Img
           variant="top"
-          src={
-            pic === "array"
-              ? product.pictures[0]?.product_picture ?? image
-              : product.pictures?.product_picture ?? image
-          }
+          src={product.pictures?.product_picture ?? image}
+          className="h-50"
         />
         <Card.Header>
           {" "}
@@ -179,16 +138,15 @@ const ProfileCard = ({
           <Card.Text>{product.endescription}</Card.Text>
         </Card.Body>
         <Card.Body>
-
-        <StarRatings
-          rating={Number(product?.rate) || 0}
-          starDimension="1.5rem"
-          starSpacing=".05rem"
-          starRatedColor="yellow"
-        />
+          <StarRatings
+            rating={Number(product?.rate) || 0}
+            starDimension="1.5rem"
+            starSpacing=".05rem"
+            starRatedColor="yellow"
+          />
         </Card.Body>
         <Card.Body className="m-0 py-0">
-          <Row >
+          <Row>
             <Col xs={4} sm={4} md={5} lg={4} xl={4}>
               {sizes.length > 0 && (
                 <>
@@ -238,7 +196,6 @@ const ProfileCard = ({
           as={Row}
           className="justify-content-between align-items-center m-0 py-0"
         >
-          
           <Col xs={9} className="my-3">
             <Card.Link
               as={"span"}
@@ -289,4 +246,4 @@ const mapDispatchToProps = {
   updateCartItemHandler,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileCard);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);

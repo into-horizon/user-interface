@@ -1,6 +1,8 @@
 import { createSlice, current } from "@reduxjs/toolkit";
 import cookie from "react-cookies";
 import Cart from "../services/Cart";
+import { triggerToast } from "./toast";
+import { ToastTypes } from "../services/utils";
 
 let cookieCard = cookie.load("cart");
 const cart = createSlice({
@@ -70,18 +72,16 @@ export const addCartItemHandler = (payload) => async (dispatch, state) => {
           })
         );
       } else {
-        console.error(message);
+        dispatch(triggerToast({message, type: ToastTypes.DANGER}))
       }
     } else {
       dispatch(addItem({ ...payload, cookie: true }));
     }
+    dispatch(triggerToast({message: 'added to your card', type: ToastTypes.SUCCESS}))
   } catch (error) {
-    console.log(
-      "🚀 ~ file: cart.js ~ line 55 ~ addCartItemHandler ~ error",
-      error
-    );
-  }
+    dispatch(triggerToast({message: error.message, type: ToastTypes.DANGER}))
 };
+}
 
 export const updateCartItemHandler = (payload) => async (dispatch, state) => {
   const login = state().sign.login;

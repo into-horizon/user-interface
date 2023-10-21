@@ -7,7 +7,7 @@
     "@coreui/icons": "^2.1.0",
     "@coreui/icons-react": "^2.2.1",
     "@coreui/react": "^4.10.1",
-    "@react-google-maps/api": "^2.12.1",
+    "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
@@ -74,5 +74,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }
