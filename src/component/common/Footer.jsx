@@ -8,7 +8,7 @@ import {
 import CIcon from "@coreui/icons-react";
 import React, { forwardRef } from "react";
 import { Container, Col, Row, Navbar, Button } from "react-bootstrap";
-import { CButton, CFooter, CFormInput } from "@coreui/react";
+import { CButton, CFooter, CFormInput, CInputGroup } from "@coreui/react";
 import LocalizedInputGroup from "./LocalizedInputGroup";
 const Footer = forwardRef((_, ref) => {
   return (
@@ -90,10 +90,10 @@ const Footer = forwardRef((_, ref) => {
                 Sign up for our daily emails and we'll send you all the best
                 deals, tailored for you.
               </p>
-              <LocalizedInputGroup>
+              <CInputGroup>
                 <CFormInput type="text" placeholder="Enter Your Email" />
                 <CButton>Subscribe</CButton>
-              </LocalizedInputGroup>
+              </CInputGroup>
             </Col>
           </Row>
         </Container>

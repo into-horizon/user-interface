@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState, lazy } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useTranslation } from "react-i18next";
 import "@coreui/coreui/dist/css/coreui.min.css";

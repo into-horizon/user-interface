@@ -6,7 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CIcon from "@coreui/icons-react";
 import { cilSearch } from "@coreui/icons";
-import { CButton, CFormInput } from "@coreui/react";
+import { CButton, CFormInput, CInputGroup } from "@coreui/react";
 import LocalizedInputGroup from "./common/LocalizedInputGroup";
 const MainNavbar = () => {
   const { i18n } = useTranslation();
@@ -71,7 +71,7 @@ const MainNavbar = () => {
               navigate(`/products?key=${e.target.key.value}`);
             }}
           >
-            <LocalizedInputGroup>
+            <CInputGroup>
               <CFormInput
                 type="search"
                 placeholder="Search for products"
@@ -82,7 +82,7 @@ const MainNavbar = () => {
               <CButton color="outline-success" type="submit">
                 <CIcon icon={cilSearch} />
               </CButton>
-            </LocalizedInputGroup>
+            </CInputGroup>
           </Form>
         </Col>
       </Row>

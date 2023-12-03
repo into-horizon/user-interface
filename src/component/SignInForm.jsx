@@ -17,6 +17,7 @@ import {
   CContainer,
   CForm,
   CFormInput,
+  CInputGroup,
   CInputGroupText,
   CRow,
 } from "@coreui/react";
@@ -59,7 +60,7 @@ const SignInForm = ({ signInHandler }) => {
                     <p className="text-medium-emphasis">
                       {t("Sign In to your account")}
                     </p>
-                    <LocalizedInputGroup className="my-4  ">
+                    <CInputGroup className="my-4  ">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
@@ -68,8 +69,8 @@ const SignInForm = ({ signInHandler }) => {
                         name="email"
                         placeholder="email"
                       />
-                    </LocalizedInputGroup>
-                    <LocalizedInputGroup className="my-2">
+                    </CInputGroup>
+                    <CInputGroup className="my-2">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
@@ -93,7 +94,7 @@ const SignInForm = ({ signInHandler }) => {
                           <EyeSlash color="inherit" />
                         )}
                       </CButton>
-                    </LocalizedInputGroup>
+                    </CInputGroup>
 
                     <CRow
                       className="justify-content-between mt-2"

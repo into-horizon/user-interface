@@ -242,7 +242,7 @@ const SignupForm = (props) => {
                     )}
                   </CFormSelect>
 
-                  <LocalizedInputGroup>
+                  <CInputGroup>
                     <CFormInput
                       type={passwordType}
                       placeholder={t("pass")}
@@ -267,7 +267,7 @@ const SignupForm = (props) => {
                         <EyeSlash color="secondary" />
                       )}
                     </CButton>
-                  </LocalizedInputGroup>
+                  </CInputGroup>
 
                   <CFormInput
                     type={passwordType}
