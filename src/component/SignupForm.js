@@ -34,8 +34,8 @@ import {
 } from "@coreui/react";
 import CFormInputWithMask from "./common/CFormInputWithMask";
 import { Children } from "react";
-import { Eye } from "react-bootstrap-icons";
-
+import { Eye, EyeSlash } from "react-bootstrap-icons";
+import LocalizedInputGroup from "./common/LocalizedInputGroup";
 const SignupForm = (props) => {
   const dispatch = useDispatch();
   const { userSignUp } = props;
@@ -48,6 +48,7 @@ const SignupForm = (props) => {
   const [phone, setPhone] = useState();
   const [city, setCity] = useState([]);
   const [showError, setShowError] = useState(false);
+  const [passwordType, setPasswordType] = useState("password");
 
   const [values, setValues] = useState({
     first_name: props.googleUser.first_name || "",
@@ -171,12 +172,10 @@ const SignupForm = (props) => {
     <div className="bg-light d-flex flex-row align-items-center wrapper w-100">
       <CContainer>
         <CRow className=" align-content-center  justify-content-center ">
-          <CCol xs={6}>
-            <CCard>
+          <CCol xs={12} sm={10} md={9} xl={6}>
+            <CCard className=" my-3 ">
               <CCardHeader>
-                <CCardTitle>
-                  <h3>{t("text1")}</h3>
-                </CCardTitle>
+                <CCardTitle>{t("text1")}</CCardTitle>
               </CCardHeader>
               <CCardBody>
                 <form
@@ -220,7 +219,6 @@ const SignupForm = (props) => {
                     id="mobile"
                     className="mb-2 "
                     onChange={setPhone}
-                    inputComponent={CFormInput}
                     onInvalid={(e) => console.log(e)}
                   />
                   {/* <CFormLabel htmlFor="gender">{t("gen")}</CFormLabel> */}
@@ -244,9 +242,9 @@ const SignupForm = (props) => {
                     )}
                   </CFormSelect>
 
-                  <CInputGroup>
+                  <LocalizedInputGroup>
                     <CFormInput
-                      type="password"
+                      type={passwordType}
                       placeholder={t("pass")}
                       floatingLabel={t("pass")}
                       name="password"
@@ -257,13 +255,22 @@ const SignupForm = (props) => {
                       className="mb-2 bg-light"
                       color="secondary"
                       variant="outline"
+                      onClick={() =>
+                        setPasswordType(
+                          passwordType === "password" ? "text" : "password"
+                        )
+                      }
                     >
-                      <Eye color="secondary" />
+                      {passwordType === "password" ? (
+                        <Eye color="secondary" />
+                      ) : (
+                        <EyeSlash color="secondary" />
+                      )}
                     </CButton>
-                  </CInputGroup>
+                  </LocalizedInputGroup>
 
                   <CFormInput
-                    type="password"
+                    type={passwordType}
                     placeholder={t("con-pass")}
                     floatingLabel={t("con-pass")}
                     name="con_password"
@@ -272,16 +279,18 @@ const SignupForm = (props) => {
                     feedbackInvalid={"passwords don't match"}
                   />
 
-                  <Button type="submit" className="ahmad">
-                    {loading ? (
-                      <Spinner animation="border" variant="primary" />
-                    ) : (
-                      t("register")
-                    )}
-                  </Button>
+                  <div className=" mx-auto mt-2 ">
+                    <Button type="submit">
+                      {loading ? (
+                        <Spinner animation="border" variant="light" />
+                      ) : (
+                        t("register")
+                      )}
+                    </Button>
+                  </div>
                 </form>
 
-                <div className="">
+                <div className=" mx-auto w-auto  ">
                   <Link to="/">
                     <input
                       hidden
@@ -304,7 +313,7 @@ const SignupForm = (props) => {
                   </Link>
                 </div>
                 <div>
-                  <a className="btn btn-sign" href="/signIn">
+                  <a className="btn " href="/signIn">
                     {t("sub")}{" "}
                   </a>
                 </div>
