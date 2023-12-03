@@ -1,5 +1,4 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import store from "./store/";
@@ -7,7 +6,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./i18next";
 import reportWebVitals from "./reportWebVitals";
-import Loader from "./component/loader";
+import Loader from "./component/common/Loader";
 import { PopupProvider } from "react-custom-popup";
 import { createRoot } from "react-dom/client";
 const container = document.getElementById("root");

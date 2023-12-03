@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./productCard.css";
+// import "./productCard.0css";
 import { connect } from "react-redux";
-import {
-  addCartItemHandler,
-  updateCartItemHandler,
-} from "../store/cart";
+import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
@@ -14,6 +11,7 @@ import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import CIcon from "@coreui/icons-react";
 import { cilBasket } from "@coreui/icons";
 import { CTooltip } from "@coreui/react";
+import { Heart, HeartFill } from "react-bootstrap-icons";
 
 const ProductCard = ({
   cart,
@@ -42,7 +40,7 @@ const ProductCard = ({
       addCartItemHandler({ ...product, quantity: 1, color: color, size: size });
     }
   };
-  const Heart = (product) => {
+  const heartFunction = (product) => {
     if (heart) {
       setheart(0);
       addItemHandler(product);
@@ -79,7 +77,7 @@ const ProductCard = ({
         setColor(() => _colors[0]);
       }
     }
-  }, []);
+  }, [product.size_and_color]);
   useEffect(() => {
     const arr = JSON.parse(product.size_and_color);
     let _colors = arr
@@ -96,10 +94,12 @@ const ProductCard = ({
       setColors(() => _colors);
       setColor(() => _colors[0]);
     }
-  }, [size]);
+  }, [product.size_and_color, size]);
   useEffect(() => {
     if (
-      wishlist.find((x) => x.id === product.id || x.product_id === product.id)
+      wishlist.find(
+        (x) => x?.id === product?.id || x?.product_id === product?.id
+      )
     ) {
       setheart(0);
     } else {
@@ -110,16 +110,22 @@ const ProductCard = ({
   return (
     <>
       <Card className="position-relative m-auto w-100 h-100">
-        <small className="position-absolute" style={{ top: 10, left: 10 }}>
-          <i
+        <small
+          className="position-absolute"
+          style={{ top: 10, left: 10 }}
+          onClick={() => heartFunction(product)}
+        >
+          {/* <i
             onClick={() => Heart(product)}
             className={`fa ${heart ? "fa-heart-o" : "fa-heart"}`}
-          ></i>
+          ></i> */}
+          {/* <CIcon icon={cilHeart}   /> */}
+          {heart ? <Heart color="red" /> : <HeartFill color="red" />}
         </small>
         <Card.Img
           variant="top"
           src={product.pictures?.product_picture ?? image}
-          className="h-50"
+          className="w-100 mx-auto "
         />
         <Card.Header>
           {" "}

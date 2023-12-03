@@ -1,5 +1,11 @@
+@import './css/responsive.css';
+
 html {
   overflow-y: scroll
+}
+
+.input-group.ar {
+  flex-direction: row-reverse !important;
 }
 
 .mg-1 {
@@ -551,7 +557,7 @@ a,
 
 .footlinks a {
   text-decoration: none;
-  line-height: 2rem;
+  line-height: 1rem;
   color: rgb(105, 103, 103);
 }
 
@@ -576,19 +582,26 @@ a,
   margin-right: 1px;
 }
 
-.footer {
-  margin: auto;
+.footer:hover {
+  height: 15rem;
+}
 
-  width: 100%;
-  position: absolute;
-  /* bottom: -10px; */
+.footer {
+  /* max-height: 410px; */
+  transition: height .3s;
+  height: 3rem;
+  overflow: hidden;
+  bottom: 0;
   z-index: 10;
-  margin-top: 0rem;
   justify-content: center;
   clear: both;
   position: relative;
-  /* height: px; */
-  /* margin-top: -00px; */
+}
+
+.absolute-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer a {
@@ -693,15 +706,13 @@ a,
   position: absolute;
   margin: auto 0;
   left: 10%;
-  top: 15%;
+  top: 11%;
   color: #fff;
-  /* display: inline-block; */
-  width: 30%;
+  width: 40%;
   justify-content: center;
-  align-items: center;
   font-size: 4rem;
+  align-items: center;
   -webkit-text-stroke: 2px black;
-  /* width and color */
 }
 
 .cartNumber {
@@ -807,7 +818,7 @@ table tr {
 .removeBtn {
   display: flex;
   /* justify-content:end; */
-  align-items: end;
+  align-items: flex-end;
 }
 
 .removeWishlist {
@@ -869,13 +880,13 @@ table tr {
   opacity: 1 !important;
 }
 
-.product {
+/* .product {
   padding: 0 10%;
   margin-bottom: 6rem;
   display: flex;
   justify-content: space-around;
 
-}
+} */
 
 .productContent {
   display: flex;
@@ -975,22 +986,11 @@ table tr {
   padding: 1rem 10%;
 }
 
-.seller section {
-  display: flex;
-  flex-direction: row;
-  background-color: #fff;
-  border: 1rem solid rgb(212, 200, 200);
-}
 
-
-.sellerAvatar {
-  border-radius: 30rem;
-}
-
-.sellerDetails {
+/* .sellerDetails {
   padding: 1rem;
   line-height: 3rem;
-}
+} */
 
 .seller hr {
   width: 100%;
@@ -1207,15 +1207,6 @@ a.btn.btn-sign {
   box-sizing: border-box;
 }
 
-.wrapper {
-  background: url(./assets/sigin.jpg);
-  background-size: cover;
-  font-family: arial;
-  color: #333;
-  font-size: 13px;
-  margin: 0;
-}
-
 input,
 select,
 button {
@@ -1237,15 +1228,17 @@ img {
   outline: none;
 }
 
+.min-vh-100-header {
+  min-height: calc(100vh - 76px);
+
+}
+
 .wrapper {
-  min-height: 100vh;
+  min-height: calc(100vh - 76px);
   background-size: cover;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 100px 0 100px;
-
+  background: url(./assets/sigin.jpg);
+  background-size: cover;
 }
 
 .inner {
@@ -1304,21 +1297,7 @@ input.form-control-input {
   margin-bottom: 25px;
 }
 
-input.PhoneInputInput {
-  border: 1px solid #333;
-  /* border: none; */
-  border-bottom: 1px solid #333;
-  border-radius: none;
-  display: block;
-  width: 100%;
-  height: 30px;
-  padding-right: 0;
-  margin-bottom: 25px;
-}
 
-.PhoneInputCountry {
-  margin-bottom: 25px;
-}
 
 select.PhoneInputCountrySelect {
   border: 1px solid #333;
@@ -1420,80 +1399,6 @@ select.form-control-input {
   background-color: #e9e6e6 !important;
 }
 
-@media screen and (max-width : 1400px) {
-  .xxl-show {
-    display: none;
-  }
-}
-
-@media screen and (min-width : 1400px) {
-  .xxl-hide {
-    display: none;
-  }
-}
-
-@media screen and (max-width : 1200px) {
-  .xl-show {
-    display: none;
-  }
-}
-
-@media screen and (min-width : 1200px) {
-  .xl-hide {
-    display: none;
-  }
-}
-
-@media screen and (max-width : 992px) {
-  .lg-show {
-    display: none !important;
-  }
-
-  .footer {
-    margin-bottom: 40px;
-  }
-}
-
-@media screen and (min-width : 992px) {
-
-  .filter-container,
-  .lg-hide {
-    display: none;
-  }
-
-}
-
-@media screen and (max-width : 768px) {
-  .md-show {
-    display: none;
-  }
-}
-
-@media screen and (min-width : 768px) {
-  .md-hide {
-    display: none;
-  }
-}
-
-@media screen and (max-width : 576px) {
-  .sm-show {
-    display: none;
-  }
-}
-
-@media screen and (min-width : 576px) {
-  .sm-hide {
-    display: none;
-  }
-}
-
-@media screen and (min-width : 992px) {
-
-  .filter-btn,
-  .lg-hide {
-    display: none;
-  }
-}
 
 .notifications-list {
   width: 15rem !important;
@@ -1505,3 +1410,22 @@ select.form-control-input {
 .offcanvas-backdrop {
   background-color: transparent;
 }
+
+.lg-spinner {
+  height: 3rem !important;
+  width: 3rem !important;
+}
+
+.min-h-screen {
+  min-height: 100dvh;
+
+}
+
+/* .main-container > div:nth-last-child(1) {
+  margin-bottom: 350px;
+} */
+
+/* .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control, .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select, .input-group:not(.has-validation)>:not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+} */

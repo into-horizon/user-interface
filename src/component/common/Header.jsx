@@ -1,29 +1,18 @@
 import React, { useEffect, useState } from "react";
-import cookie from "react-cookies";
-import { logOutHandler } from "../store/auth";
+import { logOutHandler } from "../../store/auth";
 import { Navbar, Container, Nav, NavDropdown, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { connect, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Fav from "../assets/fav.PNG";
-import Cart from "../assets/cart.PNG";
-import { CBadge, CButton, CListGroup, CListGroupItem } from "@coreui/react";
+import { CBadge, CListGroup, CListGroupItem } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import {
-  cilList,
-  cilShieldAlt,
-  cilBell,
-  cilHeart,
-  cilCart,
-  cilUser,
-} from "@coreui/icons";
+import { cilBell, cilHeart, cilCart, cilUser } from "@coreui/icons";
 
 const Header = (props) => {
   const login = useSelector((state) => state.sign.login);
   const navigate = useNavigate();
-  const { cart, userSignIn } = props;
-  // const [login, setLogin] = useState(false);
+  const { cart } = props;
   const [displayList, setDisplayList] = useState(false);
   const { t, i18n } = useTranslation();
   const [style, setStyle] = useState({});
@@ -60,7 +49,7 @@ const Header = (props) => {
   });
 
   return (
-    <Navbar bg="primary" variant="dark" className="pt-3">
+    <Navbar bg="primary" variant="dark" className="pt-3 w-100 ">
       <Container>
         <Navbar.Brand>
           <Link to="/" className="nav-link">
@@ -77,7 +66,7 @@ const Header = (props) => {
 
               {login && (
                 <Nav.Link
-                  as={'div'}
+                  as={"div"}
                   className="nav-link position-relative px-0 mx-2 pointer "
                   key="notification"
                   onClick={() => setDisplayList((x) => !x)}
@@ -150,21 +139,7 @@ const Header = (props) => {
                     }, 0)}
                   </h6>
                 </CBadge>
-                {/* <span className="cartNumber">
-                  <strong>
-                    {cart.reduce((x, y) => {
-                      return x + y.quantity;
-                    }, 0)}
-                  </strong>
-                  <img className="fav" src={Cart} alt="cart" />
-                </span> */}
               </Link>
-
-              {/* <img
-                className="profile"
-                src="https://b.top4top.io/p_2182nn0jy1.png"
-                alt="pin"
-              /> */}
 
               <NavDropdown
                 id="collasible-nav-dropdown2"
@@ -197,10 +172,18 @@ const Header = (props) => {
             </Nav>
           </div>
           <NavDropdown title={t("lan")} id="collasible-nav-dropdown">
-            <NavDropdown.Item as={Button} onClick={() => changeLanguage("ar")}>
+            <NavDropdown.Item
+              as={Button}
+              active={i18n.language === "ar"}
+              onClick={() => changeLanguage("ar")}
+            >
               العربية
             </NavDropdown.Item>
-            <NavDropdown.Item as={Button} onClick={() => changeLanguage("en")}>
+            <NavDropdown.Item
+              as={Button}
+              active={i18n.language === "en"}
+              onClick={() => changeLanguage("en")}
+            >
               English
             </NavDropdown.Item>
           </NavDropdown>

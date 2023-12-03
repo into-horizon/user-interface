@@ -1,6 +1,6 @@
 import React, { Children } from "react";
 import { connect } from "react-redux";
-import { Redirect, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import {
   addItem,
   decrementQuantity,
@@ -36,9 +36,13 @@ const Cart = ({
   };
   return (
     <>
-      
-      <h1 className="text-align-center border-bottom d-block pb-2 mx-auto px-5 border-info" style={{maxWidth: 'fit-content'}}>Cart</h1>
-      <Row className="justify-content-center cart">
+      <h1
+        className="text-align-center border-bottom d-block pb-2 mx-auto px-5 border-info"
+        style={{ maxWidth: "fit-content" }}
+      >
+        Cart
+      </h1>
+      <Row className="justify-content-center w-100 ">
         {cart.length > 0 ? (
           <>
             {" "}

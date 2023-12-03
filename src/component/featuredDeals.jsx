@@ -1,5 +1,4 @@
 import React, { Children } from "react";
-import ProfileCard from "./productCard";
 import ProductCardV2 from "./ProductCardV2";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +8,7 @@ const ProductView = ({ title, id, products }) => {
   return (
     <div className="mt-4">
       <div className="mainDiv">
-        <a href="#">
+        <a href="/#">
           <h2 className="FH">{title}</h2>
         </a>
         <button

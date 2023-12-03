@@ -1,9 +1,6 @@
 import React from "react";
 // import { Carousel } from 'react-responsive-carousel';
 import { Carousel } from "react-bootstrap";
-import img1 from "../assets/1.jpg";
-import img2 from "../assets/2.jpg";
-import img3 from "../assets/1111.jpg";
 
 const CarouselItem = () => {
   const CarouselItems = [
@@ -23,30 +20,20 @@ const CarouselItem = () => {
   ];
 
   return (
-    <div className="carousel">
-      <Carousel>
-          {CarouselItems.map((item,idx)=>
+    <Carousel>
+      {CarouselItems.map((item, idx) => (
         <Carousel.Item key={idx}>
-          <img src={item.img} />
-            <h1>{item.description}</h1>
-          <Carousel.Caption>
-            {/* <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
-          </Carousel.Caption>
+          <img
+            src={item.img}
+            className=" w-100 h-lg-75hv h-md-50hv"
+            alt="carousel"
+          />
+          <h1 className="font-size-xl-4 font-size-lg-3 font-size-md-2 ">
+            {item.description}
+          </h1>
         </Carousel.Item>
-
-          )}
-        {/* <p className="legend">Legend 1</p>
-        <Carousel.Item>
-          <img src="https://takebacklink.com/wp-content/uploads/2021/10/eCommerce.jpg" />
-        </Carousel.Item>
-        <p className="legend">Legend 2</p>
-        <Carousel.Item>
-          <img src="https://cdn.techinasia.com/wp-content/uploads/2016/03/packing-box-seller-ecommerce.jpeg" />
-        </Carousel.Item>
-
-        <p className="legend">Legend 3</p> */}
-      </Carousel>
-    </div>
+      ))}
+    </Carousel>
   );
 };
 

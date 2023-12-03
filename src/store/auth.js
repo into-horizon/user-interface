@@ -3,6 +3,8 @@ import cookie from "react-cookies";
 import AuthService from "../services/Auth";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
+import { showDialog } from "./dialog";
+import { DialogType } from "react-custom-popup";
 
 const sign = createSlice({
   name: "sign",
@@ -29,6 +31,15 @@ const sign = createSlice({
     builder.addCase(deleteProfilePicture.pending, (state) => {
       state.loading = true;
     });
+    builder.addCase(signInHandler.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(signInHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(signInHandler.pending, (state) => {
+      state.loading = true;
+    });
   },
 });
 export const signupHandler = (payload) => async (dispatch, state) => {
@@ -44,23 +55,34 @@ export const signupHandler = (payload) => async (dispatch, state) => {
   }
 };
 
-export const signInHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { access_token, refresh_token, status, session_id, message } =
-      await AuthService.login(payload);
-    if (status === 200) {
-      cookie.save("access_token", access_token, { path: "/" });
-      cookie.save("refresh_token", refresh_token, { path: "/" });
-      cookie.save("session_id", session_id, { path: "/" });
-      let { user } = await AuthService.getProfile();
-      dispatch(loginAction({ login: true, user: user }));
-    } else {
-      dispatch(loginAction({ message: message }));
+export const signInHandler = createAsyncThunk(
+  "auth/login",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      let { access_token, refresh_token, status, session_id, message } =
+        await AuthService.login(payload);
+      if (status === 200) {
+        cookie.save("access_token", access_token, { path: "/" });
+        cookie.save("refresh_token", refresh_token, { path: "/" });
+        cookie.save("session_id", session_id, { path: "/" });
+        let { user } = await AuthService.getProfile();
+        dispatch(loginAction({ login: true, user }));
+      } else {
+        dispatch(
+          showDialog({
+            message,
+            type: DialogType.DANGER,
+            title: "something went wrong",
+          })
+        );
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(loginAction({ message: error.message }));
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
 export const logOutHandler = (payload) => async (dispatch, state) => {
   try {
     let data = await AuthService.logout();

@@ -20,7 +20,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilUser, cilMap, cilNotes, cilTruck } from "@coreui/icons";
-import Loader from "../../component/loader";
+import Loader from "../../component/common/Loader";
 const Account = lazy(() => import("./components/account/account"));
 const Address = lazy(() => import("./components/address/address"));
 const Orders = lazy(() => import("./components/Orders/Orders"));

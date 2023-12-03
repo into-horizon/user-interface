@@ -15,7 +15,7 @@ export const AuthRoutes = ({ login }) => {
     routes.find(
       (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
     ) && navigate(login ? path ?? "/" : "/signin");
-  }, [login]);
+  }, [location.pathname, login, navigate, path]);
   return (
     <Routes>
       {Children.toArray(

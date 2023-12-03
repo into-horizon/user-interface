@@ -18,6 +18,7 @@ import follow from "./following";
 import toast from "./toast";
 import dialog from "./dialog";
 import landingPage from "./landingPage";
+import category from "./category";
 let reducers = combineReducers({
   sign: auth,
   address: address,
@@ -33,7 +34,8 @@ let reducers = combineReducers({
   follow: follow,
   toast,
   dialog,
-  landingPage
+  landingPage,
+  category
 });
 
 let store = configureStore({ reducer: reducers }, applyMiddleware(thunk));

@@ -14,5 +14,5 @@ class LandingPage extends ApiService {
   }
 }
 
-
-export default new LandingPage()
+const landingPageService = new LandingPage()
+export default landingPageService

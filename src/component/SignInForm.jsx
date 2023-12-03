@@ -1,28 +1,38 @@
-import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import { deleteMessage, signInHandler } from "../store/auth";
+import React, { useState } from "react";
+import { connect, useSelector } from "react-redux";
+import { signInHandler } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { googleProvider, facebookProvider } from "../store/authProvider";
 import { signInHandlerWithFacebook } from "../store/facebook";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Spinner } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { Button, Spinner } from "react-bootstrap";
 import background from "../assets/8.jpg";
-import cookie from "react-cookies";
-import { CCol, CRow } from "@coreui/react";
-const SignInForm = (props) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardGroup,
+  CCol,
+  CContainer,
+  CForm,
+  CFormInput,
+  CInputGroupText,
+  CRow,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilLockLocked, cilUser } from "@coreui/icons";
+import { EyeSlash, Eye } from "react-bootstrap-icons";
+import LocalizedInputGroup from "./common/LocalizedInputGroup";
+
+const SignInForm = ({ signInHandler }) => {
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
   const { t } = useTranslation();
-  const { userSignIn, signInHandler } = props;
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showDeactivate, setShowDeactivate] = useState(false);
-  const [show, setShow] = useState(false);
+  const { loading } = useSelector((state) => state.sign);
+  const [passwordType, setPasswordType] = useState("password");
 
   const submitHandler = (e) => {
-    setErrorMessage("");
-    setLoading(true);
     e.preventDefault();
 
     signInHandler({
@@ -30,88 +40,96 @@ const SignInForm = (props) => {
       password: e.target.password.value,
     });
   };
-  let currentPath = cookie.load("currentPath");
-
-  useEffect(() => {
-    if (userSignIn.login) {
-      navigate(currentPath || "/");
-    }
-    setLoading(false);
-  }, [currentPath, navigate, userSignIn.login]);
-
-  useEffect(() => {
-    if (userSignIn.message) {
-      if (userSignIn.message) {
-        setShow(true);
-        // dispatch(deleteMessage());
-      }
-    }
-    setLoading(false);
-  }, [dispatch, userSignIn]);
-
-  useEffect(() => {
-    if (userSignIn.message) {
-      if (userSignIn.message.includes("activate", 30)) {
-        setShowDeactivate(true);
-        // dispatch(deleteMessage());
-      }
-    }
-    setLoading(false);
-  }, [dispatch, userSignIn]);
 
   return (
-    <div className="wrapper">
-      <div className="inner2">
-        <div className="image-holder">
-          <img className="image" src={background} alt={background} />
-        </div>
-        <Form className="form" onSubmit={submitHandler}>
-          <Form.Group className="mb-3">
-            <Form.Control type="email" name="email" placeholder={t("text2")} />
+    <div className="bg-light d-flex flex-row align-items-center wrapper w-100 ">
+      <CContainer>
+        <CRow className=" w-100 h-100 justify-content-center align-content-center  ">
+          <CCol xs={12} md={10} lg={10} xl={9}>
+            <CCardGroup>
+              <CCard className="p-4 bg-light  rounded-0  lg-show ">
+                <CCardBody>
+                  <img src={background} alt="background" />
+                </CCardBody>
+              </CCard>
+              <CCard className=" rounded-0  p-sm-5  p-lg-3  ">
+                <CCardBody className=" d-flex ">
+                  <CForm onSubmit={submitHandler} className="my-auto  w-100 ">
+                    <h1>{t("login")}</h1>
+                    <p className="text-medium-emphasis">
+                      {t("Sign In to your account")}
+                    </p>
+                    <LocalizedInputGroup className="my-4  ">
+                      <CInputGroupText>
+                        <CIcon icon={cilUser} />
+                      </CInputGroupText>
+                      <CFormInput
+                        type="email"
+                        name="email"
+                        placeholder="email"
+                      />
+                    </LocalizedInputGroup>
+                    <LocalizedInputGroup className="my-2">
+                      <CInputGroupText>
+                        <CIcon icon={cilLockLocked} />
+                      </CInputGroupText>
+                      <CFormInput
+                        type={passwordType}
+                        name="password"
+                        placeholder={t("pass")}
+                      />
+                      <CButton
+                        color="secondary"
+                        className=" bg-light "
+                        variant="outline"
+                        onClick={() =>
+                          setPasswordType(
+                            passwordType === "password" ? "text" : "password"
+                          )
+                        }
+                      >
+                        {passwordType === "password" && <Eye color="inherit" />}
+                        {passwordType === "text" && (
+                          <EyeSlash color="inherit" />
+                        )}
+                      </CButton>
+                    </LocalizedInputGroup>
 
-            <Form.Text className="text-muted">{t("text3")}</Form.Text>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="password"
-              name="password"
-              placeholder={t("pass")}
-            />
-          </Form.Group>
-          {errorMessage && (
-            <div className="error" style={{ color: "red" }}>
-              {" "}
-              {errorMessage}{" "}
-            </div>
-          )}
-          {show ? (
-            <div style={{ color: "red" }}> {userSignIn.message}</div>
-          ) : null}
-          {showDeactivate ? (
-            <div style={{ color: "blue" }}>
-              {" "}
-              {
-                "your account is deactivate , you can sign in again to activate your account and We are glad to have you back in your second family ❤️"
-              }
-            </div>
-          ) : null}
-          <div>
-            <Link to="/signUp" className="btn btn-sign">
-              {t("sign")}{" "}
-            </Link>
-          </div>
-          <CRow className="justify-content-md-center">
-            <CCol xs="auto">
-              <Button variant="primary" type="submit" className="btn">
-                {t("sub")}
-              </Button>
-            </CCol>
-          </CRow>
-
-          {loading ? <Spinner animation="border" /> : null}
-        </Form>
-      </div>
+                    <CRow
+                      className="justify-content-between mt-2"
+                      xs={{ gutterY: 3 }}
+                    >
+                      <CCol xs={"auto"}>
+                        <Button
+                          variant="primary"
+                          type="submit"
+                          className="btn"
+                          disabled={loading}
+                        >
+                          {loading ? (
+                            <Spinner animation="border" size="sm" />
+                          ) : (
+                            t("sub")
+                          )}
+                        </Button>
+                      </CCol>
+                      <CCol xs={"auto"}>
+                        <CButton color="link">forgot password?</CButton>
+                      </CCol>
+                      <CCol xs={12}>
+                        <p className=" text-center ">
+                          don't have account?{" "}
+                          <Link to="/signUp">{t("sign")} </Link>
+                        </p>
+                      </CCol>
+                    </CRow>
+                  </CForm>
+                </CCardBody>
+              </CCard>
+            </CCardGroup>
+          </CCol>
+        </CRow>
+      </CContainer>
     </div>
   );
 };

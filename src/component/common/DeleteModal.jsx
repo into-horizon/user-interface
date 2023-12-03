@@ -1,11 +1,9 @@
-import { Button } from "@coreui/coreui";
 import { cilTrash } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {
   CButton,
   CModal,
   CModalBody,
-  CModalContent,
   CModalFooter,
   CModalHeader,
   CModalTitle,

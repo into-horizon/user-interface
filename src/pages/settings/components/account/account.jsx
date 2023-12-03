@@ -1,27 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   updateProfileHandler,
   updatePictureHandler,
   deactivateProfileHandler,
   logOutHandler,
   changePasswordHandler,
-  deleteMessage,
   deleteProfilePicture,
 } from "../../../../store/auth";
 import { useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
-import {
-  Button,
-  Row,
-  Form,
-  Col,
-  Figure,
-  Spinner,
-  Container,
-  Accordion,
-  Image,
-} from "react-bootstrap";
+import { Button, Row, Form, Col, Spinner, Accordion } from "react-bootstrap";
 import {
   usePopup,
   OutAnimationType,
@@ -29,11 +18,10 @@ import {
   DialogType,
   ToastPosition,
 } from "react-custom-popup";
-import { FcEditImage } from "react-icons/fc";
 import ChangeEmail from "./changeEmail";
 import CIcon from "@coreui/icons-react";
 import { cilCloudUpload } from "@coreui/icons";
-import DeleteModal from "../../../../component/DeleteModal";
+import DeleteModal from "../../../../component/common/DeleteModal";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Account = ({
@@ -47,12 +35,12 @@ const Account = ({
 }) => {
   const {
     message,
-    loading,
+    _loading,
     user: { first_name, last_name, country, city, profile_picture },
   } = useSelector((state) => state.sign);
   const navigate = useNavigate();
   const { showOptionDialog, showToast, showAlert } = usePopup();
-  const [loadingXX, setLoading] = useState(true);
+  const [_loadingXX, setLoading] = useState(true);
 
   const [loading2, setLoading2] = useState(true);
 
@@ -60,12 +48,12 @@ const Account = ({
     if (!cookie.load("access_token")) {
       navigate("/pageInvalidToken");
     }
-  }, []);
+  }, [navigate]);
   useEffect(() => {
     if (message && !message.title ? message.includes("deactivated") : null) {
       navigate("/signIn");
     }
-  }, [navigate, profileData]);
+  }, [message, navigate, profileData]);
   useEffect(() => {
     setLoading(false);
     setLoading2(false);

@@ -84,7 +84,7 @@ const Paginator = ({
     }
 
     setPages(p.filter((v, i, a) => a.indexOf(v) === i));
-  }, [count, selectedPage]);
+  }, [count, pagesCount, selectedPage]);
 
   const changePage = (n) => {
     setSelectedPage(n);
