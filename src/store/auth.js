@@ -14,6 +14,7 @@ const sign = createSlice({
     message: "",
     verify: {},
     loading: false,
+    globalLoading: false,
   },
   reducers: {
     loginAction(state, action) {
@@ -40,20 +41,59 @@ const sign = createSlice({
     builder.addCase(signInHandler.pending, (state) => {
       state.loading = true;
     });
+    builder.addCase(signupHandler.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(signupHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(signupHandler.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(logOutHandler.fulfilled, (state) => {
+      state.globalLoading = false;
+    });
+    builder.addCase(logOutHandler.rejected, (state) => {
+      state.globalLoading = false;
+    });
+    builder.addCase(logOutHandler.pending, (state) => {
+      state.globalLoading = true;
+    });
   },
 });
-export const signupHandler = (payload) => async (dispatch, state) => {
-  try {
-    let data = await AuthService.register(payload);
-    if (data.status === 200) {
-      dispatch(loginAction({ token: { ...data } }));
-    } else if (data.status === 403) {
-      dispatch(loginAction({ message: data.message }));
+export const signupHandler = createAsyncThunk(
+  "auth/sign-up",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      let { status, message, access_token, refresh_token, session_id, user } =
+        await AuthService.register(payload);
+      if (status === 200) {
+        cookie.save("access_token", access_token, { path: "/" });
+        cookie.save("refresh_token", refresh_token, { path: "/" });
+        cookie.save("session_id", session_id, { path: "/" });
+        dispatch(loginAction({ user, login: true }));
+      } else if (status === 403) {
+        dispatch(
+          showDialog({
+            title: "something went wrong",
+            message: message,
+            type: DialogType.DANGER,
+          })
+        );
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        showDialog({
+          title: "something went wrong",
+          message: error.message,
+          type: DialogType.DANGER,
+        })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
 
 export const signInHandler = createAsyncThunk(
   "auth/login",
@@ -83,21 +123,33 @@ export const signInHandler = createAsyncThunk(
     }
   }
 );
-export const logOutHandler = (payload) => async (dispatch, state) => {
-  try {
-    let data = await AuthService.logout();
-    if (data.status === 200) {
-      cookie.remove("access_token", { path: "/" });
-      cookie.remove("refresh_token", { path: "/" });
-      cookie.remove("session_id", { path: "/" });
-      dispatch(loginAction({ login: false, message: data.message }));
-    } else {
-      dispatch(loginAction({ message: data.message }));
+export const logOutHandler = createAsyncThunk(
+  "auth/logout",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      let data = await AuthService.logout();
+      if (data.status === 200) {
+        cookie.remove("access_token", { path: "/" });
+        cookie.remove("refresh_token", { path: "/" });
+        cookie.remove("session_id", { path: "/" });
+        dispatch(loginAction({ login: false }));
+        dispatch(
+          triggerToast({ type: DialogType.INFO, message: data.message })
+        );
+      } else {
+        dispatch(
+          triggerToast({ type: DialogType.DANGER, message: data.message })
+        );
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
 export const endSession = () => async (dispatch, state) => {
   dispatch(loginAction({ login: false, user: {} }));
 };

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import {
   signupHandler,
   verificationHandler,
-  deleteMessage,
 } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { signInHandlerWithFacebook } from "../store/facebook";
@@ -26,11 +25,9 @@ import {
   CCol,
   CContainer,
   CFormInput,
-  CFormLabel,
   CFormSelect,
   CFormText,
   CInputGroup,
-  CInputGroupText,
   CRow,
 } from "@coreui/react";
 import CFormInputWithMask from "./common/CFormInputWithMask";
@@ -39,10 +36,8 @@ import { Eye, EyeSlash } from "react-bootstrap-icons";
 import { validatePassword } from "../services/utils";
 const SignupForm = (props) => {
   const dispatch = useDispatch();
-  const { userSignUp } = props;
   const { t } = useTranslation("sign-up");
 
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
     useState(false);
@@ -50,33 +45,11 @@ const SignupForm = (props) => {
     invalid: false,
     message: "",
   });
-  const [phone, setPhone] = useState();
+  const { loading } = useSelector((state) => state.sign);
   const [city, setCity] = useState([]);
-  const [showError, setShowError] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
 
-  const [values, setValues] = useState({
-    first_name: props.googleUser.first_name || "",
-    last_name: props.googleUser.last_name || "",
-    email: props.googleUser.email || "",
-    gender: "",
-    mobile: "",
-    country: "",
-    city: "",
-    country_code: "",
-    password: "",
-    google_id: props.googleUser.google_id || "",
-    facebook_id: props.googleUser.facebook_id || "",
-  });
-
-  const handleChange = (e) => {
-    console.log(e.target.name, "name");
-    console.log(e.target.value, "value");
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
-  };
+  
   const handleSubmit = (e) => {
     const {
       first_name,
@@ -89,15 +62,11 @@ const SignupForm = (props) => {
       con_password,
     } = e.target;
     e.preventDefault();
-    // dispatch(deleteMessage());
-    setLoading(true);
-    setShowError(false);
     try {
       validatePassword(password.value);
       setPasswordValidation({ invalid: false });
     } catch (error) {
       setPasswordValidation({ invalid: true, message: error });
-      setLoading(false);
       return;
     }
     if (password.value !== con_password.value) {
@@ -107,47 +76,24 @@ const SignupForm = (props) => {
       setInvalidPasswordConfirmation(false);
     }
 
-    let phoneArray = e.target.mobile.value.split(" ");
-    let country_code = phoneArray[0].slice(1);
     let obj = {
-      email: e.target.email.value,
-      password: e.target.password.value,
-      first_name: e.target.first_name.value,
-      last_name: e.target.last_name.value,
-      mobile: "0" + phoneArray.slice(1).join(""),
-      // country: e.target.country.value,
-      city: e.target.city.value,
+      email: email.value,
+      password: password.value,
+      first_name: first_name.value,
+      last_name: last_name.value,
+      mobile: mobile.value.substring(1),
+      country: 'jordan',
+      city: city.value,
       country_code: 962,
-      gender: e.target.gender.value,
+      gender: gender.value,
       // google_id: e.target.google_id.value || null,
       // facebook_id: e.target.facebook_id.value || null,
     };
     // props.signupHandler(obj);
 
-    console.log(
-      "🚀 ~ file: SignupForm.js ~ line 31 ~ SignupForm ~ userSignUp",
-      userSignUp
-    );
+    dispatch(signupHandler(obj));
   };
 
-  useEffect(() => {
-    if (userSignUp.message) {
-      let check = userSignUp.message[0];
-      console.log(
-        "🚀 ~ file: SignupForm.js ~ line 92 ~ useEffect ~ userSignUp.message",
-        userSignUp.message
-      );
-      if (
-        userSignUp.message.includes("Missing") ||
-        check.includes("password") ||
-        userSignUp.message.includes("email") ||
-        userSignUp.message.includes("mobile")
-      ) {
-        setShowError(true);
-      }
-    }
-    setLoading(false);
-  }, [userSignUp]);
 
   useEffect(() => {
     let provider = localStorage.getItem("provider");
@@ -235,11 +181,8 @@ const SignupForm = (props) => {
                     name="mobile"
                     id="mobile"
                     className="mb-2 "
-                    onChange={setPhone}
                     required
-                    onInvalid={(e) => console.log(e)}
                   />
-                  {/* <CFormLabel htmlFor="gender">{t("gen")}</CFormLabel> */}
                   <CFormSelect
                     name="gender"
                     className="mb-2 p-2"
@@ -306,9 +249,9 @@ const SignupForm = (props) => {
                   />
 
                   <div className=" mx-auto mt-2 ">
-                    <Button type="submit">
+                    <Button type="submit" disabled={loading}>
                       {loading ? (
-                        <Spinner animation="grow" variant="light" />
+                        <Spinner animation="grow" size="sm" variant="light" />
                       ) : (
                         t("SIGN_UP")
                       )}

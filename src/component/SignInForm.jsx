@@ -24,11 +24,8 @@ import {
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import { EyeSlash, Eye } from "react-bootstrap-icons";
-import LocalizedInputGroup from "./common/LocalizedInputGroup";
 
 const SignInForm = ({ signInHandler }) => {
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const { t } = useTranslation();
   const { loading } = useSelector((state) => state.sign);
   const [passwordType, setPasswordType] = useState("password");

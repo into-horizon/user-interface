@@ -47,7 +47,7 @@ const App = ({
   getFollowingStores,
   getTopStores,
 }) => {
-  const { login } = useSelector((state) => state.sign);
+  const { login, globalLoading } = useSelector((state) => state.sign);
   const { i18n } = useTranslation();
   const location = useLocation();
   const [loader, setLoading] = useState(true);
@@ -123,7 +123,9 @@ const App = ({
   useEffect(() => {
     setDefaultHeaders();
   }, [location.pathname]);
-
+  useEffect(()=>{
+    setLoading(globalLoading)
+  },[globalLoading])
   const WithFooter = ({ Component }) => {
     return (
       <>
