@@ -41,8 +41,10 @@ const sign = createSlice({
     builder.addCase(signInHandler.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(signupHandler.fulfilled, (state) => {
+    builder.addCase(signupHandler.fulfilled, (state, action) => {
       state.loading = false;
+      state.login = true;
+      state.user = action.payload;
     });
     builder.addCase(signupHandler.rejected, (state) => {
       state.loading = false;
@@ -71,7 +73,7 @@ export const signupHandler = createAsyncThunk(
         cookie.save("access_token", access_token, { path: "/" });
         cookie.save("refresh_token", refresh_token, { path: "/" });
         cookie.save("session_id", session_id, { path: "/" });
-        dispatch(loginAction({ user, login: true }));
+        return user;
       } else if (status === 403) {
         dispatch(
           showDialog({
@@ -82,6 +84,7 @@ export const signupHandler = createAsyncThunk(
         );
         return rejectWithValue(message);
       }
+      return;
     } catch (error) {
       dispatch(
         showDialog({

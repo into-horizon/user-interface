@@ -12,9 +12,10 @@ export const AuthRoutes = ({ login }) => {
   const location = useLocation();
   const path = cookie.load("redirectTo", { path: "/" });
   useEffect(() => {
-    console.log("🚀 ~ file: AuthRoutes.jsx:19 ~ AuthRoutes ~ login:", login)
     routes.find(
-      (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
+      (v) =>
+        (v.path === location.pathname.toLowerCase() && v.auth !== login) ||
+        (v.path.toLowerCase() === "/signup" && login)
     ) && navigate(login ? path ?? "/" : "/signin");
   }, [location.pathname, login, navigate, path]);
   return (
