@@ -161,6 +161,13 @@ class Auth extends ApiService {
       throw new Error(error.message);
     }
   }
+  async requestVerificationCode() {
+    try {
+      return this.update(`${this.path}/verify-code`);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 let AuthService = new Auth();

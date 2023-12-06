@@ -40,7 +40,6 @@ const Header = lazy(() => import("./component/common/Header"));
 
 const App = ({
   parentCategoryHandler,
-  myProfileHandler,
   getCartItemsHandler,
   getItemsHandler,
   getFollowingStores,
@@ -82,10 +81,10 @@ const App = ({
               getItemsHandler(),
               dispatch(myAddressHandler({ limit: 5, offset: 0 })),
               getFollowingStores(),
-              myProfileHandler(),
+              dispatch(myProfileHandler()),
             ]);
           } else if (token && !login) {
-            myProfileHandler();
+            dispatch(myProfileHandler());
           } else {
             dispatch(resetCartItems(cookie.load("cart") ?? []));
             dispatch(resetWishlist(cookie.load("wishlist") ?? []));
@@ -185,7 +184,6 @@ const App = ({
 };
 const mapDispatchToProps = {
   parentCategoryHandler,
-  myProfileHandler,
   getCartItemsHandler,
   getItemsHandler,
   getFollowingStores,

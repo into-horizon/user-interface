@@ -353,6 +353,25 @@ export const checkVerificationCode = createAsyncThunk(
     }
   }
 );
+export const requestVerificationCode = createAsyncThunk(
+  "auth/requestVerificationCode",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } = await AuthService.requestVerificationCode();
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+      } else {
+        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export default sign.reducer;
 export const { loginAction, deleteMessage } = sign.actions;

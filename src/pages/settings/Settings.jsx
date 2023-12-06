@@ -109,7 +109,6 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [show, setShow] = useState(true);
-  const location = useLocation();
   useEffect(() => {
     if (windowWidth < 1000) {
     } else {
@@ -151,9 +150,6 @@ const Settings = () => {
             )}
           </Routes>
         </Suspense>
-        {location.pathname === "/settings" && (
-          <Navigate to="/settings/account" />
-        )}
       </Col>
     </Row>
   );
