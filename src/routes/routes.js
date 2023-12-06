@@ -5,6 +5,7 @@ const Settings = lazy(() => import("../pages/settings/Settings"));
 const SignInForm = lazy(() => import("../component/SignInForm"));
 const SignupForm = lazy(() => import("../component/SignupForm"));
 const Checkout = lazy(() => import("../pages/Checkout"));
+const Verification = lazy(() => import("../pages/verification/verification"));
 
 export const routes = [
   { path: "/signin", component: SignInForm, exact: true, auth: false },
@@ -12,6 +13,7 @@ export const routes = [
   { path: "/settings/*", component: Settings, exact: true, auth: true },
   { path: "/checkout", component: Checkout, exact: true, auth: true },
   { path: "/successOrder", component: PlacedOrder, exact: true, auth: true },
+  { path: "/verification", component: Verification, exact: true, auth: true },
 ];
 
 export default routes;

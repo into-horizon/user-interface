@@ -30,7 +30,6 @@ import GlobalDialog from "./component/common/Dialog";
 
 const Main = lazy(() => import("./pages/main"));
 const Page404 = lazy(() => import("./pages/Page404"));
-const Verification = lazy(() => import("./component/verification"));
 const Cart = lazy(() => import("./component/cart"));
 const Wishlist = lazy(() => import("./component/wishlist"));
 const Product = lazy(() => import("./component/product"));
@@ -172,7 +171,6 @@ const App = ({
                   element={<WithFooter Component={Seller} />}
                 />
                 <Route path="/*" element={<AuthRoutes />} />
-                <Route path="/verification" element={<Verification />} />
                 <Route path="/500" element={<Page500 />} />
                 <Route path="*" element={<Page404 />} />
               </Routes>

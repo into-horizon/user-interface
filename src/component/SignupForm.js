@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import {
-  signupHandler,
-  verificationHandler,
-} from "../store/auth";
+import { signupHandler, verificationHandler } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { signInHandlerWithFacebook } from "../store/facebook";
 
@@ -49,7 +46,6 @@ const SignupForm = (props) => {
   const [city, setCity] = useState([]);
   const [passwordType, setPasswordType] = useState("password");
 
-  
   const handleSubmit = (e) => {
     const {
       first_name,
@@ -82,7 +78,7 @@ const SignupForm = (props) => {
       first_name: first_name.value,
       last_name: last_name.value,
       mobile: mobile.value.substring(1),
-      country: 'jordan',
+      country: "jordan",
       city: city.value,
       country_code: 962,
       gender: gender.value,
@@ -93,7 +89,6 @@ const SignupForm = (props) => {
 
     dispatch(signupHandler(obj));
   };
-
 
   useEffect(() => {
     let provider = localStorage.getItem("provider");
@@ -119,10 +114,6 @@ const SignupForm = (props) => {
       props.facebookUser.user
     );
   }, [props.facebookUser]);
-
-  // const getCities = (e) => {
-  //   let id = document.getElementById("countryId").value;
-  // };
 
   useEffect(() => {
     setCity(State.getStatesOfCountry(String("JO")));

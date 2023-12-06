@@ -1,5 +1,5 @@
 import React, { lazy, useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import routes from "./routes";
 import cookie from "react-cookies";
@@ -10,14 +10,21 @@ const Page404 = lazy(() => import("../pages/Page404"));
 export const AuthRoutes = ({ login }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useSelector((state) => state.sign);
   const path = cookie.load("redirectTo", { path: "/" });
   useEffect(() => {
-    routes.find(
-      (v) =>
-        (v.path === location.pathname.toLowerCase() && v.auth !== login) ||
-        (v.path.toLowerCase() === "/signup" && login)
-    ) && navigate(login ? path ?? "/" : "/signin");
-  }, [location.pathname, login, navigate, path]);
+    if (login && !user?.verified) {
+      navigate("/verification");
+    } else if (
+      routes.find(
+        (v) =>
+          (v.path === location.pathname.toLowerCase() && v.auth !== login) ||
+          (v.path.toLowerCase() === "/signup" && login)
+      )
+    ) {
+      navigate(login ? path ?? "/" : "/signin");
+    }
+  }, [location.pathname, login, navigate, path, user?.verified]);
   return (
     <Routes>
       {Children.toArray(

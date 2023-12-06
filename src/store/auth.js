@@ -61,6 +61,25 @@ const sign = createSlice({
     builder.addCase(logOutHandler.pending, (state) => {
       state.globalLoading = true;
     });
+    builder.addCase(myProfileHandler.fulfilled, (state) => {
+      state.globalLoading = false;
+    });
+    builder.addCase(myProfileHandler.rejected, (state) => {
+      state.globalLoading = false;
+    });
+    builder.addCase(myProfileHandler.pending, (state) => {
+      state.globalLoading = true;
+    });
+    builder.addCase(checkVerificationCode.fulfilled, (state) => {
+      state.loading = false;
+      state.user.verified = true;
+    });
+    builder.addCase(checkVerificationCode.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(checkVerificationCode.pending, (state) => {
+      state.loading = true;
+    });
   },
 });
 export const signupHandler = createAsyncThunk(
@@ -176,18 +195,26 @@ export const verifyHandler = (payload) => async (dispatch, state) => {
     dispatch(loginAction({ message: error.message }));
   }
 };
-export const myProfileHandler = () => async (dispatch, state) => {
-  try {
-    let { user, status, message } = await AuthService.getProfile();
-    if (status === 200) {
-      dispatch(loginAction({ login: true, user: user }));
-    } else {
-      dispatch(loginAction({ message: message }));
+export const myProfileHandler = createAsyncThunk(
+  "auth/getProfile",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      let { user, status, message } = await AuthService.getProfile();
+      if (status === 200) {
+        dispatch(loginAction({ login: true, user: user }));
+      } else {
+        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
+
 export const updateProfileHandler = (payload) => async (dispatch, state) => {
   try {
     let { status, user, message } = await AuthService.updateProfileInfo(
@@ -302,8 +329,30 @@ export const changePasswordHandler = (payload) => async (dispatch, state) => {
       dispatch(loginAction({ message: message, status: status }));
       return { message: message, status: status };
     }
-  } catch (error) {}
+  } catch (error) {
+    dispatch(triggerToast({ type: DialogType.DANGER, message: error.message }));
+  }
 };
+
+export const checkVerificationCode = createAsyncThunk(
+  "auth/verifyCode",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } = await AuthService.verifyCode(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+      } else {
+        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export default sign.reducer;
 export const { loginAction, deleteMessage } = sign.actions;
