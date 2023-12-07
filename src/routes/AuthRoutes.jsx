@@ -12,33 +12,33 @@ export const AuthRoutes = () => {
   const location = useLocation();
   const { user, login } = useSelector((state) => state.sign);
   const path = cookie.load("redirectTo", { path: "/" });
-  useEffect(() => {
-    if (
-      login &&
-      !!routes.find(
-        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
-      )
-    ) {
-      if (user?.id && user?.verified && location.pathname === "/verification") {
-        navigate("/");
-      } else {
-        navigate("/");
-      }
-    } else if (user?.id && !user?.verified) {
-      navigate("/verification");
-    } else if (
-      !login &&
-      !!routes.find(
-        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
-      )
-    ) {
-      navigate("/");
-    }
-    console.log(
-      "🚀 ~ file: AuthRoutes.jsx:28 ~ useEffect ~ user?.id && !user?.verified:",
-      user?.id && !user?.verified
-    );
-  }, [location.pathname, login, navigate, path, user?.id, user?.verified]);
+  // useEffect(() => {
+  //   if (
+  //     login &&
+  //     !!routes.find(
+  //       (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
+  //     )
+  //   ) {
+  //     if (user?.id && user?.verified && location.pathname === "/verification") {
+  //       navigate("/");
+  //     } else {
+  //       navigate("/");
+  //     }
+  //   } else if (user?.id && !user?.verified) {
+  //     navigate("/verification");
+  //   } else if (
+  //     !login &&
+  //     !!routes.find(
+  //       (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
+  //     )
+  //   ) {
+  //     navigate("/");
+  //   }
+  //   console.log(
+  //     "🚀 ~ file: AuthRoutes.jsx:28 ~ useEffect ~ user?.id && !user?.verified:",
+  //     user?.id && !user?.verified
+  //   );
+  // }, [location.pathname, login, navigate, path, user?.id, user?.verified]);
   return (
     <Routes>
       {Children.toArray(

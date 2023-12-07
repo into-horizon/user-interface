@@ -27,6 +27,7 @@ import MobileNavBar from "./component/common/MobileNavBar";
 import AuthService from "./services/Auth";
 import Page500 from "./pages/page500/500";
 import GlobalDialog from "./component/common/Dialog";
+import routes from "./routes/routes";
 
 const Main = lazy(() => import("./pages/main"));
 const Page404 = lazy(() => import("./pages/Page404"));
@@ -64,7 +65,6 @@ const App = ({
   const setDefaultHeaders = async () => await ApiService.setDefaultHeaders();
 
   useEffect(() => {
-    setLoading(true);
     Promise.all([AuthService.checkAPI()])
       .then(() => {
         if (location.pathname === "/500") {
@@ -81,7 +81,6 @@ const App = ({
               getItemsHandler(),
               dispatch(myAddressHandler({ limit: 5, offset: 0 })),
               getFollowingStores(),
-              !user?.id && dispatch(myProfileHandler()),
             ]);
           } else if (token && !login) {
             dispatch(myProfileHandler());
@@ -89,13 +88,12 @@ const App = ({
             dispatch(resetCartItems(cookie.load("cart") ?? []));
             dispatch(resetWishlist(cookie.load("wishlist") ?? []));
           }
-          setLoading(false);
         });
       })
       .catch(() => {
         navigate("/500");
-        setLoading(false);
-      });
+      })
+      .finally(() => setLoading(false));
   }, [
     dispatch,
     getCartItemsHandler,
@@ -108,7 +106,6 @@ const App = ({
     parentCategoryHandler,
     token,
     user?.id,
-    user?.verified,
   ]);
   useEffect(() => {
     if (i18n.language === "en") {
@@ -133,7 +130,30 @@ const App = ({
       </>
     );
   };
-
+  useEffect(() => {
+    if (
+      !routes.find(
+        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
+      )
+    ) {
+      navigate("/");
+    } else if (user?.id && !user?.verified) {
+      navigate("/verification");
+    } else if (
+      !login &&
+      !!routes.find(
+        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
+      )
+    ) {
+      navigate("/");
+    } else if (
+      user?.id &&
+      user?.verified &&
+      location.pathname === "/verification"
+    ) {
+      navigate("/");
+    }
+  }, [location.pathname, login, navigate, user?.id, user?.verified]);
   if (loader) {
     return <Loader />;
   }

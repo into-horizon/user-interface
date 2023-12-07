@@ -10,9 +10,9 @@ const initialState = {
   login: false,
   user: {},
   message: "",
-  verify: {},
+  verificationCodeRequested: false,
   loading: false,
-  globalLoading: false,
+  globalLoading: true,
 };
 const sign = createSlice({
   name: "sign",
@@ -75,6 +75,9 @@ const sign = createSlice({
       state.loading = false;
       state.user.verified = true;
     });
+    builder.addCase(requestVerificationCode.fulfilled, (state) => {
+      state.verificationCodeRequested = true
+    });
     builder.addCase(checkVerificationCode.rejected, (state) => {
       state.loading = false;
     });
@@ -122,13 +125,12 @@ export const signInHandler = createAsyncThunk(
   "auth/login",
   async (payload, { dispatch, rejectWithValue }) => {
     try {
-      let { access_token, refresh_token, status, session_id, message } =
+      let { access_token, refresh_token, status, session_id, message, user } =
         await AuthService.login(payload);
       if (status === 200) {
         cookie.save("access_token", access_token, { path: "/" });
         cookie.save("refresh_token", refresh_token, { path: "/" });
         cookie.save("session_id", session_id, { path: "/" });
-        let { user } = await AuthService.getProfile();
         dispatch(loginAction({ login: true, user }));
       } else {
         dispatch(

@@ -28,7 +28,9 @@ import {
 const Verification = (props) => {
   const { t } = useTranslation("verification");
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.sign);
+  const { loading, verificationCodeRequested } = useSelector(
+    (state) => state.sign
+  );
 
   const handleVerification = async (e) => {
     e.preventDefault();
@@ -36,10 +38,12 @@ const Verification = (props) => {
   };
 
   useEffect(() => {
-    console.log('here');
-    dispatch(requestVerificationCode());
+    console.log("here");
+    if (!verificationCodeRequested) {
+      dispatch(requestVerificationCode());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [verificationCodeRequested]);
   return (
     <div className=" min-vw-100 wrapper bg-light align-items-center  d-flex flex-row">
       <CContainer>
