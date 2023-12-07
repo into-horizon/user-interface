@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import {
   checkVerificationCode,
+  requestVerificationCode,
   verificationHandler,
   verifyHandler,
 } from "../../store/auth";
 import { useTranslation } from "react-i18next";
-import { Form, Button } from "react-bootstrap";
 import {
   CButton,
   CCard,
@@ -14,6 +14,7 @@ import {
   CCardHeader,
   CCardText,
   CCardTitle,
+  CCardFooter,
   CCol,
   CContainer,
   CForm,
@@ -25,7 +26,7 @@ import {
 // import './verification.css';
 
 const Verification = (props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation("verification");
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.sign);
 
@@ -34,16 +35,11 @@ const Verification = (props) => {
     dispatch(checkVerificationCode(e.target.code.value));
   };
 
-  // const handleCode = (e) => {
-  //   e.preventDefault();
-  //   let code = e.target.code.value;
-  //   console.log(
-  //     "🚀 ~ file: verification.jsx ~ line 19 ~ handleCode ~ code",
-  //     code
-  //   );
-  //   // props.verifyHandler(code);
-  // };
-
+  useEffect(() => {
+    console.log('here');
+    dispatch(requestVerificationCode());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className=" min-vw-100 wrapper bg-light align-items-center  d-flex flex-row">
       <CContainer>
@@ -55,7 +51,7 @@ const Verification = (props) => {
               </CCardHeader>
               <CCardBody>
                 <CCardText>
-                  <p>{t("PLEASE_ENTER_CODE")}</p>
+                  <p>{t("VERIFICATION_TEXT")}</p>
                 </CCardText>
                 <CForm onSubmit={handleVerification} className=" mt-5">
                   <CInputGroup>
@@ -66,11 +62,26 @@ const Verification = (props) => {
                       placeholder={t("PLEASE_ENTER_CODE")}
                     />
                     <CButton type="submit" disabled={loading}>
-                      {loading ? <CSpinner size="sm" /> : "verify"}
+                      {loading ? (
+                        <CSpinner size="sm" />
+                      ) : (
+                        t("verify".toUpperCase())
+                      )}
                     </CButton>
                   </CInputGroup>
                 </CForm>
               </CCardBody>
+              <CCardFooter>
+                <CCardText>
+                  {t("NEW_CODE_TEXT")}
+                  <CButton
+                    color="link"
+                    onClick={() => dispatch(requestVerificationCode())}
+                  >
+                    {t("NEW_CODE")}
+                  </CButton>
+                </CCardText>
+              </CCardFooter>
             </CCard>
           </CCol>
         </CRow>

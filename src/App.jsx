@@ -45,7 +45,7 @@ const App = ({
   getFollowingStores,
   getTopStores,
 }) => {
-  const { login, globalLoading } = useSelector((state) => state.sign);
+  const { login, globalLoading, user } = useSelector((state) => state.sign);
   const { i18n } = useTranslation();
   const location = useLocation();
   const [loader, setLoading] = useState(true);
@@ -81,7 +81,7 @@ const App = ({
               getItemsHandler(),
               dispatch(myAddressHandler({ limit: 5, offset: 0 })),
               getFollowingStores(),
-              dispatch(myProfileHandler()),
+              !user?.id && dispatch(myProfileHandler()),
             ]);
           } else if (token && !login) {
             dispatch(myProfileHandler());
@@ -104,10 +104,11 @@ const App = ({
     getTopStores,
     location.pathname,
     login,
-    myProfileHandler,
     navigate,
     parentCategoryHandler,
     token,
+    user?.id,
+    user?.verified,
   ]);
   useEffect(() => {
     if (i18n.language === "en") {
@@ -121,9 +122,9 @@ const App = ({
   useEffect(() => {
     setDefaultHeaders();
   }, [location.pathname]);
-  useEffect(()=>{
-    setLoading(globalLoading)
-  },[globalLoading])
+  useEffect(() => {
+    setLoading(globalLoading);
+  }, [globalLoading]);
   const WithFooter = ({ Component }) => {
     return (
       <>

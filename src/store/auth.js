@@ -6,16 +6,17 @@ import { ToastTypes } from "../services/utils";
 import { showDialog } from "./dialog";
 import { DialogType } from "react-custom-popup";
 
+const initialState = {
+  login: false,
+  user: {},
+  message: "",
+  verify: {},
+  loading: false,
+  globalLoading: false,
+};
 const sign = createSlice({
   name: "sign",
-  initialState: {
-    login: false,
-    user: {},
-    message: "",
-    verify: {},
-    loading: false,
-    globalLoading: false,
-  },
+  initialState,
   reducers: {
     loginAction(state, action) {
       return { ...state, ...action.payload };
@@ -53,10 +54,10 @@ const sign = createSlice({
       state.loading = true;
     });
     builder.addCase(logOutHandler.fulfilled, (state) => {
-      state.globalLoading = false;
+      return initialState;
     });
     builder.addCase(logOutHandler.rejected, (state) => {
-      state.globalLoading = false;
+      return initialState;
     });
     builder.addCase(logOutHandler.pending, (state) => {
       state.globalLoading = true;
