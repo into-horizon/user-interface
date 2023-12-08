@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { productHandler, searchProductsHandler } from "../../store/products";
-import { useTranslation } from "react-i18next";
 import {
   Button,
   Col,
   Row,
   Form,
-  Card,
-  CardGroup,
   FormControl,
-  Container,
   Offcanvas,
 } from "react-bootstrap";
 import "./products.css";
-import { CSpinner, CFormSelect, CRow, CCol, CButton } from "@coreui/react";
-import ProductCard from "../ProductCardV2";
-import Paginator from "../Paginator";
+import { CSpinner, CFormSelect, CCol } from "@coreui/react";
+import ProductCard from "../../component/ProductCardV2";
+import Paginator from "../../component/common/Paginator";
 import CIcon from "@coreui/icons-react";
 import { cilFilter } from "@coreui/icons";
 
 const Products = ({ productsData, productHandler, searchProductsHandler }) => {
   const {
-    message,
     searchedProducts: { data: searchedProducts, count },
   } = useSelector((state) => state.products);
   const { parentCategory, childCategory, grandChildCategory } = useSelector(
@@ -69,7 +64,7 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
       setFirstLand(false);
     });
     setSearchQuery(search);
-  }, []);
+  }, [searchProductsHandler]);
 
   useEffect(() => {
     let _store = [];
@@ -128,44 +123,6 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
     setShow(false);
   };
 
-  const storeChangeHandler = (e) => {
-    e.target.checked
-      ? setSearchQuery((x) => {
-          return {
-            ...x,
-            store_id: [...x.store_id.split(","), e.target.id]
-              .filter((value) => value)
-              .join(","),
-          };
-        })
-      : setSearchQuery((x) => {
-          return {
-            ...x,
-            store_id: [...x.store_id.split(",")]
-              .filter((value) => value !== e.target.id)
-              .join(","),
-          };
-        });
-  };
-  const brandChangeHandler = (e) => {
-    e.target.checked
-      ? setSearchQuery((x) => {
-          return {
-            ...x,
-            brand: [...x.brand?.split(","), e.target.id]
-              .filter((value) => value)
-              .join(","),
-          };
-        })
-      : setSearchQuery((x) => {
-          return {
-            ...x,
-            brand: [...x.brand.split(",")]
-              .filter((value) => value !== e.target.id)
-              .join(","),
-          };
-        });
-  };
   const resetHandler = (e) => {
     e.target.reset();
     setSearchQuery(initialSearchQuery);
@@ -352,15 +309,7 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
       </Offcanvas>
 
       <Row>
-        <Col
-          xs={5}
-          sm={4}
-          md={4}
-          lg={3}
-          xl={2}
-          key="col1"
-          className="lg-show"
-        >
+        <Col xs={5} sm={4} md={4} lg={3} xl={2} key="col1" className="lg-show">
           <div className="filter m-2rem">
             {loading && firstLand ? (
               <CSpinner />
@@ -538,7 +487,7 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
           <Col key="col2">
             <Row className="py-1">
               <Col xs="auto" className="filter-btn">
-                <Button onClick={() => setShow(true)} variant="secondary" >
+                <Button onClick={() => setShow(true)} variant="secondary">
                   <CIcon icon={cilFilter} />
                 </Button>
               </Col>

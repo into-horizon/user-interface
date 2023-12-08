@@ -44,47 +44,63 @@ export default class ApiService {
     }
   }
   async get(endpoint, params) {
-    let res = await apiAxios({
-      method: "get",
-      url: `/${endpoint}`,
-      params: params,
-      // headers: this.bearer(await this.token()),
-    });
+    try {
+      let res = await apiAxios({
+        method: "get",
+        url: `/${endpoint}`,
+        params: params,
+        // headers: this.bearer(await this.token()),
+      });
 
-    return res.data;
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async post(endpoint, data, headers, params = null) {
-    let res = await apiAxios({
-      method: "post",
-      url: `/${endpoint}`,
-      data,
-      params,
-      headers,
-    });
-    return res.data;
+    try {
+      let res = await apiAxios({
+        method: "post",
+        url: `/${endpoint}`,
+        data,
+        params,
+        headers,
+      });
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async update(endpoint, data, params = null) {
-    let res = await apiAxios({
-      method: "put",
-      url: `/${endpoint}`,
-      params: params,
-      data: data,
-      // headers: this.bearer(await this.token()),
-    });
-    return res.data;
+    try {
+      let res = await apiAxios({
+        method: "put",
+        url: `/${endpoint}`,
+        params: params,
+        data: data,
+        // headers: this.bearer(await this.token()),
+      });
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async delete(endpoint, data, params) {
-    let res = await apiAxios({
-      method: "delete",
-      url: `/${endpoint}`,
-      params: params,
-      data: data,
-      // headers: this.bearer(await this.token()),
-    });
-    return res.data;
+    try {
+      let res = await apiAxios({
+        method: "delete",
+        url: `/${endpoint}`,
+        params: params,
+        data: data,
+        // headers: this.bearer(await this.token()),
+      });
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
   session() {
     let session_id = cookie.load("session_id");

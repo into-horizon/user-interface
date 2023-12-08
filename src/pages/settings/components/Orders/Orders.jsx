@@ -24,7 +24,7 @@ import {
   CSpinner,
 } from "@coreui/react";
 import { Link } from "react-router-dom";
-import Paginator from "../../../../component/Paginator";
+import Paginator from "../../../../component/common/Paginator";
 import { Placeholder } from "react-bootstrap";
 import { Children } from "react";
 import _ from "lodash";

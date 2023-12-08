@@ -147,6 +147,27 @@ class Auth extends ApiService {
       return error;
     }
   }
+  async checkAPI() {
+    try {
+      return await this.get("");
+    } catch (error) {
+      throw error;
+    }
+  }
+  async verifyCode(code) {
+    try {
+      return this.post(`${this.path}/verify-code`, { code });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  async requestVerificationCode() {
+    try {
+      return this.update(`${this.path}/verify-code`);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 let AuthService = new Auth();

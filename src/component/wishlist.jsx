@@ -19,7 +19,7 @@ const Wishlist = ({
   //     setW(x)
   //   },[wishlist])
   return (
-    <div className="wishlist">
+    <div className="" >
       <h2 className="wishlistHead">Wishlist</h2>
       {wishlist.length > 0 ? (
         Children.toArray(

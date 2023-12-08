@@ -1,52 +1,36 @@
-import React, { useState, useEffect, Children } from "react";
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  DropdownButton,
-  ButtonGroup,
-  Dropdown,
-  Form,
-  FormControl,
-  Button,
-  Row,
-  Col,
-} from "react-bootstrap";
-import { connect } from "react-redux";
+import React, { Children } from "react";
+import { Navbar, Nav, NavDropdown, Form, Row, Col } from "react-bootstrap";
+import { connect, useSelector } from "react-redux";
 import { parentCategoryHandler } from "../store/parent";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CIcon from "@coreui/icons-react";
 import { cilSearch } from "@coreui/icons";
-const MainNavbar = ({ parentData }) => {
-  const { t, i18n } = useTranslation();
-  const { parentCategory, childCategory, grandChildCategory } = parentData;
-  const [lang, setLang] = useState("");
+import { CButton, CFormInput, CInputGroup } from "@coreui/react";
+import LocalizedInputGroup from "./common/LocalizedInputGroup";
+const MainNavbar = () => {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const { data } = useSelector((state) => state.category);
 
   return (
-    <Navbar bg="light" variant="light" className="min-vw-100 ">
-      <Row className="justify-content-center w-100">
+    <Navbar bg="light" variant="light" className="min-vw-100 mx-auto">
+      <Row className="justify-content-center mx-auto w-100 ">
         <Col md={12} lg={8} xl={8} xxl={6}>
           <Nav className="px-1">
             {Children.toArray(
-              parentCategory?.slice(0, 6).map((parent) => {
-                const children = childCategory.filter(
-                  (element) => element.parent_id === parent.id
-                );
+              data?.slice(0, 6).map((parent) => {
+                const children = parent.children;
                 return (
-                  children.length > 0 && (
+                  children?.length > 0 && (
                     <NavDropdown
                       title={parent[`${i18n.language}title`]}
                       className="text-capitalize mx-auto"
                     >
                       {Children.toArray(
                         children.map((child) => {
-                          const grandChildren = grandChildCategory.filter(
-                            (element) => element.parent_id === child.id
-                          );
-                          return grandChildren.length > 0 ? (
+                          const grandChildren = child.children;
+                          return grandChildren?.length > 0 ? (
                             <NavDropdown
                               title={child[`${i18n.language}title`]}
                               className="text-capitalize"
@@ -79,25 +63,26 @@ const MainNavbar = ({ parentData }) => {
             )}
           </Nav>
         </Col>
-        <Col lg={4} xl={2} xxl={2} className="lg-show" >
+        <Col lg={3} xl={3} xxl={2} className="lg-show">
           <Form
             className="d-flex"
             onSubmit={(e) => {
               e.preventDefault();
               navigate(`/products?key=${e.target.key.value}`);
             }}
-            
           >
-            <FormControl
-              type="search"
-              placeholder="Search for products"
-              className="me-2"
-              aria-label="Search"
-              id="key"
-            />
-            <Button variant="outline-success" type="submit">
-              <CIcon icon={cilSearch}/>
-            </Button>
+            <CInputGroup>
+              <CFormInput
+                type="search"
+                placeholder="Search for products"
+                aria-label="Search"
+                id="key"
+                required
+              />
+              <CButton color="outline-success" type="submit">
+                <CIcon icon={cilSearch} />
+              </CButton>
+            </CInputGroup>
           </Form>
         </Col>
       </Row>

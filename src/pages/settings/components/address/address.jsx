@@ -1,14 +1,13 @@
 import React, { Children } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
-import { Row, Col, ListGroup, Spinner, Placeholder } from "react-bootstrap";
+import { connect, useSelector } from "react-redux";
+import { Row, Col, ListGroup, Placeholder } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CButton, CTooltip } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilPen, cilPlus } from "@coreui/icons";
 import AddressModal from "./AddressModal";
-import Paginator from "../../../../component/Paginator";
-import DeleteModal from "../../../../component/DeleteModal";
+import Paginator from "../../../../component/common/Paginator";
+import DeleteModal from "../../../../component/common/DeleteModal";
 import {
   updateAddressHandler,
   addAddressHandler,
@@ -30,7 +29,7 @@ const Address = ({
     count,
     loading,
   } = useSelector((state) => state.address);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const deleteHandler = async (id) => {
     await removeAddressHandler({ id: id });
   };
