@@ -8,9 +8,15 @@ import React, {
   Suspense,
 } from "react";
 import { connect } from "react-redux";
-import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { myProfileHandler } from "../../store/auth";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import {
   CSidebar,
   CSidebarBrand,
@@ -69,13 +75,20 @@ const routes = [
 ];
 export const SideNavbar = ({ show, setShow, width }) => {
   const [narrow, setNarrow] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   const hideSidebar = useCallback(() => {
     width < 700 && setShow(false);
-  }, [width]);
+  }, [setShow, width]);
 
   useEffect(() => {
     width < 1000 && setNarrow(true);
   }, [width]);
+  useEffect(() => {
+    if (location.pathname === "/settings") {
+     navigate("/settings/account");
+    }
+  }, [location.pathname, navigate]);
   return (
     <Fragment>
       <CSidebar narrow={narrow} visible={show} onHide={hideSidebar}>
@@ -106,7 +119,6 @@ export const SideNavbar = ({ show, setShow, width }) => {
   );
 };
 const Settings = () => {
-  const [loading, setLoading] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [show, setShow] = useState(true);
   useEffect(() => {
@@ -126,7 +138,7 @@ const Settings = () => {
     };
   }, []);
   return (
-    <Row className="justify-content-start">
+    <Row className="justify-content-start w-100 ">
       {!show && (
         <CButton
           color="info"
@@ -140,7 +152,6 @@ const Settings = () => {
         <SideNavbar show={show} setShow={setShow} width={windowWidth} />
       </Col>
       <Col lg={6} md={9} className="m-3">
-        {loading && <Spinner animation="border" />}
         <Suspense fallback={<Loader />}>
           <Routes>
             {Children.toArray(

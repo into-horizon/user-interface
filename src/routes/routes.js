@@ -16,4 +16,21 @@ export const routes = [
   { path: "/verification", component: Verification, exact: true, auth: true },
 ];
 
+const commonRoutes = [
+  "/cart",
+  "/wishlist",
+  "/products",
+  "/product/:id",
+  "/store/:id",
+  "/500",
+];
+export const authRoutes = routes
+  .filter((route) => route.auth)
+  .map((route) => route.path)
+  // .concat(commonRoutes);
+export const unauthRoutes = routes
+  .filter((route) => !route.auth)
+  .map((route) => route.path)
+  // .concat(commonRoutes);
+  
 export default routes;

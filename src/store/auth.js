@@ -21,6 +21,9 @@ const sign = createSlice({
     loginAction(state, action) {
       return { ...state, ...action.payload };
     },
+    stopLoading(state) {
+      state.globalLoading = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(deleteProfilePicture.fulfilled, (state, action) => {
@@ -76,7 +79,7 @@ const sign = createSlice({
       state.user.verified = true;
     });
     builder.addCase(requestVerificationCode.fulfilled, (state) => {
-      state.verificationCodeRequested = true
+      state.verificationCodeRequested = true;
     });
     builder.addCase(checkVerificationCode.rejected, (state) => {
       state.loading = false;
@@ -377,4 +380,4 @@ export const requestVerificationCode = createAsyncThunk(
 );
 
 export default sign.reducer;
-export const { loginAction, deleteMessage } = sign.actions;
+export const { loginAction, stopLoading } = sign.actions;

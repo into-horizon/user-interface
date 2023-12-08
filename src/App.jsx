@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, lazy } from "react";
+import React, { Suspense, useEffect, lazy } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -12,7 +12,7 @@ import { parentCategoryHandler } from "./store/parent";
 import { connect, useDispatch } from "react-redux";
 import AuthRoutes from "./routes/AuthRoutes";
 import cookie from "react-cookies";
-import { myProfileHandler } from "./store/auth";
+import { myProfileHandler, stopLoading } from "./store/auth";
 import { useSelector } from "react-redux";
 import { getCartItemsHandler, resetCartItems } from "./store/cart";
 import { getItemsHandler, resetWishlist } from "./store/wishlist";
@@ -27,7 +27,7 @@ import MobileNavBar from "./component/common/MobileNavBar";
 import AuthService from "./services/Auth";
 import Page500 from "./pages/page500/500";
 import GlobalDialog from "./component/common/Dialog";
-import routes from "./routes/routes";
+import { authRoutes, unauthRoutes } from "./routes/routes";
 
 const Main = lazy(() => import("./pages/main"));
 const Page404 = lazy(() => import("./pages/Page404"));
@@ -49,7 +49,6 @@ const App = ({
   const { login, globalLoading, user } = useSelector((state) => state.sign);
   const { i18n } = useTranslation();
   const location = useLocation();
-  const [loader, setLoading] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let token = cookie.load("access_token");
@@ -64,49 +63,54 @@ const App = ({
 
   const setDefaultHeaders = async () => await ApiService.setDefaultHeaders();
 
-  useEffect(() => {
-    Promise.all([AuthService.checkAPI()])
-      .then(() => {
-        if (location.pathname === "/500") {
-          navigate("/");
-        }
-        setDefaultHeaders().then(() => {
-          Promise.all([
-            parentCategoryHandler(),
-            dispatch(getAllCategories(), getTopStores()),
-          ]);
-          if (login) {
-            Promise.all([
-              getCartItemsHandler(),
-              getItemsHandler(),
-              dispatch(myAddressHandler({ limit: 5, offset: 0 })),
-              getFollowingStores(),
-            ]);
-          } else if (token && !login) {
-            dispatch(myProfileHandler());
-          } else {
-            dispatch(resetCartItems(cookie.load("cart") ?? []));
-            dispatch(resetWishlist(cookie.load("wishlist") ?? []));
+  useEffect(
+    () => {
+      // setLoading(true);
+      Promise.all([AuthService.checkAPI()])
+        .then(() => {
+          if (location.pathname === "/500") {
+            navigate("/");
           }
+          setDefaultHeaders().then(() => {
+            Promise.all([
+              parentCategoryHandler(),
+              dispatch(getAllCategories(), getTopStores()),
+            ]);
+            if (login) {
+              Promise.all([
+                getCartItemsHandler(),
+                getItemsHandler(),
+                dispatch(myAddressHandler({ limit: 5, offset: 0 })),
+                getFollowingStores(),
+              ]);
+            } else if (token && !login) {
+              dispatch(myProfileHandler());
+            } else if (!token) {
+              dispatch(stopLoading());
+            } else {
+              dispatch(resetCartItems(cookie.load("cart") ?? []));
+              dispatch(resetWishlist(cookie.load("wishlist") ?? []));
+            }
+          });
+        })
+        .catch(() => {
+          navigate("/500");
         });
-      })
-      .catch(() => {
-        navigate("/500");
-      })
-      .finally(() => setLoading(false));
-  }, [
-    dispatch,
-    getCartItemsHandler,
-    getFollowingStores,
-    getItemsHandler,
-    getTopStores,
-    location.pathname,
-    login,
-    navigate,
-    parentCategoryHandler,
-    token,
-    user?.id,
-  ]);
+      // .finally(() => setLoading(false));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      // dispatch,
+      // getCartItemsHandler,
+      // getFollowingStores,
+      // getItemsHandler,
+      // getTopStores,
+      login,
+      // navigate,
+      // parentCategoryHandler,
+      // token,
+    ]
+  );
   useEffect(() => {
     if (i18n.language === "en") {
       document.documentElement.setAttribute("lang", "en");
@@ -119,9 +123,9 @@ const App = ({
   useEffect(() => {
     setDefaultHeaders();
   }, [location.pathname]);
-  useEffect(() => {
-    setLoading(globalLoading);
-  }, [globalLoading]);
+  // useEffect(() => {
+  //   setLoading(globalLoading);
+  // }, [globalLoading]);
   const WithFooter = ({ Component }) => {
     return (
       <>
@@ -131,30 +135,23 @@ const App = ({
     );
   };
   useEffect(() => {
+    const { pathname } = location;
+    if (token && !login) return;
     if (
-      !routes.find(
-        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
-      )
+      (pathname === "/verification" && user?.verified) ||
+      (login && unauthRoutes.includes(pathname)) ||
+      (!login && authRoutes.includes(pathname))
     ) {
       navigate("/");
-    } else if (user?.id && !user?.verified) {
+    } else if (login && !user?.verified) {
       navigate("/verification");
-    } else if (
-      !login &&
-      !!routes.find(
-        (v) => v.path === location.pathname.toLowerCase() && v.auth !== login
-      )
-    ) {
-      navigate("/");
-    } else if (
-      user?.id &&
-      user?.verified &&
-      location.pathname === "/verification"
-    ) {
-      navigate("/");
+    } else {
+      navigate(pathname);
     }
-  }, [location.pathname, login, navigate, user?.id, user?.verified]);
-  if (loader) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, login, user?.verified]);
+
+  if (globalLoading) {
     return <Loader />;
   }
 
@@ -164,7 +161,7 @@ const App = ({
       <GlobalToast />
       <GlobalDialog />
       <div
-        className=" position-relative min-h-screen  "
+        className=" position-relative min-vh-100   "
         style={{ maxWidth: "100vw" }}
       >
         <Suspense fallback={<Loader />}>

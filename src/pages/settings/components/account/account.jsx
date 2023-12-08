@@ -10,7 +10,15 @@ import {
 } from "../../../../store/auth";
 import { useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
-import { Button, Row, Form, Col, Spinner, Accordion } from "react-bootstrap";
+import {
+  Button,
+  Row,
+  Form,
+  Col,
+  Spinner,
+  Accordion,
+  FloatingLabel,
+} from "react-bootstrap";
 import {
   usePopup,
   OutAnimationType,
@@ -23,6 +31,7 @@ import CIcon from "@coreui/icons-react";
 import { cilCloudUpload } from "@coreui/icons";
 import DeleteModal from "../../../../component/common/DeleteModal";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { CFormInput, CRow } from "@coreui/react";
 
 const Account = ({
   updateProfileHandler,
@@ -242,79 +251,61 @@ const Account = ({
               <Accordion.Header>Personal Information</Accordion.Header>
               <Accordion.Body>
                 <Form onSubmit={updateHandler} className="w-100">
-                  <fieldset className="fieldset">
-                    {/* <legend>Personal Information</legend> */}
-                    <Row>
-                      <Col>
-                        <Form.Group
-                          className="mb-3"
-                          controlid="formBasicFirstName"
-                        >
-                          <Form.Label>First Name </Form.Label>
-                          <Form.Control
-                            type="first_name"
-                            placeholder="first name"
-                            name="first_name"
-                            defaultValue={
-                              profileData ? first_name : "First Name"
-                            }
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group
-                          className="mb-3"
-                          id="last_name"
-                          controlid="formBasicLastName"
-                        >
-                          <Form.Label>Last Name </Form.Label>
-                          <Form.Control
-                            type="last_name"
-                            placeholder="last name"
-                            name="last_name"
-                            defaultValue={profileData ? last_name : "Last Name"}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col>
-                        <Form.Group
-                          className="mb-3"
-                          id="country"
-                          controlid="formBasicCountry"
-                        >
-                          <Form.Label> Country </Form.Label>
-                          <Form.Control
-                            type="country"
-                            placeholder="country"
-                            name="country"
-                            defaultValue={profileData ? country : "Country"}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col>
-                        <Form.Group
-                          className="mb-3"
-                          id="city"
-                          controlid="formBasicCity"
-                        >
-                          <Form.Label> City </Form.Label>
-                          <Form.Control
-                            type="city"
-                            placeholder="city"
-                            name="city"
-                            defaultValue={profileData ? city : "City"}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
+                  <CRow xs={{gutterY:2}}>
+                    <Col xs='12'>
+                      <CFormInput
+                        floatingLabel={"First Name"}
+                        placeholder={"First Name"}
+                        id="first_name"
+                        value={first_name ?? ""}
+                      />
+                    </Col>
+                    <Col xs='12'>
+                      <CFormInput
+                        floatingLabel={"last_name"}
+                        placeholder="last_name"
+                        id="last_name"
+                        value={last_name ?? ""}
+                      />
+                    </Col>
+                  </CRow>
+                  <Row>
+                    <Col>
+                      <Form.Group
+                        className="mb-3"
+                        id="country"
+                        controlid="formBasicCountry"
+                      >
+                        <Form.Label> Country </Form.Label>
+                        <Form.Control
+                          type="country"
+                          placeholder="country"
+                          name="country"
+                          defaultValue={profileData ? country : "Country"}
+                        />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group
+                        className="mb-3"
+                        id="city"
+                        controlid="formBasicCity"
+                      >
+                        <Form.Label> City </Form.Label>
+                        <Form.Control
+                          type="city"
+                          placeholder="city"
+                          name="city"
+                          defaultValue={profileData ? city : "City"}
+                        />
+                      </Form.Group>
+                    </Col>
+                  </Row>
 
-                    <Button variant="primary" type="submit">
-                      Update
-                    </Button>
-                    {loading2 ? <Spinner animation="border" /> : null}
-                  </fieldset>
+                  <Button variant="primary" type="submit">
+                    Update
+                  </Button>
+                  {loading2 ? <Spinner animation="border" /> : null}
                 </Form>
               </Accordion.Body>
             </Accordion.Item>
