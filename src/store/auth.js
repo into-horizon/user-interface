@@ -5,6 +5,8 @@ import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
 import { showDialog } from "./dialog";
 import { DialogType } from "react-custom-popup";
+import { resetCartItems } from "./cart";
+import { resetWishlist } from "./wishlist";
 
 const initialState = {
   login: false,
@@ -13,6 +15,7 @@ const initialState = {
   verificationCodeRequested: false,
   loading: false,
   globalLoading: true,
+  resetPassword: { isReferenceInvalid: false, feedback: "" },
 };
 const sign = createSlice({
   name: "sign",
@@ -176,6 +179,8 @@ export const logOutHandler = createAsyncThunk(
       );
       return rejectWithValue(error.message);
     }
+    dispatch(resetCartItems([]));
+    dispatch(resetWishlist([]));
   }
 );
 export const endSession = () => async (dispatch, state) => {
@@ -373,6 +378,27 @@ export const requestVerificationCode = createAsyncThunk(
     } catch (error) {
       dispatch(
         triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const provideResetPasswordReference = createAsyncThunk(
+  "auth/provideReference",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } =
+        await AuthService.resetPasswordProvideReference(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+      } else {
+        rejectWithValue(message);
+        return message;
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
       );
       return rejectWithValue(error.message);
     }

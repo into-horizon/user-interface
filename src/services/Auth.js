@@ -168,6 +168,15 @@ class Auth extends ApiService {
       throw new Error(error.message);
     }
   }
+  async resetPasswordProvideReference(reference) {
+    try {
+      return this.post(`${this.path}/user/password/generateToken`, {
+        reference,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 let AuthService = new Auth();

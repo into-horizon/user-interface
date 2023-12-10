@@ -26,7 +26,7 @@ import { cilLockLocked, cilUser } from "@coreui/icons";
 import { EyeSlash, Eye } from "react-bootstrap-icons";
 
 const SignInForm = ({ signInHandler }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["sign-in", "sign-up"]);
   const { loading } = useSelector((state) => state.sign);
   const [passwordType, setPasswordType] = useState("password");
 
@@ -39,6 +39,9 @@ const SignInForm = ({ signInHandler }) => {
     });
   };
 
+  const signupNs = {
+    ns: "sign-up",
+  };
   return (
     <div className="bg-light d-flex flex-row align-items-center wrapper w-100 ">
       <CContainer>
@@ -53,10 +56,8 @@ const SignInForm = ({ signInHandler }) => {
               <CCard className=" rounded-0  p-sm-5  p-lg-3  ">
                 <CCardBody className=" d-flex ">
                   <CForm onSubmit={submitHandler} className="my-auto  w-100 ">
-                    <h1>{t("login")}</h1>
-                    <p className="text-medium-emphasis">
-                      {t("Sign In to your account")}
-                    </p>
+                    <h1>{t("login".toUpperCase(), signupNs)}</h1>
+                    <p className="text-medium-emphasis">{t("LOGIN_TEXT")}</p>
                     <CInputGroup className="my-4  ">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -64,7 +65,7 @@ const SignInForm = ({ signInHandler }) => {
                       <CFormInput
                         type="email"
                         name="email"
-                        placeholder="email"
+                        placeholder={t("EMAIL", signupNs)}
                       />
                     </CInputGroup>
                     <CInputGroup className="my-2">
@@ -74,7 +75,7 @@ const SignInForm = ({ signInHandler }) => {
                       <CFormInput
                         type={passwordType}
                         name="password"
-                        placeholder={t("pass")}
+                        placeholder={t("password".toUpperCase(), signupNs)}
                       />
                       <CButton
                         color="secondary"
@@ -107,17 +108,19 @@ const SignInForm = ({ signInHandler }) => {
                           {loading ? (
                             <Spinner animation="border" size="sm" />
                           ) : (
-                            t("sub")
+                            t("LOGIN", signupNs)
                           )}
                         </Button>
                       </CCol>
                       <CCol xs={"auto"}>
-                        <CButton color="link">forgot password?</CButton>
+                        <Link to={"/provide-reference"}>
+                          {t("PASSWORD_FORGOT")}
+                        </Link>
                       </CCol>
                       <CCol xs={12}>
                         <p className=" text-center ">
-                          don't have account?{" "}
-                          <Link to="/signUp">{t("sign")} </Link>
+                          {t("DONT_HAVE_ACCOUNT")}{" "}
+                          <Link to="/signUp">{t("SIGN_UP", signupNs)} </Link>
                         </p>
                       </CCol>
                     </CRow>

@@ -95,6 +95,7 @@ const App = ({
         })
         .catch(() => {
           navigate("/500");
+          dispatch(stopLoading());
         });
       // .finally(() => setLoading(false));
     },

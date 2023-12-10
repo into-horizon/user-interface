@@ -1,4 +1,5 @@
 import ar from "./ar";
 import en from "./en";
 
-export default { ar, en };
+const signupLocalization = { ar, en };
+export default signupLocalization;
