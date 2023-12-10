@@ -1,4 +1,4 @@
-export default {
+const en = {
   FIRST_NAME: "First name",
   LAST_NAME: "Last name",
   EMAIL: "Email address",
@@ -33,5 +33,7 @@ export default {
   INVALID_PHONE: "Invalid phone number",
   INVALID_SMALL_LETTER: "at least one small letter, ",
   INVALID_CAPITAL_LETTER: "at least one capital letter, ",
-  HAVE_ACCOUNT: 'already have account?',
+  HAVE_ACCOUNT: "already have account?",
 };
+
+export default en;

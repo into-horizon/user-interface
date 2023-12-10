@@ -8,13 +8,19 @@ import { useNavigate } from "react-router-dom";
 import { CBadge, CListGroup, CListGroupItem } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilBell, cilHeart, cilCart, cilUser } from "@coreui/icons";
+import { namespaces } from "../../i18n";
 
 const Header = (props) => {
   const login = useSelector((state) => state.sign.login);
   const navigate = useNavigate();
   const { cart } = props;
   const [displayList, setDisplayList] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation([
+    namespaces.LANDING_PAGE.ns,
+    namespaces.SIGN_IN.ns,
+    namespaces.SIGN_UP.ns,
+    namespaces.GLOBAL.ns,
+  ]);
   const [style, setStyle] = useState({});
 
   useEffect(() => {
@@ -60,7 +66,6 @@ const Header = (props) => {
           <div className="links" style={style}>
             <Nav>
               <Link to="/wishlist" className="nav-link " key="wishlist">
-                {/* <<img className="fav" src={Fav} alt="fav" />> */}
                 <CIcon icon={cilHeart} size="xxl" className="my-auto" />
               </Link>
 
@@ -148,30 +153,27 @@ const Header = (props) => {
                 {login ? (
                   <>
                     <Link to="/settings" className="dropdown-item">
-                      settings
+                      {t("settings".toUpperCase())}
                     </Link>
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logOutHandle}>
-                      Log Out
+                      {t("logout".toUpperCase())}
                     </NavDropdown.Item>
                   </>
                 ) : (
                   <>
-                    <Link to="/signUp" className="dropdown-item">
-                      Sign Up
-                    </Link>
-                    <Link className="dropdown-item" to="/verification">
-                      verification
-                    </Link>
                     <Link className="dropdown-item" to="/signin">
-                      Sign In
+                      {t("LOGIN", namespaces.SIGN_UP)}
+                    </Link>
+                    <Link to="/signUp" className="dropdown-item">
+                      {t("SIGN_UP", namespaces.SIGN_UP)}
                     </Link>
                   </>
                 )}
               </NavDropdown>
             </Nav>
           </div>
-          <NavDropdown title={t("lan")} id="collasible-nav-dropdown">
+          <NavDropdown title={t("LANGUAGE")} id="collasible-nav-dropdown">
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "ar"}

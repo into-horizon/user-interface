@@ -105,7 +105,7 @@ const ProductCard = ({
     } else {
       setheart(1);
     }
-  }, [wishlist]);
+  }, [product?.id, wishlist]);
 
   return (
     <>

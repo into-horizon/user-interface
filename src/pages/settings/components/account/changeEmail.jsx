@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
-import { Button, Row, Form, Col, Spinner } from "react-bootstrap";
+import { Button, Row, Form, Col } from "react-bootstrap";
 import { usePopup } from "react-custom-popup";
 import { updateEmailHandler } from "../../../../store/auth";
+import { CFormInput } from "@coreui/react";
+import { namespaces } from "../../../../i18n";
 
-const Email = (props) => {
-  const { updateEmailHandler, profileData } = props;
-  const [loading, setLoading] = useState(true);
-  const { showOptionDialog, showToast } = usePopup();
+const Email = ({ updateEmailHandler, profileData }) => {
+  const [_loading, setLoading] = useState(true);
+  const { t } = useTranslation(["settings", "sign-up"]);
+  const { showOptionDialog } = usePopup();
   const { email, mobile } = profileData.user;
   useEffect(() => {
     setLoading(false);
@@ -52,9 +53,15 @@ const Email = (props) => {
         <fieldset>
           {/* <legend>Account info</legend> */}
 
-          <Row>
+          <Row className=" gy-3 ">
             <Col xs={12} md={12}>
-              <Form.Group className="mb-3" controlid="formBasicEmail">
+              <CFormInput
+                placeholder={t("EMAIL", namespaces.SIGN_UP)}
+                name="email"
+                defaultValue={email}
+                floatingLabel={t("EMAIL", namespaces.SIGN_UP)}
+              />
+              {/* <Form.Group className="mb-3" controlid="formBasicEmail">
                 <Form.Label>Email Address </Form.Label>
 
                 <Form.Control
@@ -63,27 +70,26 @@ const Email = (props) => {
                   defaultValue={email}
                   style={{ maxWidth: "100%" }}
                 />
-              </Form.Group>
+              </Form.Group> */}
             </Col>
-          </Row>
-          <Row>
             <Col xs={12} md={12}>
-              <Form.Group className="mb-3" controlid="formBasicMobile">
-                <Form.Label>Mobile </Form.Label>
-                <Form.Control
-                  placeholder="mobile"
-                  name="mobile"
-                  defaultValue={mobile}
-                  style={{ maxWidth: "100%" }}
-                />
-              </Form.Group>
+              <CFormInput
+                placeholder={t("PHONE", namespaces.SIGN_UP)}
+                floatingLabel={t("PHONE", namespaces.SIGN_UP)}
+                name="mobile"
+                defaultValue={mobile}
+                style={{ maxWidth: "100%" }}
+              />
             </Col>
-          </Row>
-          <Row>
-            <Button variant="primary" type="submit" controlid="button-email">
-              Update
-            </Button>
-            {loading ? <Spinner animation="border" /> : null}
+            <Col>
+              <Button
+                variant="outline-primary"
+                type="submit"
+                controlid="button-email"
+              >
+                Update
+              </Button>
+            </Col>
           </Row>
         </fieldset>
       </Form>

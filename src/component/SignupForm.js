@@ -11,7 +11,6 @@ import google from "../assets/g.png";
 
 import { State } from "country-state-city";
 import { Spinner, Button } from "react-bootstrap";
-import "react-phone-number-input/style.css";
 import { useTranslation } from "react-i18next";
 import {
   CButton,
@@ -176,15 +175,21 @@ const SignupForm = (props) => {
                   />
                   <CFormSelect
                     name="gender"
-                    className="mb-2 p-2"
+                    className="mb-2"
                     id="gender"
+                    floatingLabel={t("GENDER")}
                     required
                   >
                     <option value="male">{t("MALE")}</option>
                     <option value="female">{t("FEMALE")}</option>
                   </CFormSelect>
 
-                  <CFormSelect name="city" className="mb-2 p-2" id="city">
+                  <CFormSelect
+                    name="city"
+                    id="city"
+                    className="mb-2"
+                    floatingLabel={t("CITY")}
+                  >
                     {Children.toArray(
                       city.map((item) => (
                         <option value={item.name.split(" ")[0]}>

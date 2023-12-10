@@ -5,6 +5,8 @@ import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
 import { showDialog } from "./dialog";
 import { DialogType } from "react-custom-popup";
+import { resetCartItems } from "./cart";
+import { resetWishlist } from "./wishlist";
 
 const initialState = {
   login: false,
@@ -13,6 +15,12 @@ const initialState = {
   verificationCodeRequested: false,
   loading: false,
   globalLoading: true,
+  resetPassword: {
+    isReferenceInvalid: false,
+    feedback: "",
+    isResetTokenInvalid: false,
+    success: false,
+  },
 };
 const sign = createSlice({
   name: "sign",
@@ -74,6 +82,17 @@ const sign = createSlice({
     builder.addCase(myProfileHandler.pending, (state) => {
       state.globalLoading = true;
     });
+    builder.addCase(validateResetToken.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(validateResetToken.rejected, (state, action) => {
+      state.loading = false;
+      state.resetPassword.isResetTokenInvalid = true;
+      state.resetPassword.feedback = action.payload;
+    });
+    builder.addCase(validateResetToken.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(checkVerificationCode.fulfilled, (state) => {
       state.loading = false;
       state.user.verified = true;
@@ -85,6 +104,30 @@ const sign = createSlice({
       state.loading = false;
     });
     builder.addCase(checkVerificationCode.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(provideResetPasswordReference.rejected, (state, action) => {
+      state.resetPassword.isReferenceInvalid = true;
+      state.resetPassword.feedback = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(provideResetPasswordReference.fulfilled, (state) => {
+      state.resetPassword.isReferenceInvalid = false;
+      state.resetPassword.feedback = "";
+      state.loading = false;
+    });
+    builder.addCase(provideResetPasswordReference.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.loading = false;
+      state.resetPassword.success = true;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.resetPassword.feedback = action.payload;
+    });
+    builder.addCase(resetPassword.pending, (state) => {
       state.loading = true;
     });
   },
@@ -176,6 +219,8 @@ export const logOutHandler = createAsyncThunk(
       );
       return rejectWithValue(error.message);
     }
+    dispatch(resetCartItems([]));
+    dispatch(resetWishlist([]));
   }
 );
 export const endSession = () => async (dispatch, state) => {
@@ -294,7 +339,6 @@ export const deleteProfilePicture = createAsyncThunk(
       const { message, status, data } = await AuthService.removePicture(
         payload
       );
-      console.log("🚀 ~ file: auth.js:185 ~ data:", data);
       if (status === 200) {
         dispatch(triggerToast({ message, type: ToastTypes.INFO }));
         return data;
@@ -304,10 +348,10 @@ export const deleteProfilePicture = createAsyncThunk(
       }
     } catch (error) {
       if (error instanceof Error) {
-        rejectWithValue(error.message);
         dispatch(
           triggerToast({ message: error.message, type: ToastTypes.DANGER })
         );
+        return rejectWithValue(error.message);
       }
     }
   }
@@ -368,6 +412,65 @@ export const requestVerificationCode = createAsyncThunk(
         dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
       } else {
         dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const provideResetPasswordReference = createAsyncThunk(
+  "auth/provideReference",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } =
+        await AuthService.resetPasswordProvideReference(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+      } else {
+        return rejectWithValue(message);
+        // return message;
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const validateResetToken = createAsyncThunk(
+  "auth/validate/ResetToken",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } = await AuthService.validateResetToken(payload);
+      if (status === 200) {
+        return;
+      } else {
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } = await AuthService.resetPassword(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+      } else {
         return rejectWithValue(message);
       }
     } catch (error) {

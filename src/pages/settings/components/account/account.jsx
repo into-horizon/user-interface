@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import {
   updateProfileHandler,
@@ -10,15 +10,7 @@ import {
 } from "../../../../store/auth";
 import { useNavigate } from "react-router-dom";
 import cookie from "react-cookies";
-import {
-  Button,
-  Row,
-  Form,
-  Col,
-  Spinner,
-  Accordion,
-  FloatingLabel,
-} from "react-bootstrap";
+import { Button, Row, Form, Col, Spinner, Accordion } from "react-bootstrap";
 import {
   usePopup,
   OutAnimationType,
@@ -31,7 +23,10 @@ import CIcon from "@coreui/icons-react";
 import { cilCloudUpload } from "@coreui/icons";
 import DeleteModal from "../../../../component/common/DeleteModal";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { CFormInput, CRow } from "@coreui/react";
+import { CFormInput, CFormSelect, CRow } from "@coreui/react";
+import { State } from "country-state-city";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../../i18n";
 
 const Account = ({
   updateProfileHandler,
@@ -44,12 +39,14 @@ const Account = ({
 }) => {
   const {
     message,
-    _loading,
-    user: { first_name, last_name, country, city, profile_picture },
+    // _loading,
+    user: { first_name, last_name, city, profile_picture },
   } = useSelector((state) => state.sign);
   const navigate = useNavigate();
+  const { t } = useTranslation(["", "sign-up"]);
   const { showOptionDialog, showToast, showAlert } = usePopup();
   const [_loadingXX, setLoading] = useState(true);
+  const [cities, setCities] = useState([]);
 
   const [loading2, setLoading2] = useState(true);
 
@@ -195,6 +192,13 @@ const Account = ({
       </React.Fragment>
     );
   };
+
+  useEffect(() => {
+    setCities(State.getStatesOfCountry(String("JO")));
+  }, []);
+  const signupNs = {
+    ns: "sign-up",
+  };
   return (
     <div>
       <>
@@ -251,58 +255,63 @@ const Account = ({
               <Accordion.Header>Personal Information</Accordion.Header>
               <Accordion.Body>
                 <Form onSubmit={updateHandler} className="w-100">
-                  <CRow xs={{gutterY:2}}>
-                    <Col xs='12'>
+                  <CRow xs={{ gutterY: 2 }}>
+                    <Col xs="12" lg="6">
                       <CFormInput
-                        floatingLabel={"First Name"}
-                        placeholder={"First Name"}
+                        floatingLabel={t("FIRST_NAME", namespaces.SIGN_UP)}
+                        placeholder={t("FIRST_NAME", signupNs)}
                         id="first_name"
                         value={first_name ?? ""}
                       />
                     </Col>
-                    <Col xs='12'>
+                    <Col xs="12" lg="6">
                       <CFormInput
-                        floatingLabel={"last_name"}
-                        placeholder="last_name"
+                        floatingLabel={t("last_name".toUpperCase(), namespaces.SIGN_UP)}
+                        placeholder={t("last_name".toUpperCase(), namespaces.SIGN_UP)}
                         id="last_name"
                         value={last_name ?? ""}
                       />
                     </Col>
-                  </CRow>
-                  <Row>
-                    <Col>
-                      <Form.Group
-                        className="mb-3"
-                        id="country"
-                        controlid="formBasicCountry"
-                      >
-                        <Form.Label> Country </Form.Label>
-                        <Form.Control
-                          type="country"
-                          placeholder="country"
-                          name="country"
-                          defaultValue={profileData ? country : "Country"}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group
-                        className="mb-3"
-                        id="city"
-                        controlid="formBasicCity"
-                      >
-                        <Form.Label> City </Form.Label>
-                        <Form.Control
-                          type="city"
-                          placeholder="city"
-                          name="city"
-                          defaultValue={profileData ? city : "City"}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
 
-                  <Button variant="primary" type="submit">
+                    <Col xs="12" lg="6">
+                      <CFormSelect
+                        floatingLabel={t("city".toUpperCase(), namespaces.SIGN_UP)}
+                        placeholder={t("city".toUpperCase(), namespaces.SIGN_UP)}
+                        name="city"
+                        id="city"
+                        defaultValue={profileData ? city : "City"}
+                      >
+                        {Children.toArray(
+                          cities.map((item) => (
+                            <option value={item.name.split(" ")[0]}>
+                              {t(
+                                item.name.split(" ")[0].toUpperCase(),
+                                namespaces.SIGN_UP
+                              )}
+                            </option>
+                          ))
+                        )}
+                      </CFormSelect>
+                    </Col>
+                    <Col xs="12" lg="6">
+                      <CFormSelect
+                        floatingLabel={t("gender".toUpperCase(), namespaces.SIGN_UP)}
+                        placeholder="city"
+                        name="city"
+                        id="city"
+                        defaultValue={profileData ? profileData?.gender : ""}
+                      >
+                        <option value="male">{t("MALE", namespaces.SIGN_UP)}</option>
+                        <option value="female">{t("FEMALE", namespaces.SIGN_UP)}</option>
+                      </CFormSelect>
+                    </Col>
+                  </CRow>
+
+                  <Button
+                    variant="outline-primary"
+                    className="mt-2"
+                    type="submit"
+                  >
                     Update
                   </Button>
                   {loading2 ? <Spinner animation="border" /> : null}
@@ -312,45 +321,46 @@ const Account = ({
             <Accordion.Item eventKey="1">
               <Accordion.Header>Account info</Accordion.Header>
               <Accordion.Body>
-                <ChangeEmail />
+                <ChangeEmail signupNs={signupNs} />
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
               <Accordion.Header>Change Password</Accordion.Header>
               <Accordion.Body>
                 <Form onSubmit={updatePasswordHandler} className="h-100">
-                  <Row>
-                    <Form.Group className="mb-3">
-                      <Form.Control
+                  <Row className=" gy-3">
+                    <Col xs="12">
+                      <CFormInput
                         placeholder="current password"
+                        floatingLabel="current password"
                         type="password"
                         id="password"
                         required
                       />
-                    </Form.Group>
-                  </Row>
-                  <Row>
-                    <Form.Group className="mb-3">
-                      <Form.Control
+                    </Col>
+                    <Col xs="12">
+                      <CFormInput
                         placeholder="new password"
+                        floatingLabel="new password"
                         type="password"
                         id="newPassword"
                         required
                       />
-                    </Form.Group>
-                  </Row>
-                  <Row>
-                    <Form.Group className="mb-3">
-                      <Form.Control
+                    </Col>
+                    <Col xs="12">
+                      <CFormInput
                         placeholder="repeat new password"
+                        floatingLabel="repeat new password"
                         type="password"
                         id="repeatedPassword"
                         required
                       />
-                      <Button variant="primary" type="submit">
+                    </Col>
+                    <Col xs="12">
+                      <Button variant="outline-primary" type="submit">
                         Update
                       </Button>
-                    </Form.Group>
+                    </Col>
                   </Row>
                 </Form>
               </Accordion.Body>

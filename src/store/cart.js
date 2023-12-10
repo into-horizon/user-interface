@@ -60,7 +60,7 @@ const cart = createSlice({
 });
 
 export const addCartItemHandler = (payload) => async (dispatch, state) => {
-  const login = state().sign.login;
+  const { login } = state().sign;
   try {
     if (login) {
       let { data, status, message } = await Cart.addCartItem(payload);
@@ -68,20 +68,23 @@ export const addCartItemHandler = (payload) => async (dispatch, state) => {
       if (status === 200) {
         dispatch(
           addItem({
-           ...payload,...data
+            ...payload,
+            ...data,
           })
         );
       } else {
-        dispatch(triggerToast({message, type: ToastTypes.DANGER}))
+        dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
       }
     } else {
       dispatch(addItem({ ...payload, cookie: true }));
     }
-    dispatch(triggerToast({message: 'added to your card', type: ToastTypes.SUCCESS}))
+    dispatch(
+      triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
+    );
   } catch (error) {
-    dispatch(triggerToast({message: error.message, type: ToastTypes.DANGER}))
+    dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
+  }
 };
-}
 
 export const updateCartItemHandler = (payload) => async (dispatch, state) => {
   const login = state().sign.login;
@@ -97,10 +100,7 @@ export const updateCartItemHandler = (payload) => async (dispatch, state) => {
       dispatch(updateCartItem({ ...payload, cookie: true }));
     }
   } catch (error) {
-    console.log(
-      "🚀 ~ file: cart.js ~ line 69 ~ updateCartItemHandler ~ error",
-      error
-    );
+    dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
 
@@ -118,10 +118,7 @@ export const deleteCartItemHandler = (payload) => async (dispatch, state) => {
       dispatch(deleteItem({ ...payload, cookie: true }));
     }
   } catch (error) {
-    console.log(
-      "🚀 ~ file: cart.js ~ line 98 ~ deleteCartItemHandler ~ error",
-      error
-    );
+    dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
 
@@ -145,10 +142,7 @@ export const getCartItemsHandler = () => async (dispatch, state) => {
       cookie.remove("cart", { path: "/" });
     }
   } catch (error) {
-    console.log(
-      "🚀 ~ file: cart.js ~ line 118 ~ getCartItemsHandler ~ error",
-      error
-    );
+    dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
 

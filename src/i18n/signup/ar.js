@@ -1,4 +1,4 @@
-export default {
+const ar = {
   FIRST_NAME: "الإسم الاول",
   LAST_NAME: "الإسم الاخير",
   EMAIL: "بريدك الألكتروني",
@@ -35,3 +35,5 @@ export default {
   INVALID_CAPITAL_LETTER: "ما لا يقل عن حرف واحد، ",
   HAVE_ACCOUNT: "لديك حساب بالفعل؟",
 };
+
+export default ar;

@@ -17,16 +17,18 @@ import {
 } from "react-router-dom";
 import { myProfileHandler } from "../../store/auth";
 import { Col, Row } from "react-bootstrap";
-import {
-  CSidebar,
-  CSidebarBrand,
-  CSidebarNav,
-  CSidebarToggler,
-  CButton,
-} from "@coreui/react";
+import { CSidebar, CSidebarBrand, CSidebarNav, CButton } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilUser, cilMap, cilNotes, cilTruck } from "@coreui/icons";
+import {
+  cilUser,
+  cilMap,
+  cilNotes,
+  cilTruck,
+  cilExpandLeft,
+  cilExpandRight,
+} from "@coreui/icons";
 import Loader from "../../component/common/Loader";
+import { useTranslation } from "react-i18next";
 const Account = lazy(() => import("./components/account/account"));
 const Address = lazy(() => import("./components/address/address"));
 const Orders = lazy(() => import("./components/Orders/Orders"));
@@ -76,7 +78,10 @@ const routes = [
 export const SideNavbar = ({ show, setShow, width }) => {
   const [narrow, setNarrow] = useState(false);
   const location = useLocation();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const [icon, setIcon] = useState(cilExpandLeft);
+  const [iconPosition, setIconPosition] = useState("text-end");
   const hideSidebar = useCallback(() => {
     width < 700 && setShow(false);
   }, [setShow, width]);
@@ -86,9 +91,24 @@ export const SideNavbar = ({ show, setShow, width }) => {
   }, [width]);
   useEffect(() => {
     if (location.pathname === "/settings") {
-     navigate("/settings/account");
+      navigate("/settings/account");
     }
   }, [location.pathname, navigate]);
+  useEffect(() => {
+    if (
+      (narrow && i18n.language === "ar") ||
+      (!narrow && i18n.language === "en")
+    ) {
+      setIcon(cilExpandLeft);
+    } else setIcon(cilExpandRight);
+    if (narrow) {
+      setIconPosition("text-center");
+    } else if (i18n.language === "ar") {
+      setIconPosition("text-start");
+    } else if (i18n.language === "en") {
+      setIconPosition("text-end");
+    }
+  }, [narrow, i18n.language]);
   return (
     <Fragment>
       <CSidebar narrow={narrow} visible={show} onHide={hideSidebar}>
@@ -101,7 +121,11 @@ export const SideNavbar = ({ show, setShow, width }) => {
               route.secondary ? null : (
                 <li className="nav-item">
                   <Link className="nav-link" to={`/settings${route.path}`}>
-                    <CIcon customClassName="nav-icon" icon={route.icon} />
+                    <CIcon
+                      customClassName="nav-icon"
+                      icon={route.icon}
+                      className="mx-auto"
+                    />
                     {route.sidebar}
                   </Link>
                 </li>
@@ -110,10 +134,17 @@ export const SideNavbar = ({ show, setShow, width }) => {
           )}
         </CSidebarNav>
 
-        <CSidebarToggler
-          className="bg-primary position-relative"
+        <CButton
+          className={`rounded-0 bg-primary  position-relative p-2 ${iconPosition}`}
           onClick={() => setNarrow(!narrow)}
-        />
+        >
+          <CIcon
+            icon={icon}
+            size="xl"
+            className=" mx-0 "
+            style={{ "--ci-primary-color": "#fff" }}
+          />
+        </CButton>
       </CSidebar>
     </Fragment>
   );
