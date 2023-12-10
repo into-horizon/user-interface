@@ -12,14 +12,22 @@ import {
   CForm,
   CFormInput,
   CRow,
+  CSpinner,
 } from "@coreui/react";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../i18n";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { provideResetPasswordReference } from "../../store/auth";
 function ProvideReference() {
   const { t } = useTranslation([namespaces.PASSWORD.ns, namespaces.GLOBAL.ns]);
+  const { resetPassword:{feedback, isReferenceInvalid}, loading } = useSelector(
+    (state) => state.sign
+  );
   const dispatch = useDispatch();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(provideResetPasswordReference(e.target.reference.value));
+  };
   return (
     <div className="wrapper d-flex flex-row  justify-content-center  align-content-center ">
       <CContainer>
@@ -33,12 +41,17 @@ function ProvideReference() {
                 <CCardSubtitle className=" mb-3">
                   {t(["REFERENCE_TEXT"])}
                 </CCardSubtitle>
-                <CForm>
+                <CForm onSubmit={handleSubmit}>
                   <CRow className=" gy-3">
                     <CCol xs="12">
                       <CFormInput
                         placeholder={t("REFERENCE_PLACEHOLDER")}
                         floatingLabel={t("REFERENCE_PLACEHOLDER")}
+                        name="reference"
+                        id="reference"
+                        feedbackInvalid={feedback}
+                        invalid={isReferenceInvalid}
+                        required
                       />
                     </CCol>
                     <CCol xs="12" className=" d-flex ">
@@ -47,7 +60,7 @@ function ProvideReference() {
                         variant="outline"
                         className=" mx-auto"
                       >
-                        {t("SUBMIT", namespaces.GLOBAL)}
+                         {loading? <CSpinner size="sm"/> : t("SUBMIT", namespaces.GLOBAL)}
                       </CButton>
                     </CCol>
                   </CRow>

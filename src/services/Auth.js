@@ -1,5 +1,4 @@
 import ApiService from "./ApiService";
-import cookie from "react-cookies";
 class Auth extends ApiService {
   constructor() {
     super();
@@ -172,7 +171,16 @@ class Auth extends ApiService {
     try {
       return this.post(`${this.path}/user/password/generateToken`, {
         reference,
+        userType: "user",
       });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  async resetPassword(data) {}
+  async validateResetToken(token) {
+    try {
+      return this.post(`${this.path}/user/password/validateToken`, { token });
     } catch (error) {
       throw new Error(error.message);
     }

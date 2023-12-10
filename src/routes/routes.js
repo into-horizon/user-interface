@@ -15,7 +15,7 @@ export const routes = [
   { path: "/signin", component: SignInForm, exact: true, auth: false },
   { path: "/signUp", component: SignupForm, exact: true, auth: false },
   {
-    path: "/reset-password",
+    path: "/reset-password/:token",
     component: ForgotPassword,
     exact: true,
     auth: false,
