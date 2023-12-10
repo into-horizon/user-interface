@@ -7,9 +7,14 @@ import { useTranslation } from "react-i18next";
 import CIcon from "@coreui/icons-react";
 import { cilSearch } from "@coreui/icons";
 import { CButton, CFormInput, CInputGroup } from "@coreui/react";
-import LocalizedInputGroup from "./common/LocalizedInputGroup";
+import { namespaces } from "../i18n";
 const MainNavbar = () => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation([
+    namespaces.LANDING_PAGE.ns,
+    namespaces.SIGN_IN.ns,
+    namespaces.SIGN_UP.ns,
+    namespaces.GLOBAL.ns,
+  ]);
   const navigate = useNavigate();
   const { data } = useSelector((state) => state.category);
 
@@ -74,7 +79,7 @@ const MainNavbar = () => {
             <CInputGroup>
               <CFormInput
                 type="search"
-                placeholder="Search for products"
+                placeholder={t("SEARCH_PLACEHOLDER")}
                 aria-label="Search"
                 id="key"
                 required

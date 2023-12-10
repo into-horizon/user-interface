@@ -13,15 +13,16 @@ import {
   CFormText,
   CInputGroup,
   CRow,
+  CSpinner,
 } from "@coreui/react";
 import React, { useEffect, useState } from "react";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { validatePassword } from "../../services/utils";
 import { namespaces } from "../../i18n";
 import { useDispatch, useSelector } from "react-redux";
-import { validateResetToken } from "../../store/auth";
+import { resetPassword, validateResetToken } from "../../store/auth";
 import LoadingSpinner from "../../component/common/LoadingSpinner";
 
 function ForgotPassword() {
@@ -32,9 +33,10 @@ function ForgotPassword() {
     namespaces.GLOBAL.ns,
   ]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     loading,
-    resetPassword: { isResetTokenInvalid, feedback },
+    resetPassword: { isResetTokenInvalid, feedback, success },
   } = useSelector((state) => state.sign);
   const [passwordType, setPasswordType] = useState("password");
   const [passwordValidation, setPasswordValidation] = useState({
@@ -61,11 +63,18 @@ function ForgotPassword() {
     } else {
       setInvalidPasswordConfirmation(false);
     }
+    dispatch(resetPassword({ password: password.value, token }));
   };
 
   useEffect(() => {
     dispatch(validateResetToken(token));
   }, [dispatch, token]);
+
+  useEffect(() => {
+    if (success) {
+      navigate("/signin");
+    }
+  }, [navigate, success]);
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -81,7 +90,7 @@ function ForgotPassword() {
               <CCardBody>
                 {isResetTokenInvalid ? (
                   <CCardText className=" text-danger text-center fw-bold">
-                   {feedback}
+                    {feedback}
                   </CCardText>
                 ) : (
                   <CForm onSubmit={handleSubmit}>
@@ -147,8 +156,13 @@ function ForgotPassword() {
                           className=" mx-auto mt-3"
                           color="secondary"
                           variant="outline"
+                          disabled={loading}
                         >
-                          {t("SUBMIT", namespaces.GLOBAL)}
+                          {loading ? (
+                            <CSpinner size="sm" />
+                          ) : (
+                            t("SUBMIT", namespaces.GLOBAL)
+                          )}
                         </CButton>
                       </CCol>
                     </CRow>

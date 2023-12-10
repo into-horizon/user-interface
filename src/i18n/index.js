@@ -1,4 +1,5 @@
 import globalLocalization from "./global";
+import landingPageLocalization from "./landing-page";
 import passwordLocalization from "./password";
 import signInLocalization from "./sign-in";
 import signup from "./signup";
@@ -10,6 +11,7 @@ export const namespaces = {
   VERIFICATION: { ns: "verification" },
   GLOBAL: { ns: "global" },
   PASSWORD: { ns: "password" },
+  LANDING_PAGE: { ns: "landing-page" },
 };
 
 const localizations = [
@@ -18,6 +20,7 @@ const localizations = [
   { ns: namespaces.SIGN_IN.ns, source: signInLocalization },
   { ns: namespaces.GLOBAL.ns, source: globalLocalization },
   { ns: namespaces.PASSWORD.ns, source: passwordLocalization },
+  { ns: namespaces.LANDING_PAGE.ns, source: landingPageLocalization },
 ];
 
 const ar = "ar";

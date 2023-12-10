@@ -177,7 +177,13 @@ class Auth extends ApiService {
       throw new Error(error.message);
     }
   }
-  async resetPassword(data) {}
+  async resetPassword(data) {
+    try {
+      return this.post(`${this.path}/user/password/resetByToken`, data);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
   async validateResetToken(token) {
     try {
       return this.post(`${this.path}/user/password/validateToken`, { token });

@@ -19,6 +19,7 @@ const initialState = {
     isReferenceInvalid: false,
     feedback: "",
     isResetTokenInvalid: false,
+    success: false,
   },
 };
 const sign = createSlice({
@@ -116,6 +117,17 @@ const sign = createSlice({
       state.loading = false;
     });
     builder.addCase(provideResetPasswordReference.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.loading = false;
+      state.resetPassword.success = true;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.resetPassword.feedback = action.payload;
+    });
+    builder.addCase(resetPassword.pending, (state) => {
       state.loading = true;
     });
   },
@@ -327,7 +339,6 @@ export const deleteProfilePicture = createAsyncThunk(
       const { message, status, data } = await AuthService.removePicture(
         payload
       );
-      console.log("🚀 ~ file: auth.js:185 ~ data:", data);
       if (status === 200) {
         dispatch(triggerToast({ message, type: ToastTypes.INFO }));
         return data;
@@ -337,10 +348,10 @@ export const deleteProfilePicture = createAsyncThunk(
       }
     } catch (error) {
       if (error instanceof Error) {
-        rejectWithValue(error.message);
         dispatch(
           triggerToast({ message: error.message, type: ToastTypes.DANGER })
         );
+        return rejectWithValue(error.message);
       }
     }
   }
@@ -440,6 +451,25 @@ export const validateResetToken = createAsyncThunk(
       const { message, status } = await AuthService.validateResetToken(payload);
       if (status === 200) {
         return;
+      } else {
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const { message, status } = await AuthService.resetPassword(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
       } else {
         return rejectWithValue(message);
       }
