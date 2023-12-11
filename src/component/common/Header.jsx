@@ -30,17 +30,6 @@ const Header = (props) => {
     }
   }, []);
 
-  const changeLanguage = (lang) => {
-    if (lang === "en") {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", "en");
-      document.documentElement.setAttribute("dir", "ltl");
-    } else {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", "ar");
-      document.documentElement.setAttribute("dir", "rtl");
-    }
-  };
   const logOutHandle = () => {
     props.logOutHandler();
     navigate("/");
@@ -55,11 +44,16 @@ const Header = (props) => {
   });
 
   return (
-    <Navbar bg="primary" variant="dark" className="pt-3 w-100 ">
+    <Navbar bg="primary" variant="dark" className=" w-100 ">
       <Container>
-        <Navbar.Brand>
-          <Link to="/" className="nav-link">
-            <span className="logo">Horizon</span>
+        <Navbar.Brand className=" my-auto ">
+          <Link to="/" className="nav-link my-auto w-50 ">
+            {/* <span className="logo">Horizon</span> */}
+            <img
+              src={process.env.REACT_APP_HORIZON_LOGO}
+              alt="logo"
+              className="h-100 w-75"
+            />
           </Link>
         </Navbar.Brand>
         <Nav className="lg-show">
@@ -72,23 +66,23 @@ const Header = (props) => {
               {login && (
                 <Nav.Link
                   as={"div"}
-                  className="nav-link position-relative px-0 mx-2 pointer "
+                  className="nav-link position-relative px-0 mx-2 pointer"
                   key="notification"
                   onClick={() => setDisplayList((x) => !x)}
                 >
-                  <CIcon icon={cilBell} size="xxl" className="" />
+                  <CIcon icon={cilBell} size="xxl" />
                   <CBadge
                     color="danger"
                     position="top-end"
                     shape="rounded-pill"
+                    className="mt-1"
                   >
-                    9 <span className="visually-hidden">unread messages</span>
+                    9
                   </CBadge>
 
                   {displayList && (
                     <CListGroup
-                      style={{ width: "16rem !important" }}
-                      className="position-absolute notifications-list"
+                      className="position-absolute notifications-list start-0 overflow-y-auto  "
                     >
                       <CListGroupItem component="a" href="#">
                         <div className="d-flex w-100 justify-content-between">
@@ -177,14 +171,14 @@ const Header = (props) => {
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "ar"}
-              onClick={() => changeLanguage("ar")}
+              onClick={() => i18n.changeLanguage("ar")}
             >
               العربية
             </NavDropdown.Item>
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "en"}
-              onClick={() => changeLanguage("en")}
+              onClick={() => i18n.changeLanguage("en")}
             >
               English
             </NavDropdown.Item>

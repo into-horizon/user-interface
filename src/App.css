@@ -1356,8 +1356,9 @@ select.form-control-input {
 }
 
 .notifications-list {
-  width: 15rem !important;
+  width: 20rem !important;
   z-index: 1000;
+  max-height: 25rem;
 }
 
 .offcanvas-backdrop {
