@@ -1377,3 +1377,8 @@ select.form-control-input {
 /* .main-container > div:nth-last-child(1) {
   margin-bottom: 350px;
 } */
+
+
+.main > :nth-child(odd) {
+  background-color: #fff;
+}

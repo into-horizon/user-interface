@@ -10,11 +10,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { selectStores } from "../store/landingPage";
 import StarRatings from "react-star-ratings";
 import Product from "../services/Product";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n";
 
 const Main = () => {
+  const { t, i18n } = useTranslation([
+    namespaces.LANDING_PAGE.ns,
+    namespaces.GLOBAL.ns,
+  ]);
   const { parentCategory, childCategory } = useSelector(
     (state) => state.parent
   );
+
   const stores = useSelector(selectStores);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -52,8 +59,11 @@ const Main = () => {
   }, [parentCategory]);
 
   return (
-    <Row className=" justify-content-center main-container w-100 ">
-      <div className="min-vw-100 p-0 md-show w-100 start-0 position-fixed  z-3  " style={style}>
+    <Row className=" justify-content-center main w-100 ">
+      <div
+        className="min-vw-100 p-0 md-show w-100 start-0 position-fixed  z-3  "
+        style={style}
+      >
         <MainNavbar />
       </div>
 
@@ -65,9 +75,11 @@ const Main = () => {
         <Row className=" justify-content-center w-100 m-auto w-auto w-100 ">
           <Col xs={3} xl={3} xxl={3} className="lg-show">
             <Card className="m-auto" style={{ height: "min-content" }}>
-              <Card.Title className="my-1">Discover</Card.Title>
+              <Card.Title className="my-1">
+                {t("Discover".toUpperCase())}
+              </Card.Title>
               <hr className="w-75 mx-auto my-3 " />
-              <Row className=' w-100 '> 
+              <Row className=" w-100 ">
                 {Children.toArray(
                   childCategory?.map((category) => (
                     <>
@@ -77,7 +89,7 @@ const Main = () => {
                           className="text-dark"
                         >
                           <h6 className="px-2 text-capitalize my-2">
-                            {category.entitle}
+                            {category[`${i18n.language}title`]}
                           </h6>
                         </Link>
                       </Col>
@@ -92,7 +104,7 @@ const Main = () => {
               </Row>
             </Card>
           </Col>
-          <Col md={12} lg={8} xl={9} xxl={8} >
+          <Col md={12} lg={8} xl={9} xxl={8}>
             <Row className="justify-content-center align-items-center w-100 ">
               {Children.toArray(
                 stores.slice(0, 2).map((store) => (
@@ -104,7 +116,7 @@ const Main = () => {
                         src={store.store_picture}
                       />
                       <Card.Header>
-                        Store Name:{" "}
+                        {t("Store_Name".toUpperCase())}:{" "}
                         <span className="fw-bold">{store.store_name}</span>
                       </Card.Header>
                       <Card.Body>
@@ -116,16 +128,16 @@ const Main = () => {
                           starRatedColor="yellow"
                         />
                       </Card.Body>
-                      <Card.Body>
+                      <Card.Body className=" d-flex justify-content-between ">
                         <Card.Link as={Button} variant="secondary">
-                          Follow Store
+                          {t("Follow_Store".toUpperCase())}
                         </Card.Link>
                         <Card.Link
                           as={Button}
                           variant="primary"
                           onClick={() => navigate(`/store/${store.id}`)}
                         >
-                          Visit Store
+                          {t("Visit_Store".toUpperCase())}
                         </Card.Link>
                       </Card.Body>
                     </Card>
