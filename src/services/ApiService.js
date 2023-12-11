@@ -49,7 +49,6 @@ export default class ApiService {
         method: "get",
         url: `/${endpoint}`,
         params: params,
-        // headers: this.bearer(await this.token()),
       });
 
       return res.data;

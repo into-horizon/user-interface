@@ -1,40 +1,35 @@
-import axios from 'axios';
-
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { triggerToast } from "./toast";
+import { DialogType } from "react-custom-popup";
+import AuthService from "../services/Auth";
 
 let signInWithGoogle = createSlice({
-    name: 'signInWithGoogle',
-    initialState: {},
-    reducers:{
-        addUserWithGoogle(state,action){
-        
-            
-            return action.payload 
-        }
-    }
-
-})
-
-export const signInHandlerWithGoogle = (payload) => (dispatch,state) => {
-
-    
-    let API = `http://localhost:5000/auth/google/callback${payload}`;
-    
-    
-    return axios({
-        method: 'get',
-        url: API,
-    } 
-   
-    )
-    .then(res => {
-    dispatch(addUserWithGoogle(res.data));
-   })
-   .catch(e=>{
-       console.error(e.message);
-    //    throw new Error(e.message);
+  name: "signInWithGoogle",
+  initialState: {},
+  reducers: {
+    addUserWithGoogle(state, action) {
+      return action.payload;
+    },
+    resetGoogleUser() {
+      return {};
+    },
+  },
 });
-}
 
-export default signInWithGoogle.reducer 
-export const {addUserWithGoogle} = signInWithGoogle.actions
+export const signInHandlerWithGoogle = (payload) => async (dispatch, state) => {
+  try {
+    const { message, user, status } = await AuthService.signupWithGoogle(
+      payload
+    );
+    if (status === 200) {
+      dispatch(addUserWithGoogle(user));
+    } else {
+      dispatch(triggerToast({ type: DialogType.DANGER, message }));
+    }
+  } catch (error) {
+    dispatch(triggerToast({ type: DialogType.DANGER, message: error.message }));
+  }
+};
+
+export default signInWithGoogle.reducer;
+export const { addUserWithGoogle,resetGoogleUser } = signInWithGoogle.actions;

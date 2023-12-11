@@ -191,6 +191,20 @@ class Auth extends ApiService {
       throw new Error(error.message);
     }
   }
+  async signupWithGoogle(data) {
+    try {
+      return await this.get(`${this.path}/google/callback${data}`);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  async signupWithFacebook(data) {
+    try {
+      return await this.get(`${this.path}/facebook/callback${data}`);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 let AuthService = new Auth();
