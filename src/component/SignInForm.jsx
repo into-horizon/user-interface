@@ -114,7 +114,7 @@ const SignInForm = ({ signInHandler }) => {
                       </CCol>
                       <CCol xs={"auto"}>
                         <Link to={"/provide-reference"}>
-                          {t("PASSWORD_FORGOT")}
+                          {t("FORGOT_PASSWORD")}
                         </Link>
                       </CCol>
                       <CCol xs={12}>

@@ -7,6 +7,8 @@ import { showDialog } from "./dialog";
 import { DialogType } from "react-custom-popup";
 import { resetCartItems } from "./cart";
 import { resetWishlist } from "./wishlist";
+import { resetGoogleUser } from "./google";
+import { resetFacebookState } from "./facebook";
 
 const initialState = {
   login: false,
@@ -142,6 +144,8 @@ export const signupHandler = createAsyncThunk(
         cookie.save("access_token", access_token, { path: "/" });
         cookie.save("refresh_token", refresh_token, { path: "/" });
         cookie.save("session_id", session_id, { path: "/" });
+        dispatch(resetGoogleUser());
+        dispatch(resetFacebookState());
         return user;
       } else if (status === 403) {
         dispatch(

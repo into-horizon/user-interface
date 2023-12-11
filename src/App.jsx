@@ -140,14 +140,14 @@ const App = ({
     if (token && !login) return;
     if (
       (pathname === "/verification" && user?.verified) ||
-      (login && unauthRoutes.includes(pathname)) ||
-      (!login && authRoutes.includes(pathname))
+      (login &&
+        (unauthRoutes.includes(pathname) || pathname.startsWith("/signup"))) ||
+      (!login &&
+        (authRoutes.includes(pathname) || pathname.startsWith("/settings")))
     ) {
       navigate("/");
     } else if (login && !user?.verified) {
       navigate("/verification");
-    } else {
-      navigate(pathname);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, login, user?.verified]);

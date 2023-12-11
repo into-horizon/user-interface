@@ -1,6 +1,6 @@
 import thunk from "redux-thunk";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { createStore, applyMiddleware } from "redux";
+import { applyMiddleware } from "redux";
 
 import auth from "./auth";
 import address from "./address";
@@ -24,9 +24,9 @@ let reducers = combineReducers({
   address: address,
   parent: parent,
   products: product,
-  signInWithGoogleData: signInWithGoogle,
+  google: signInWithGoogle,
   provider: authProvider,
-  signInWithFacebookData: signInWithFacebook,
+  facebook: signInWithFacebook,
   cart: cart,
   wishlist: wishlist,
   discount: discount,
@@ -35,7 +35,7 @@ let reducers = combineReducers({
   toast,
   dialog,
   landingPage,
-  category
+  category,
 });
 
 let store = configureStore({ reducer: reducers }, applyMiddleware(thunk));

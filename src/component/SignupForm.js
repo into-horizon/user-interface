@@ -30,11 +30,16 @@ import CFormInputWithMask from "./common/CFormInputWithMask";
 import { Children } from "react";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
 import { validatePassword } from "../services/utils";
-const SignupForm = (props) => {
+const SignupForm = ({ signInHandlerWithGoogle }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation("sign-up");
-
-  const [user, setUser] = useState({});
+  const googleUser = useSelector((state) => state.google);
+  const { user: facebookUser } = useSelector((state) => state.facebook);
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+  });
   const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
     useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
@@ -44,7 +49,9 @@ const SignupForm = (props) => {
   const { loading } = useSelector((state) => state.sign);
   const [city, setCity] = useState([]);
   const [passwordType, setPasswordType] = useState("password");
-
+  const onChange = (e) => {
+    setUser((user) => ({ ...user, [e.target.name]: e.target.value }));
+  };
   const handleSubmit = (e) => {
     const {
       first_name,
@@ -55,6 +62,8 @@ const SignupForm = (props) => {
       gender,
       password,
       con_password,
+      google_id,
+      facebook_id,
     } = e.target;
     e.preventDefault();
     try {
@@ -77,15 +86,13 @@ const SignupForm = (props) => {
       first_name: first_name.value,
       last_name: last_name.value,
       mobile: mobile.value.substring(1),
-      country: "jordan",
       city: city.value,
+      country: "jordan",
       country_code: 962,
       gender: gender.value,
-      // google_id: e.target.google_id.value || null,
-      // facebook_id: e.target.facebook_id.value || null,
+      google_id: google_id.value,
+      facebook_id: facebook_id.value || null,
     };
-    // props.signupHandler(obj);
-
     dispatch(signupHandler(obj));
   };
 
@@ -93,27 +100,20 @@ const SignupForm = (props) => {
     let provider = localStorage.getItem("provider");
     if (window.location.search) {
       if (provider === "google") {
-        props.signInHandlerWithGoogle(window.location.search);
+        signInHandlerWithGoogle(window.location.search);
       } else if (provider === "facebook") {
-        props.signInHandlerWithFacebook(window.location.search);
+        dispatch(signInHandlerWithFacebook(window.location.search));
       }
     }
-  }, [props]);
+  }, [dispatch, signInHandlerWithGoogle]);
   useEffect(() => {
-    console.log(
-      "🚀 ~ file: SignupForm.js ~ line 72 ~ SignupForm ~ [props.googleUser",
-      props.googleUser
-    );
-    setUser(props.googleUser);
-  }, [props.googleUser]);
-  useEffect(() => {
-    setUser(props.facebookUser);
-    console.log(
-      "🚀 ~ file: SignupForm.js ~ line 80 ~ useEffect ~ props.facebookUser.user",
-      props.facebookUser.user
-    );
-  }, [props.facebookUser]);
-
+    if (googleUser?.email) {
+      setUser(googleUser);
+      // dispatch(resetGoogleUser());
+    } else if (facebookUser?.email) {
+      setUser(facebookUser);
+    }
+  }, [dispatch, googleUser, facebookUser]);
   useEffect(() => {
     setCity(State.getStatesOfCountry(String("JO")));
   }, []);
@@ -140,7 +140,8 @@ const SignupForm = (props) => {
                     id="first_name"
                     className="mb-2 "
                     required
-                    value={user ? user.first_name : null}
+                    value={user.first_name}
+                    onChange={onChange}
                   />
                   <CFormInput
                     type="text"
@@ -150,7 +151,8 @@ const SignupForm = (props) => {
                     id="last_name"
                     className="mb-2 "
                     required
-                    value={user ? user.last_name : null}
+                    value={user.last_name}
+                    onChange={onChange}
                   />
 
                   <CFormInput
@@ -161,7 +163,9 @@ const SignupForm = (props) => {
                     id="email"
                     className="mb-2 "
                     required
-                    value={user ? user.email : null}
+                    value={user.email}
+                    onChange={onChange}
+                    disabled={googleUser.email || facebookUser.email}
                   />
 
                   <CFormInputWithMask
@@ -170,8 +174,10 @@ const SignupForm = (props) => {
                     mask="+{962}000000000"
                     name="mobile"
                     id="mobile"
+                    type="tel"
                     className="mb-2 "
                     required
+                    onChange={onChange}
                   />
                   <CFormSelect
                     name="gender"
@@ -179,6 +185,7 @@ const SignupForm = (props) => {
                     id="gender"
                     floatingLabel={t("GENDER")}
                     required
+                    onChange={onChange}
                   >
                     <option value="male">{t("MALE")}</option>
                     <option value="female">{t("FEMALE")}</option>
@@ -253,29 +260,38 @@ const SignupForm = (props) => {
                       )}
                     </Button>
                   </div>
+                  <input
+                    hidden
+                    name="google_id"
+                    id="google_id"
+                    type="text"
+                    value={googleUser?.google_id ?? ""}
+                    onChange={onChange}
+                  />
+                  <input
+                    hidden
+                    className="input"
+                    name="facebook_id"
+                    id="facebook_id"
+                    type="text"
+                    defaultValue={facebookUser?.facebook_id ?? ""}
+                    onChange={onChange}
+                  />
                 </form>
 
                 <div className=" mx-auto w-auto d-flex justify-content-center mt-2    ">
-                  <Link to="/">
-                    <input
-                      hidden
-                      className="input"
-                      name="google_id"
-                      type="text"
-                      value={user ? user.google_id : null}
-                    />
+                  <a
+                    href={`${process.env.REACT_APP_API}/auth/google`}
+                    onClick={() => localStorage.setItem("provider", "google")}
+                  >
                     <img className=" w-75 " src={google} alt="" />
-                  </Link>
-                  <Link to="/">
-                    <input
-                      hidden
-                      className="input"
-                      name="facebook_id"
-                      type="text"
-                      value={user ? user.google_id : null}
-                    />
+                  </a>
+                  <a
+                    href={`${process.env.REACT_APP_API}/auth/facebook`}
+                    onClick={() => localStorage.setItem("provider", "facebook")}
+                  >
                     <img className=" w-75 " src={facebook} alt="" />
-                  </Link>
+                  </a>
                 </div>
                 <div className="mt-2">
                   <p className=" text-center ">
