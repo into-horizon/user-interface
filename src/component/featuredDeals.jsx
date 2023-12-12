@@ -1,5 +1,5 @@
 import React, { Children } from "react";
-import ProductCard from "./ProductCard";
+import ProductCard from "./productCard";
 import { Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { CButton, CCol, CRow } from "@coreui/react";

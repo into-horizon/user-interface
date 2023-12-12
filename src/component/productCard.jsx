@@ -10,8 +10,11 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import CIcon from "@coreui/icons-react";
 import { cilBasket } from "@coreui/icons";
-import { CTooltip } from "@coreui/react";
+import { CButton, CFormSelect, CTooltip } from "@coreui/react";
 import { Heart, HeartFill } from "react-bootstrap-icons";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n";
+import landingPage from "../store/landingPage";
 
 const ProductCard = ({
   cart,
@@ -22,6 +25,10 @@ const ProductCard = ({
   deleteItemHandler,
   updateCartItemHandler,
 }) => {
+  const { t, i18n } = useTranslation([
+    namespaces.PRODUCT.ns,
+    namespaces.COLOR.ns,
+  ]);
   const [heart, setheart] = useState(1);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
@@ -137,11 +144,11 @@ const ProductCard = ({
           <Card.Title>
             {" "}
             <Link to={`/product/${product.id}`} className="card-link">
-              {product.entitle}
+              {product[`${i18n.language}title`]}
             </Link>
           </Card.Title>
-          <Card.Subtitle>description</Card.Subtitle>
-          <Card.Text>{product.endescription}</Card.Text>
+          <Card.Subtitle>{t("description".toUpperCase())}</Card.Subtitle>
+          <Card.Text>{product[`${i18n.language}description`]}</Card.Text>
         </Card.Body>
         <Card.Body>
           <StarRatings
@@ -152,86 +159,102 @@ const ProductCard = ({
           />
         </Card.Body>
         <Card.Body className="m-0 py-0">
-          <Row>
-            <Col xs={4} sm={4} md={5} lg={4} xl={4}>
-              {sizes.length > 0 && (
+          <Row className=" justify-content-between  align-content-center ">
+            {sizes.length > 0 && (
+              <Col
+                xs="4"
+                // xs={4} sm={4} md={5} lg={4} xl={4}
+              >
                 <>
-                  <Form.Group className="mb-3">
-                    <Form.Label>size</Form.Label>
-                    <Form.Select
-                      id="size"
-                      onChange={(e) => setSize(e.target.value)}
-                    >
-                      {sizes.map((size, i) => (
-                        <option key={`size${i}`} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
+                  <CFormSelect
+                    id="size"
+                    onChange={(e) => setSize(e.target.value)}
+                    floatingLabel={t("size".toUpperCase())}
+                  >
+                    {sizes.map((size, i) => (
+                      <option key={`size${i}`} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                  {/* <Form.Group className="mb-3">
+                    <Form.Label>{t("size".toUpperCase())}</Form.Label>
+                  </Form.Group> */}
                 </>
-              )}
-            </Col>
-            <Col
-              xs={{ span: 5, offset: 3 }}
-              md={{ span: 7, offset: 0 }}
-              lg={{ span: 5, offset: 3 }}
-              xl={{ span: 6, offset: 2 }}
-            >
-              {colors.length > 0 && (
+              </Col>
+            )}
+            {colors.length > 0 && (
+              <Col
+                xs="4"
+                // xs={{ span: 5, offset: 3 }}
+                // md={{ span: 7, offset: 0 }}
+                // lg={{ span: 5, offset: 3 }}
+                // xl={{ span: 6, offset: 2 }}
+              >
                 <>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Color</Form.Label>
-                    <Form.Select
-                      id="color"
-                      onChange={(e) => setColor(e.target.value)}
-                    >
-                      {colors.map((color, i) => (
-                        <option key={`color${i}`} value={color}>
-                          {color}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Form.Group>
+                  <CFormSelect
+                    id="color"
+                    onChange={(e) => setColor(e.target.value)}
+                    floatingLabel={t("Color".toUpperCase())}
+                  >
+                    {colors.map((color, i) => (
+                      <option key={`color${i}`} value={color}>
+                        {t(color, namespaces.COLOR)}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                  {/* <Form.Group className="mb-3">
+                    <Form.Label>{t("Color".toUpperCase())}</Form.Label>
+                  </Form.Group> */}
                 </>
-              )}
-            </Col>
+              </Col>
+            )}
           </Row>
         </Card.Body>
         <Card.Body
           as={Row}
-          className="justify-content-between align-items-center m-0 py-0"
+          className="justify-content-between align-items-center my-3 py-0"
         >
           <Col xs={9} className="my-3">
             <Card.Link
               as={"span"}
-              className="text-dark fw-bold bg-light p-2  border-1 rounded align-self-end"
+              className="text-dark fw-bold bg-light p-3  border-1 rounded align-self-end"
             >
               {product.discount ? (
                 <>
                   <sup className="text-decoration-line-through">
-                    {`${product.price} ${product.currency}`}
+                    {`${product.price} ${t(product.currency.toUpperCase())}`}
                   </sup>{" "}
-                  {`${product.price * (1 - product.discount_rate).toFixed(2)} ${
-                    product.currency
-                  }`}
+                  {`${
+                    product.price * (1 - product.discount_rate).toFixed(2)
+                  } ${t(product.currency.toUpperCase())}`}
                 </>
               ) : (
-                `${product.price} ${product.currency}`
+                `${product.price} ${t(product.currency.toUpperCase())}`
               )}
             </Card.Link>
           </Col>
           <Col xs={3}>
             <CTooltip
-              content={product.quantity <= 0 ? "out of stock" : "Add to cart"}
+              content={
+                product.quantity <= 0 ? t("OUT_OF_STOCK") : t("ADD_TO_CART")
+              }
             >
-              <Card.Link
+              {/* <Card.Link
                 as={Button}
                 onClick={() => AddBag(product)}
                 disabled={product.quantity <= 0}
               >
                 <CIcon icon={cilBasket} size="lg" />
-              </Card.Link>
+              </Card.Link> */}
+              <CButton
+                onClick={() => AddBag(product)}
+                disabled={product.quantity <= 0}
+                size="lg"
+                className=" text-light "
+              >
+                <CIcon icon={cilBasket} size="xl" />
+              </CButton>
             </CTooltip>
           </Col>
         </Card.Body>

@@ -130,7 +130,8 @@ const Header = (props) => {
               >
                 <CIcon icon={cilCart} size="xxl" />
                 <CBadge
-                  style={{ position: "absolute", top: -10, right: "22%" }}
+                  style={{ top: -10, right: "22%" }}
+                  className=" position-absolute mt-1"
                 >
                   <h6>
                     {cart.reduce((x, y) => {
@@ -141,7 +142,6 @@ const Header = (props) => {
               </Link>
 
               <NavDropdown
-                id="collasible-nav-dropdown2"
                 title={<CIcon icon={cilUser} size="xxl" />}
               >
                 {login ? (

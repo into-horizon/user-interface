@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import "./products.css";
 import { CSpinner, CFormSelect, CCol } from "@coreui/react";
-import ProductCard from "../../component/ProductCard";
+import ProductCard from "../../component/productCard";
 import Paginator from "../../component/common/Paginator";
 import CIcon from "@coreui/icons-react";
 import { cilFilter } from "@coreui/icons";
@@ -46,9 +46,7 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
   useEffect(() => {}, [searchQuery.key]);
   const onChange = (e, v = {}) => {
     v[e.target.id] = e.target.value;
-    setSearchQuery((x) => {
-      return { ...x, ...v };
-    });
+    setSearchQuery((x) => ({ ...x, ...v }));
   };
 
   useEffect(() => {

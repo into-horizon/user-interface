@@ -1383,28 +1383,38 @@ select.form-control-input {
   background-color: #fff;
 }
 
-.progress {
-  background-color: #ffffff;
-  width: 220px;
-  height: 20px;
-  border-radius: 100px;
-  overflow: hidden;
-  backface-visibility: hidden;
+.loader {
+  display: block;
+  --height-of-loader: 20px;
+  --loader-color: #0071e2;
+  width: 130px;
+  height: var(--height-of-loader);
+  border-radius: 30px;
+  background-color: rgba(0,0,0,0.2);
+  position: relative;
 }
 
-.inner {
-  background-image: linear-gradient(to left, #00cdac, #00c2c9, #00b4e3, #00a2f1, #008cef, #0088eb, #0085e6, #0081e2, #0090de, #009bd2, #00a3c1, #02aab0);
+.loader::before {
+  content: "";
+  position: absolute;
+  background: var(--loader-color);
+  top: 0;
+  left: 0;
+  width: 0%;
   height: 100%;
-  transform-origin: left;
-  animation: progress 2s infinite;
+  border-radius: 30px;
+  animation: moving 1s ease-in-out infinite;
+  ;
 }
 
-@keyframes progress {
-  0% {
-    transform: scaleX(10%) translateX(-10%);
+@keyframes moving {
+  50% {
+    width: 100%;
   }
 
   100% {
-    transform: scaleX(80%) translateX(150%);
+    width: 0;
+    right: 0;
+    left: unset;
   }
 }

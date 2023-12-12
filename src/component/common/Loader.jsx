@@ -9,9 +9,10 @@ const Loader = () => {
         <CRow className="justify-content-center">
           <CCol xs="auto">
             {/* <Rings height="35rem" width="150" color="blue" /> */}
-            <div class="progress">
+            {/* <div class="progress">
               <div class="inner"></div>
-            </div>
+            </div> */}
+            <div class="loader"></div>
           </CCol>
         </CRow>
       </CContainer>

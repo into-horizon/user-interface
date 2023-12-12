@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import MainNavbar from "../component/navbar";
 import ProductView from "../component/featuredDeals";
-// import escapes from "../static-data/escapes";
 import CarouselItem from "../component/carousel";
 import { useSelector } from "react-redux";
 import { Children } from "react";

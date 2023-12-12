@@ -1,6 +1,8 @@
+import colorLocalization from "./colors";
 import globalLocalization from "./global";
 import landingPageLocalization from "./landing-page";
 import passwordLocalization from "./password";
+import productLocalization from "./product";
 import signInLocalization from "./sign-in";
 import signup from "./signup";
 import verificationLocalization from "./verification";
@@ -12,6 +14,8 @@ export const namespaces = {
   GLOBAL: { ns: "global" },
   PASSWORD: { ns: "password" },
   LANDING_PAGE: { ns: "landing-page" },
+  PRODUCT: { ns: "product" },
+  COLOR: { ns: "color" },
 };
 
 const localizations = [
@@ -21,6 +25,8 @@ const localizations = [
   { ns: namespaces.GLOBAL.ns, source: globalLocalization },
   { ns: namespaces.PASSWORD.ns, source: passwordLocalization },
   { ns: namespaces.LANDING_PAGE.ns, source: landingPageLocalization },
+  { ns: namespaces.PRODUCT.ns, source: productLocalization },
+  { ns: namespaces.COLOR.ns, source: colorLocalization },
 ];
 
 const ar = "ar";

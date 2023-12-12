@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import { Tabs, Tab } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import ProductCard from "./ProductCard";
+import ProductCard from "./productCard";
 import Store from "../services/Store";
 import { CButton, CRow, CCol } from "@coreui/react";
 import { getStoreProductsHandler } from "../store/products";
