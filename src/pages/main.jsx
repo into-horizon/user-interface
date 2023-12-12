@@ -49,7 +49,7 @@ const Main = () => {
       });
       setCategories((state) => [
         ...state,
-        { id: category.id, title: category.entitle, products },
+        { id: category.id, title: category[`${i18n.language}title`], products },
       ]);
     });
   };
@@ -120,7 +120,7 @@ const Main = () => {
                         <span className="fw-bold">{store.store_name}</span>
                       </Card.Header>
                       <Card.Body>
-                        <span className="fw-bold">Rating: </span>
+                        <span className="fw-bold">{t('RATING')}: </span>
                         <StarRatings
                           rating={store.store_rating}
                           starDimension="1.5rem"
@@ -153,7 +153,7 @@ const Main = () => {
           <Col xs={12} className="w-100 mx-auto ">
             <Row className="justify-content-center w-100 mx-auto  ">
               <Col xs={12} xl={10}>
-                <ProductView {...item} />
+                <ProductView {...item} t={t}/>
               </Col>
             </Row>
           </Col>

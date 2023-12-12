@@ -1,176 +1,255 @@
 import React, { useState, useEffect } from "react";
-import "./productCard.css";
-import { connect } from 'react-redux'
-import { addItem, decrementQuantity, incrementQuantity, deleteItem } from '../store/cart'
-import { addProduct, deleteProduct } from '../store/wishlist'
-import { If, Then, Else } from 'react-if'
-// import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
-import StarRatings from 'react-star-ratings';
-import { Link } from 'react-router-dom'
-import { ToastContainer, toast } from 'react-toastify';
+// import "./productCard.0css";
+import { connect } from "react-redux";
+import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
+import StarRatings from "react-star-ratings";
+import { Link } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import image from "../assets/no-image.png";
+import { Button, Card, Col, Row } from "react-bootstrap";
+import { addItemHandler, deleteItemHandler } from "../store/wishlist";
+import CIcon from "@coreui/icons-react";
+import { cilBasket } from "@coreui/icons";
+import { CTooltip } from "@coreui/react";
+import { Heart, HeartFill } from "react-bootstrap-icons";
 
-
-
-const ProfileCard = (props) => {
-  const { addItem, decrementQuantity, incrementQuantity, deleteItem, cart, addProduct, deleteProduct, wishlist, itemType } = props
-
-  const [addbag, setaddbag] = useState(1);
+const ProductCard = ({
+  cart,
+  wishlist,
+  addCartItemHandler,
+  product,
+  addItemHandler,
+  deleteItemHandler,
+  updateCartItemHandler,
+}) => {
   const [heart, setheart] = useState(1);
-
+  const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [color, setColor] = useState(null);
+  const [size, setSize] = useState(null);
   const AddBag = (product) => {
-    let item = cart.filter(item => item.id === product.id)
-    if (item[0]) {
-      incrementQuantity(product)
+    let item = cart.find(
+      (item) =>
+        (item.product_id === product.id || item.id === product.id) &&
+        item.color === color &&
+        item.size === size
+    );
+    if (item) {
+      updateCartItemHandler({ ...item, quantity: item.quantity + 1 });
     } else {
-      addItem({...product, qty: 1})
-    }
-    toast("added to your cart")
-  };
-  const DecBag = () => {
-    if (addbag >= 1) {
-      setaddbag(addbag - 1);
+      addCartItemHandler({ ...product, quantity: 1, color: color, size: size });
     }
   };
-  const Heart = (product) => {
+  const heartFunction = (product) => {
     if (heart) {
       setheart(0);
-      addProduct(product)
+      addItemHandler(product);
     } else {
       setheart(1);
-      deleteProduct(product);
+      deleteItemHandler(product);
     }
   };
-  const wishlistIds = wishlist.map(product => product.id)
 
   useEffect(() => {
-    if (wishlistIds.includes(props.product.id)) {
+    const arr = JSON.parse(product.size_and_color);
+    if (arr?.length > 0) {
+      let _colors = arr
+        .filter(
+          (v, i, a) =>
+            i === a.findIndex((x) => x.color === v.color) && v.quantity
+        )
+        .map((v) => v.color)
+        .filter((value) => value);
+      let _sizes = arr
+        .filter(
+          (v, i, a) => i === a.findIndex((x) => x.size === v.size) && v.quantity
+        )
+        .map((v) => v.size)
+        .filter((value) => value);
+      if (_sizes.length > 0 && _colors.length > 0) {
+        setSizes(() => _sizes);
+        setSize(() => _sizes[0]);
+      } else if (_sizes.length > 0 && _colors.length === 0) {
+        setSizes(() => _sizes);
+        setSize(() => _sizes[0]);
+      } else if (_sizes.length === 0 && _colors.length > 0) {
+        setColors(() => _colors);
+        setColor(() => _colors[0]);
+      }
+    }
+  }, [product.size_and_color]);
+  useEffect(() => {
+    const arr = JSON.parse(product.size_and_color);
+    let _colors = arr
+      ?.filter(
+        (v, i, a) =>
+          i ===
+          a.findIndex(
+            (x) => x.color === v.color && v.size === size && v.quantity
+          )
+      )
+      .map((v) => v.color)
+      .filter((value) => value);
+    if (_colors?.length > 0) {
+      setColors(() => _colors);
+      setColor(() => _colors[0]);
+    }
+  }, [product.size_and_color, size]);
+  useEffect(() => {
+    if (
+      wishlist.find(
+        (x) => x?.id === product?.id || x?.product_id === product?.id
+      )
+    ) {
       setheart(0);
     } else {
-      setheart(1)
+      setheart(1);
     }
-
-  }, [])
-
+  }, [product?.id, wishlist]);
 
   return (
     <>
-      {/* <div className="container2">
-    </div> */}
-      <div className={'card' + ' ' + props.xclass}>
-
-        <div className="top_part">
-          {/* <div className="circle">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div> */}
-          <small>
-            <i
-              onClick={() => Heart(props.product)}
-              className={`fa ${heart ? "fa-heart-o" : "fa-heart"}`}
-            // className={`fa ${!wishlistIds.includes(props.product.id)} ? "fa-heart-o" : "fa-heart"`}
-            ></i>
-          </small>
-        </div>
-        <div className="image2">
-          <img className="img" src={props.product.image} alt="Image" />
-          {/* <p className="hover">{props.product.description}</p> */}
-        </div>
-
-        <div className="vitamin">
-          <If condition={itemType === 'product'}>
-            <Then>
-              <Link to={`/product/${props.product.id}`}>
-                <h3>{props.product.title}</h3>
-
-
-              </Link>
-
-            </Then>
-            <Else>
-              <h3>{props.product.title}</h3>
-            </Else>
-          </If>
-
-        </div>
-        <div className="reviews">
-        
-          {props.product.metaTitle ? (
-            <p>{props.product.metaTitle}</p>
-          ) : null}
-        </div>
-        {/* <div className="size">
-                        <p>with Hyaluronic acid and Vitamin E</p>
-                        <h5>Size : 1 FL Oz</h5>
-                      </div> */}
-        {/* <div className="buttons">
-                        <button>1 FL Oz<p>1 option from $23</p></button>
-                        <button>2 FL Oz<p>$43($21/FL Oz)</p></button>
-                      </div> */}
-        {/* <h4>Select Gender</h4>
-                    <div className="gender">
-                    <span>Man</span>
-                    <span>Woman</span>
-                    <span>Both</span>
-                  </div> */}
-        <div className="last">
-          {/* <span className="boughtSpan">{props.product.bought} Bought</span> */}
+      <Card className="position-relative m-auto w-100 h-100">
+        <small
+          className="position-absolute"
+          style={{ top: 10, left: 10 }}
+          onClick={() => heartFunction(product)}
+        >
+          {/* <i
+            onClick={() => Heart(product)}
+            className={`fa ${heart ? "fa-heart-o" : "fa-heart"}`}
+          ></i> */}
+          {/* <CIcon icon={cilHeart}   /> */}
+          {heart ? <Heart color="red" /> : <HeartFill color="red" />}
+        </small>
+        <Card.Img
+          variant="top"
+          src={product.pictures?.product_picture ?? image}
+          className="w-100 mx-auto"
+        />
+        <Card.Header>
+          {" "}
+          <Link to={`/store/${product.store_id}`}>
+            <small>{product.store_name}</small>
+          </Link>
+        </Card.Header>
+        <Card.Body>
+          <Card.Title>
+            {" "}
+            <Link to={`/product/${product.id}`} className="card-link">
+              {product.entitle}
+            </Link>
+          </Card.Title>
+          <Card.Subtitle>description</Card.Subtitle>
+          <Card.Text>{product.endescription}</Card.Text>
+        </Card.Body>
+        <Card.Body>
           <StarRatings
-            rating={props.product.rate || 2.403}
+            rating={Number(product?.rate) || 0}
             starDimension="1.5rem"
             starSpacing=".05rem"
             starRatedColor="yellow"
           />
-          <If condition={itemType === 'product'}>
-            <Then>
-              <div className="prices">
-                {props.product.oldPrice ? (
-                  <h4 className="oldprice">{props.product.oldPrice}</h4>
-                ) : null}
-                <h3 style={{ margin: "1rem" }}>{props.product.price}</h3>
-
-              </div>
-            </Then>
-          </If>
-          <If condition={itemType === 'seller'}>
-            <Then>
-              <Link to={`/store/${props.product.id}`}>
-                <button className="visit">
-                  Visit Store
-                </button>
-
-              </Link>
-            </Then>
-          </If>
-
-
-          {/* <i onClick={DecBag} className="fa fa-minus"></i>
-                            <p>{addbag}</p>
-                          <i onClick={AddBag} className="fa fa-plus"></i> */}
-        </div>
-
-        <If condition={itemType === 'product'}>
-          <Then>
-            <div className="money_bag">
-              <button onClick={() => AddBag(props.product)}><i className="fa fa-shopping-bag"></i>Add to cart</button>
-              <ToastContainer position="bottom-right"/>
-            </div>
-
-          </Then>
-
-        </If>
-      </div>
+        </Card.Body>
+        <Card.Body className="m-0 py-0">
+          <Row>
+            <Col xs={4} sm={4} md={5} lg={4} xl={4}>
+              {sizes.length > 0 && (
+                <>
+                  <Form.Group className="mb-3">
+                    <Form.Label>size</Form.Label>
+                    <Form.Select
+                      id="size"
+                      onChange={(e) => setSize(e.target.value)}
+                    >
+                      {sizes.map((size, i) => (
+                        <option key={`size${i}`} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </>
+              )}
+            </Col>
+            <Col
+              xs={{ span: 5, offset: 3 }}
+              md={{ span: 7, offset: 0 }}
+              lg={{ span: 5, offset: 3 }}
+              xl={{ span: 6, offset: 2 }}
+            >
+              {colors.length > 0 && (
+                <>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Color</Form.Label>
+                    <Form.Select
+                      id="color"
+                      onChange={(e) => setColor(e.target.value)}
+                    >
+                      {colors.map((color, i) => (
+                        <option key={`color${i}`} value={color}>
+                          {color}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </>
+              )}
+            </Col>
+          </Row>
+        </Card.Body>
+        <Card.Body
+          as={Row}
+          className="justify-content-between align-items-center m-0 py-0"
+        >
+          <Col xs={9} className="my-3">
+            <Card.Link
+              as={"span"}
+              className="text-dark fw-bold bg-light p-2  border-1 rounded align-self-end"
+            >
+              {product.discount ? (
+                <>
+                  <sup className="text-decoration-line-through">
+                    {`${product.price} ${product.currency}`}
+                  </sup>{" "}
+                  {`${product.price * (1 - product.discount_rate).toFixed(2)} ${
+                    product.currency
+                  }`}
+                </>
+              ) : (
+                `${product.price} ${product.currency}`
+              )}
+            </Card.Link>
+          </Col>
+          <Col xs={3}>
+            <CTooltip
+              content={product.quantity <= 0 ? "out of stock" : "Add to cart"}
+            >
+              <Card.Link
+                as={Button}
+                onClick={() => AddBag(product)}
+                disabled={product.quantity <= 0}
+              >
+                <CIcon icon={cilBasket} size="lg" />
+              </Card.Link>
+            </CTooltip>
+          </Col>
+        </Card.Body>
+      </Card>
     </>
   );
 };
 
 const mapStateToProps = (state) => ({
   cart: state.cart,
-  wishlist: state.wishlist.items
-
+  wishlist: state.wishlist.items,
 });
 
-const mapDispatchToProps = { addItem, decrementQuantity, incrementQuantity, deleteItem, addProduct, deleteProduct };
+const mapDispatchToProps = {
+  addCartItemHandler,
+  addItemHandler,
+  deleteItemHandler,
+  updateCartItemHandler,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileCard);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);

@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import "./products.css";
 import { CSpinner, CFormSelect, CCol } from "@coreui/react";
-import ProductCard from "../../component/ProductCardV2";
+import ProductCard from "../../component/ProductCard";
 import Paginator from "../../component/common/Paginator";
 import CIcon from "@coreui/icons-react";
 import { cilFilter } from "@coreui/icons";
@@ -367,7 +367,7 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
                 }
 
                 {brand.length !== 0 && (
-                  <div key={`Brand`} className="mb-3 m-2rem">
+                  <div key={`Brand`} className="mb-3">
                     {" "}
                     Brand
                     {brand.map((brand, index) => (
@@ -388,7 +388,6 @@ const Products = ({ productsData, productHandler, searchProductsHandler }) => {
                     {" "}
                     <label>first category</label>{" "}
                     <CFormSelect
-                      aria-label="Default select example"
                       value={searchQuery.parent_category_id}
                       id="parent_category_id"
                       onChange={(e) =>

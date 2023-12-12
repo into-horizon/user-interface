@@ -7,6 +7,10 @@ const ar = {
   STORE_NAME: "إسم المتجر",
   FOLLOW_STORE: "تابع المتجر",
   VISIT_STORE: "قم بزيارة المتجر",
+  RATING: "التقييم",
+  VIEW_MORE: "عرض المزيد",
+
+
 };
 
 export default ar;
