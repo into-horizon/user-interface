@@ -185,7 +185,7 @@ const ProductCard = ({
             )}
             {colors.length > 0 && (
               <Col
-                xs="4"
+                xs="6"
                 // xs={{ span: 5, offset: 3 }}
                 // md={{ span: 7, offset: 0 }}
                 // lg={{ span: 5, offset: 3 }}

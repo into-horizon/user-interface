@@ -11,6 +11,9 @@ import {
   CButton,
   CCard,
   CCardBody,
+  CCardFooter,
+  CCardHeader,
+  CCardSubtitle,
   CCardText,
   CCardTitle,
   CCol,
@@ -24,6 +27,8 @@ import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import { toast } from "react-toastify";
 import LoadingSpinner from "./common/LoadingSpinner";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n";
 
 const Product = ({
   productHandler,
@@ -34,6 +39,10 @@ const Product = ({
   deleteItemHandler,
 }) => {
   let { id } = useParams();
+  const { t, i18n } = useTranslation([
+    namespaces.PRODUCT.ns,
+    namespaces.COLOR.ns,
+  ]);
   const cart = useSelector((state) => state.cart);
   const { items } = useSelector((state) => state.wishlist);
   const { product, reviews } = useSelector((state) => state.products);
@@ -59,22 +68,19 @@ const Product = ({
       updateCartItemHandler({
         ...item,
         quantity:
-          item.quantity + qty > product.quantity
-            ? product.quantity
+          item.quantity + qty > product?.quantity
+            ? product?.quantity
             : item.quantity + qty,
       });
     } else {
       addCartItemHandler({
         ...product,
-        quantity:
-          item.quantity + qty > product.quantity
-            ? product.quantity
-            : item.quantity + qty,
+        quantity: qty > product?.quantity ? product?.quantity : qty,
         color: color,
         size: size,
       });
     }
-    toast("added to your cart");
+    // toast("added to your cart");
   };
 
   useEffect(() => {
@@ -82,8 +88,8 @@ const Product = ({
       const sizeAndColor = JSON.parse(product.size_and_color);
       const sizes = sizeAndColor
         .map((item) => item.size)
-        ?.filter((size, i, self) => self.indexOf(size) === i);
-      if (sizes) {
+        ?.filter((size, i, self) => self.indexOf(size) === i && size);
+      if (sizes.length > 0) {
         const colors = sizeAndColor
           .filter((item) => item.size === sizes?.[0])
           .map((item) => item.color);
@@ -113,7 +119,7 @@ const Product = ({
   }
   return (
     <CRow
-      className="justify-content-center align-items-start position-relative py-3 w-100 "
+      className="justify-content-center align-items-start position-relative py-3 w-100 gy-3 "
       // xs={{ gutter: 5 }}
     >
       <CCol
@@ -121,44 +127,46 @@ const Product = ({
         sm={10}
         md={8}
         lg={4}
-        className="border-3 border border-light p-3 m-1"
+        // className="border-3 border border-light p-3 m-1"
       >
-        {product?.pictures?.length > 0 && (
-          <Carousel
-            data={
-              product?.pictures?.map((p) => {
-                return { image: p.product_picture };
-              }) ?? []
-            }
-            width="35rem"
-            height="20rem"
-            radius="10px"
-            pauseIconColor="white"
-            pauseIconSize="40px"
-            slideImageFit="cover"
-            thumbnails
-            thumbnailWidth="50px"
-            style={{
-              textAlign: "left",
-              maxWidth: "850px",
-              maxHeight: "500px",
-              margin: "40px auto",
-            }}
-          />
-        )}
+        <CCard>
+          {product?.pictures?.length > 0 && (
+            <Carousel
+              data={
+                product?.pictures?.map((p) => {
+                  return { image: p.product_picture };
+                }) ?? []
+              }
+              width="35rem"
+              height="20rem"
+              radius="10px"
+              pauseIconColor="white"
+              pauseIconSize="40px"
+              slideImageFit="cover"
+              thumbnails
+              thumbnailWidth="50px"
+              style={{
+                textAlign: "left",
+                maxWidth: "850px",
+                maxHeight: "500px",
+                margin: "40px auto",
+              }}
+            />
+          )}
+        </CCard>
       </CCol>
       <CCol
         xs={10}
         md={6}
         lg={4}
         sm={8}
-        className=" border-3 border border-light p-3 "
+        // className=" border-3 border border-light p-3 "
       >
-        <CRow className="" xs={{ gutterY: 2 }}>
-          <h3 className=" text-capitalize border-bottom border-2 py-2">
-            {product.entitle}
-          </h3>
-          <div>
+        <CCard>
+          <CCardHeader>
+            <CCardTitle>{product[`${i18n.language}title`]}</CCardTitle>
+          </CCardHeader>
+          <CCardBody>
             <StarRatings
               rating={Number(product.rate) || 0}
               starDimension="1.5rem"
@@ -166,57 +174,141 @@ const Product = ({
               starRatedColor="yellow"
             />{" "}
             <span className="my-auto">({product.votes}) </span>
-          </div>
-          <h5 className="">Price: {product.price + " " + product.currency}</h5>
-          <p className="">Description: {product.endescription}</p>
-          <CCol xs={12} className="px-2">
-            <h5>sizes</h5>
-            <CRow xs={{ gutter: 1 }}>
-              {Children.toArray(
-                sizes?.map((_size, i) => (
-                  <CCol xs="auto">
-                    <CFormCheck
-                      button={{ color: "outline-secondary" }}
-                      type="radio"
-                      name="size"
-                      id={_size}
-                      label={_size}
-                      value={_size}
-                      checked={size === _size}
-                      onChange={(e) => setSize(e.target.value)}
-                    />
-                  </CCol>
-                ))
-              )}
+          </CCardBody>
+          <CCardBody>
+            <CCardSubtitle>
+              {`${t("PRICE")}: ${product.price} ${t(
+                product.currency.toUpperCase()
+              )}`}
+            </CCardSubtitle>
+          </CCardBody>
+          <CCardBody>
+            <CCardText>
+              {" "}
+              {`${t("DESCRIPTION")}: ${product[`${i18n.language}title`]}`}
+            </CCardText>
+          </CCardBody>
+          <CCardBody>
+            {sizes?.length > 0 && (
+              <CCardBody>
+                <CCardSubtitle className="mb-2">
+                  {t("sizes".toUpperCase())}
+                </CCardSubtitle>
+                <CRow xs={{ gutter: 1 }}>
+                  {Children.toArray(
+                    sizes?.map((_size, i) => (
+                      <CCol xs="auto">
+                        <CFormCheck
+                          button={{ color: "outline-secondary" }}
+                          type="radio"
+                          name="size"
+                          id={_size}
+                          label={_size}
+                          value={_size}
+                          checked={size === _size}
+                          onChange={(e) => setSize(e.target.value)}
+                        />
+                      </CCol>
+                    ))
+                  )}
+                </CRow>
+              </CCardBody>
+            )}
+            {colors?.length > 0 && (
+              <CCardBody>
+                <CCardSubtitle className="mb-2">
+                  {t("colors".toUpperCase())}
+                </CCardSubtitle>
+                <CRow xs={{ gutter: 1 }}>
+                  {Children.toArray(
+                    colors?.map((_color, i) => (
+                      <CCol xs="auto">
+                        <CFormCheck
+                          button={{
+                            color: "outline-secondary",
+                            className: "mx-2 ",
+                          }}
+                          type="radio"
+                          name="color"
+                          id={_color}
+                          label={t(_color, namespaces.COLOR)}
+                          value={_color}
+                          checked={color === _color}
+                          onChange={(e) => setColor(e.target.value)}
+                        />
+                      </CCol>
+                    ))
+                  )}
+                </CRow>
+              </CCardBody>
+            )}
+            {/* <CRow className="" xs={{ gutterY: 2 }}>
+              <h3 className=" text-capitalize border-bottom border-2 py-2"></h3>
+              <h5 className=""></h5>
+              <p className="">Description: {product.endescription}</p>
+              <CCol xs={12} className="px-2"></CCol>
+              <CCol className="px-2"></CCol>
+            </CRow> */}
+          </CCardBody>
+          <CCardFooter>
+            <CRow
+              className="align-items-center flex-column  justify-content-center p-3 w-auto mx-auto   "
+              xs={{ gutterY: 2 }}
+            >
+              <CCol xs={12} md={9} lg={9} xl={7} xxl={6}>
+                <CInputGroup>
+                  <CButton
+                    onClick={() => setQty((x) => x - 1)}
+                    disabled={qty === 1}
+                    color="info"
+                  >
+                    -
+                  </CButton>
+                  <CFormInput
+                    className=" bg-info  text-center border-info "
+                    value={qty}
+                    readOnly
+                  />
+                  <CButton
+                    onClick={() => setQty((x) => x + 1)}
+                    disabled={qty === product.quantity}
+                    color="info"
+                  >
+                    +
+                  </CButton>
+                </CInputGroup>
+              </CCol>
+
+              <CCol xs={12} md={9} lg={9} xl={7} xxl={6}>
+                <CButton
+                  color="primary"
+                  className="mx-auto w-100 "
+                  onClick={AddBag}
+                >
+                  {BagPlus && <BagPlus size={20} className="mx-1" />}
+                  {t('Add_to_cart'.toUpperCase())}
+                </CButton>
+              </CCol>
+              <CCol xs={12} md={10} lg={'auto'} >
+                {items.find((i) => i?.product_id === product?.id) ? (
+                  <CButton color="success" className="w-100" disabled>
+                    <HeartFill color="red" /> in wishlist
+                  </CButton>
+                ) : (
+                  <CButton
+                    color="success"
+                    className="w-100"
+                    onClick={() => addItemHandler(product)}
+                  >
+                    <Heart color="red" /> {t('ADD_TO_WISHLIST')}
+                  </CButton>
+                )}
+              </CCol>
             </CRow>
-          </CCol>
-          <CCol className="px-2">
-            <h5>color</h5>
-            <CRow xs={{ gutter: 1 }}>
-              {Children.toArray(
-                colors?.map((_color, i) => (
-                  <CCol xs="auto">
-                    <CFormCheck
-                      button={{
-                        color: "outline-secondary",
-                        className: "mx-2 ",
-                      }}
-                      type="radio"
-                      name="color"
-                      id={_color}
-                      label={_color}
-                      value={_color}
-                      checked={color === _color}
-                      onChange={(e) => setColor(e.target.value)}
-                    />
-                  </CCol>
-                ))
-              )}
-            </CRow>
-          </CCol>
-        </CRow>
+          </CCardFooter>
+        </CCard>
       </CCol>
-      <CCol
+      {/* <CCol
         xs={10}
         md={4}
         lg={3}
@@ -279,7 +371,7 @@ const Product = ({
             )}
           </CCol>
         </CRow>
-      </CCol>
+      </CCol> */}
       {reviews?.data?.length !== 0 && (
         <CCol xs={8} className="shadow-box">
           <CRow xs={{ cols: 1, gutterY: 5 }}>

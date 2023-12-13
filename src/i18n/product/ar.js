@@ -4,7 +4,12 @@ const ar = {
   SIZE: "المقاس",
   JOD: "دينار",
   OUT_OF_STOCK: "البضاعة غير متوفرة",
-  ADD_TO_CART: "أضف إلى السلة",  
+  ADD_TO_CART: "أضف إلى السلة",
+  PRICE: "السعر",
+  SIZES: "المقاسات",
+  COLORS: "الألوان",
+  ADD_TO_WISHLIST: "اضف الى قائمة الامنيات",
+
 };
 
 export default ar;

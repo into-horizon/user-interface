@@ -12,7 +12,7 @@ const Loader = () => {
             {/* <div class="progress">
               <div class="inner"></div>
             </div> */}
-            <div class="loader"></div>
+            <div className="loader"></div>
           </CCol>
         </CRow>
       </CContainer>
