@@ -9,7 +9,7 @@ const ar = {
   SIZES: "المقاسات",
   COLORS: "الألوان",
   ADD_TO_WISHLIST: "اضف الى قائمة الامنيات",
-
+  REVIEWS: "المراجعات",
 };
 
 export default ar;

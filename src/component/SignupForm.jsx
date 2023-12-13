@@ -6,8 +6,8 @@ import { signupHandler, verificationHandler } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { signInHandlerWithFacebook } from "../store/facebook";
 
-import facebook from "../assets/f.png";
-import google from "../assets/g.png";
+import facebook from "../assets/facebook.svg";
+import google from "../assets/google.svg";
 
 import { State } from "country-state-city";
 import { Spinner, Button } from "react-bootstrap";
@@ -279,20 +279,34 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                   />
                 </form>
 
-                <div className=" mx-auto w-auto d-flex justify-content-center mt-2    ">
-                  <a
-                    href={`${process.env.REACT_APP_API}/auth/google`}
-                    onClick={() => localStorage.setItem("provider", "google")}
-                  >
-                    <img className=" w-75 " src={google} alt="" />
-                  </a>
-                  <a
-                    href={`${process.env.REACT_APP_API}/auth/facebook`}
-                    onClick={() => localStorage.setItem("provider", "facebook")}
-                  >
-                    <img className=" w-75 " src={facebook} alt="" />
-                  </a>
-                </div>
+                <CRow className=" mx-auto w-auto d-flex justify-content-center  mt-2 gy-2 ">
+                  <CCol xs="8" className=" d-flex ">
+                    <a
+                      href={`${process.env.REACT_APP_API}/auth/google`}
+                      onClick={() => localStorage.setItem("provider", "google")}
+                      className=" mx-auto "
+                    >
+                      <button className="google-btn">
+                        <img src={google} alt="google" />
+                        Continue with Google
+                      </button>
+                    </a>
+                  </CCol>
+                  <CCol xs="8" className=" d-flex ">
+                    <a
+                      href={`${process.env.REACT_APP_API}/auth/facebook`}
+                      onClick={() =>
+                        localStorage.setItem("provider", "facebook")
+                      }
+                      className=" mx-auto "
+                    >
+                      <button className="facebook-btn">
+                        <img src={facebook} alt="facebook" />
+                        Continue with Facebook
+                      </button>
+                    </a>
+                  </CCol>
+                </CRow>
                 <div className="mt-2">
                   <p className=" text-center ">
                     {t("HAVE_ACCOUNT")}{" "}

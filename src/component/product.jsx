@@ -12,6 +12,7 @@ import {
   CCard,
   CCardBody,
   CCardFooter,
+  CCardGroup,
   CCardHeader,
   CCardSubtitle,
   CCardText,
@@ -25,7 +26,6 @@ import {
 import { BagPlus, HeartFill, Heart } from "react-bootstrap-icons";
 import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
-import { toast } from "react-toastify";
 import LoadingSpinner from "./common/LoadingSpinner";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n";
@@ -242,13 +242,6 @@ const Product = ({
                 </CRow>
               </CCardBody>
             )}
-            {/* <CRow className="" xs={{ gutterY: 2 }}>
-              <h3 className=" text-capitalize border-bottom border-2 py-2"></h3>
-              <h5 className=""></h5>
-              <p className="">Description: {product.endescription}</p>
-              <CCol xs={12} className="px-2"></CCol>
-              <CCol className="px-2"></CCol>
-            </CRow> */}
           </CCardBody>
           <CCardFooter>
             <CRow
@@ -286,10 +279,10 @@ const Product = ({
                   onClick={AddBag}
                 >
                   {BagPlus && <BagPlus size={20} className="mx-1" />}
-                  {t('Add_to_cart'.toUpperCase())}
+                  {t("Add_to_cart".toUpperCase())}
                 </CButton>
               </CCol>
-              <CCol xs={12} md={10} lg={'auto'} >
+              <CCol xs={12} md={10} lg={"auto"}>
                 {items.find((i) => i?.product_id === product?.id) ? (
                   <CButton color="success" className="w-100" disabled>
                     <HeartFill color="red" /> in wishlist
@@ -300,7 +293,7 @@ const Product = ({
                     className="w-100"
                     onClick={() => addItemHandler(product)}
                   >
-                    <Heart color="red" /> {t('ADD_TO_WISHLIST')}
+                    <Heart color="red" /> {t("ADD_TO_WISHLIST")}
                   </CButton>
                 )}
               </CCol>
@@ -308,113 +301,57 @@ const Product = ({
           </CCardFooter>
         </CCard>
       </CCol>
-      {/* <CCol
-        xs={10}
-        md={4}
-        lg={3}
-        xl={3}
-        sm={6}
-        xxl={2}
-        className=" justify-content-center align-items-center  "
-      >
-        <CRow
-          className="align-items-center justify-content-center shadow-box p-3 my-5 w-auto mx-auto   "
-          xs={{ gutterY: 2 }}
-        >
-          <CCol xs={10} lg={12}>
-            <CInputGroup>
-              <CButton
-                onClick={() => setQty((x) => x - 1)}
-                disabled={qty === 1}
-                color="info"
-              >
-                -
-              </CButton>
-              <CFormInput
-                className=" bg-info  text-center border-info "
-                value={qty}
-                readOnly
-              />
-              <CButton
-                onClick={() => setQty((x) => x + 1)}
-                disabled={qty === product.quantity}
-                color="info"
-              >
-                +
-              </CButton>
-            </CInputGroup>
-          </CCol>
-
-          <CCol xs={10} lg={12}>
-            <CButton
-              color="primary"
-              className="mx-auto w-100 "
-              onClick={AddBag}
-            >
-              {BagPlus && <BagPlus size={20} />}
-              Add to cart
-            </CButton>
-          </CCol>
-          <CCol xs={10} lg={12}>
-            {items.find((i) => i?.product_id === product?.id) ? (
-              <CButton color="success" className="w-100" disabled>
-                <HeartFill color="red" /> in wishlist
-              </CButton>
-            ) : (
-              <CButton
-                color="success"
-                className="w-100"
-                onClick={() => addItemHandler(product)}
-              >
-                <Heart color="red" /> Add to wishlist
-              </CButton>
-            )}
-          </CCol>
-        </CRow>
-      </CCol> */}
       {reviews?.data?.length !== 0 && (
-        <CCol xs={8} className="shadow-box">
-          <CRow xs={{ cols: 1, gutterY: 5 }}>
-            <hr />
-            {Children.toArray(
-              reviews?.data?.map((review) => (
-                <CCol>
-                  <CCard className="mb-3 w-auto p-3 bg-light  ">
-                    <CRow className="g-0">
-                      <CCol xs={"auto"}>
-                        <CAvatar
-                          src={review.profile_picture}
-                          className="mg-1"
-                          size="xl"
-                        />
-                      </CCol>
-                      <CCol md={8}>
-                        <CCardBody>
-                          <CCardTitle className=" border-bottom border-2 border-white text-start pb-2">
-                            <strong>{`${review.first_name} ${review.last_name}`}</strong>
-                          </CCardTitle>
-                          <CCardText>
-                            <h6>{review.review}</h6>
-                          </CCardText>
-                          <StarRatings
-                            rating={review.rate}
-                            starDimension="1.5rem"
-                            starSpacing=".05rem"
-                            starRatedColor="yellow"
-                          />
-                          <CCardText className="py-2">
-                            <small className="text-medium-emphasis ">
-                              {new Date(review.created_at).toLocaleDateString()}
-                            </small>
-                          </CCardText>
-                        </CCardBody>
-                      </CCol>
-                    </CRow>
-                  </CCard>
-                </CCol>
-              ))
-            )}
-          </CRow>
+        <CCol xs={8} className="mb-5">
+          <CCard>
+            <CCardHeader>
+              <CCardTitle>{t("Reviews".toUpperCase())}</CCardTitle>
+            </CCardHeader>
+            <CCardBody>
+              <CRow xs={{ cols: 1, gutterY: 5 }} className="mt-1">
+                {Children.toArray(
+                  reviews?.data?.map((review) => (
+                    <CCardGroup>
+                      <CCard className="mb-3 w-auto p-3 bg-light  ">
+                        <CRow className="g-0">
+                          <CCol xs={"auto"}>
+                            <CAvatar
+                              src={review.profile_picture}
+                              className="mg-1"
+                              size="xl"
+                            />
+                          </CCol>
+                          <CCol md={8}>
+                            <CCardBody>
+                              <CCardTitle className=" border-bottom border-2 border-white w-fit-content pb-2">
+                                <strong>{`${review.first_name} ${review.last_name}`}</strong>
+                              </CCardTitle>
+                              <StarRatings
+                                rating={review.rate}
+                                starDimension="1.5rem"
+                                starSpacing=".05rem"
+                                starRatedColor="yellow"
+                              />
+                              <CCardBody>
+                                <CCardSubtitle>{review.review}</CCardSubtitle>
+                              </CCardBody>
+                              <CCardText className="py-2">
+                                <small className="text-medium-emphasis ">
+                                  {new Date(
+                                    review.created_at
+                                  ).toLocaleDateString()}
+                                </small>
+                              </CCardText>
+                            </CCardBody>
+                          </CCol>
+                        </CRow>
+                      </CCard>
+                    </CCardGroup>
+                  ))
+                )}
+              </CRow>
+            </CCardBody>
+          </CCard>
         </CCol>
       )}
     </CRow>

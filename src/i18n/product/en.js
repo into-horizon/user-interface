@@ -9,6 +9,7 @@ const en = {
   SIZES: "Sizes",
   COLORS: "Colors",
   ADD_TO_WISHLIST: "Add to wishlist",
+  REVIEWS: "Reviews",
 };
 
 export default en;
