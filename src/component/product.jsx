@@ -44,6 +44,7 @@ const Product = ({
     namespaces.COLOR.ns,
   ]);
   const cart = useSelector((state) => state.cart);
+  const { ids: wishlistIds } = useSelector((state) => state.wishlist);
   const { items } = useSelector((state) => state.wishlist);
   const { product, reviews } = useSelector((state) => state.products);
   const [loading, setLoading] = useState(true);
@@ -299,7 +300,7 @@ const Product = ({
                 </CButton>
               </CCol>
               <CCol xs={12} md={10} lg={"auto"}>
-                {items.find((i) => i?.product_id === product?.id) ? (
+                {wishlistIds.includes(product?.id) ? (
                   <CButton color="success" className="w-100" disabled>
                     <HeartFill color="red" /> in wishlist
                   </CButton>

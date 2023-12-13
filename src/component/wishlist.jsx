@@ -1,25 +1,25 @@
 import React, { useState, useEffect, Children } from "react";
-import { connect } from "react-redux";
-import { deleteProduct, deleteItemHandler } from "../store/wishlist";
+import { connect, useDispatch, useSelector } from "react-redux";
+import {
+  deleteProduct,
+  deleteItemHandler,
+  getItemsHandler,
+} from "../store/wishlist";
 import { addItem, addCartItemHandler } from "../store/cart";
 import { If, Then, Else } from "react-if";
 import image from "../assets/no-image.png";
-const Wishlist = ({
-  wishlist,
-  deleteProduct,
-  addItem,
-  addCartItemHandler,
-  cart,
-  deleteItemHandler,
-}) => {
-  const x = cart.map((w) => w.id);
-
-  // useEffect(() =>{
-
-  //     setW(x)
-  //   },[wishlist])
+import LoadingSpinner from "./common/LoadingSpinner";
+const Wishlist = ({ addItem, addCartItemHandler, cart, deleteItemHandler }) => {
+  const dispatch = useDispatch();
+  const { loading, items: wishlist } = useSelector((state) => state.wishlist);
+  useEffect(() => {
+    dispatch(getItemsHandler());
+  }, [dispatch]);
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
-    <div className="" >
+    <div className="">
       <h2 className="wishlistHead">Wishlist</h2>
       {wishlist.length > 0 ? (
         Children.toArray(

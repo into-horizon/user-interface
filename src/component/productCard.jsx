@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import "./productCard.0css";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
@@ -27,7 +27,8 @@ const ProductCard = ({
     namespaces.PRODUCT.ns,
     namespaces.COLOR.ns,
   ]);
-  const [heart, setheart] = useState(1);
+  const { ids: wishlistIds } = useSelector((state) => state.wishlist);
+  const [heart, setHeart] = useState(1);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [color, setColor] = useState(null);
@@ -54,10 +55,10 @@ const ProductCard = ({
   };
   const heartFunction = (product) => {
     if (heart) {
-      setheart(0);
+      setHeart(0);
       addItemHandler(product);
     } else {
-      setheart(1);
+      setHeart(1);
       deleteItemHandler(product);
     }
   };
@@ -108,16 +109,12 @@ const ProductCard = ({
     }
   }, [product.size_and_color, size]);
   useEffect(() => {
-    if (
-      wishlist.find(
-        (x) => x?.id === product?.id || x?.product_id === product?.id
-      )
-    ) {
-      setheart(0);
+    if (wishlistIds.includes(product.id)) {
+      setHeart(0);
     } else {
-      setheart(1);
+      setHeart(1);
     }
-  }, [product?.id, wishlist]);
+  }, [product.id, wishlistIds]);
   useEffect(() => {
     if (product.discount) {
       setPrice((price) =>

@@ -15,7 +15,11 @@ import cookie from "react-cookies";
 import { myProfileHandler, stopLoading } from "./store/auth";
 import { useSelector } from "react-redux";
 import { getCartItemsHandler, resetCartItems } from "./store/cart";
-import { getItemsHandler, resetWishlist } from "./store/wishlist";
+import {
+  getItemsHandler,
+  getWishlistItemsIds,
+  resetWishlist,
+} from "./store/wishlist";
 import { myAddressHandler } from "./store/address";
 import { getFollowingStores } from "./store/following";
 import ApiService from "./services/ApiService";
@@ -79,7 +83,7 @@ const App = ({
             if (login) {
               Promise.all([
                 getCartItemsHandler(),
-                getItemsHandler(),
+                dispatch(getWishlistItemsIds()),
                 dispatch(myAddressHandler({ limit: 5, offset: 0 })),
                 getFollowingStores(),
               ]);
