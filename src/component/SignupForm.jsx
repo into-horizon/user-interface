@@ -179,7 +179,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     required
                     onChange={onChange}
                   />
-                  <CFormSelect
+                  {/* <CFormSelect
                     name="gender"
                     className="mb-2"
                     id="gender"
@@ -189,7 +189,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                   >
                     <option value="male">{t("MALE")}</option>
                     <option value="female">{t("FEMALE")}</option>
-                  </CFormSelect>
+                  </CFormSelect> */}
 
                   <CFormSelect
                     name="city"
@@ -288,7 +288,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     >
                       <button className="google-btn">
                         <img src={google} alt="google" />
-                        Continue with Google
+                       {t('CONTINUE_WITH_GOOGLE')}
                       </button>
                     </a>
                   </CCol>
@@ -302,7 +302,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     >
                       <button className="facebook-btn">
                         <img src={facebook} alt="facebook" />
-                        Continue with Facebook
+                       {t('CONTINUE_WITH_FACEBOOK')}
                       </button>
                     </a>
                   </CCol>

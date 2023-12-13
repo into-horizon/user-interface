@@ -34,6 +34,8 @@ const en = {
   INVALID_SMALL_LETTER: "at least one small letter, ",
   INVALID_CAPITAL_LETTER: "at least one capital letter, ",
   HAVE_ACCOUNT: "already have account?",
+  CONTINUE_WITH_GOOGLE: "Continue with Google",
+  CONTINUE_WITH_FACEBOOK: "Continue with Facebook",
 };
 
 export default en;

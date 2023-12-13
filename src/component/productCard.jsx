@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
 import StarRatings from "react-star-ratings";
 import { Link } from "react-router-dom";
-import Form from "react-bootstrap/Form";
 import image from "../assets/no-image.png";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import CIcon from "@coreui/icons-react";
 import { cilBasket } from "@coreui/icons";
@@ -14,7 +13,6 @@ import { CButton, CFormSelect, CTooltip } from "@coreui/react";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n";
-import landingPage from "../store/landingPage";
 
 const ProductCard = ({
   cart,
@@ -34,6 +32,7 @@ const ProductCard = ({
   const [colors, setColors] = useState([]);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
+  const [price, setPrice] = useState(product.price);
   const AddBag = (product) => {
     let item = cart.find(
       (item) =>
@@ -44,7 +43,13 @@ const ProductCard = ({
     if (item) {
       updateCartItemHandler({ ...item, quantity: item.quantity + 1 });
     } else {
-      addCartItemHandler({ ...product, quantity: 1, color: color, size: size });
+      addCartItemHandler({
+        ...product,
+        quantity: 1,
+        color,
+        size,
+        price,
+      });
     }
   };
   const heartFunction = (product) => {
@@ -113,7 +118,16 @@ const ProductCard = ({
       setheart(1);
     }
   }, [product?.id, wishlist]);
-
+  useEffect(() => {
+    if (product.discount) {
+      setPrice((price) =>
+        (+price - +price * +product.discount_rate).toFixed(2)
+      );
+    }
+    if (!product.is_commission_included) {
+      setPrice((price) => (+price + +price * +product.commission).toFixed(2));
+    }
+  }, [product]);
   return (
     <>
       <Card className="position-relative m-auto w-100 h-100">
@@ -215,7 +229,7 @@ const ProductCard = ({
           as={Row}
           className="justify-content-between align-items-center my-3 py-0"
         >
-          <Col xs={9} className="my-3">
+          <Col xs="auto" className="my-3">
             <Card.Link
               as={"span"}
               className="text-dark fw-bold bg-light p-3  border-1 rounded align-self-end"
@@ -225,16 +239,14 @@ const ProductCard = ({
                   <sup className="text-decoration-line-through">
                     {`${product.price} ${t(product.currency.toUpperCase())}`}
                   </sup>{" "}
-                  {`${
-                    product.price * (1 - product.discount_rate).toFixed(2)
-                  } ${t(product.currency.toUpperCase())}`}
+                  {`${price} ${t(product.currency.toUpperCase())}`}
                 </>
               ) : (
-                `${product.price} ${t(product.currency.toUpperCase())}`
+                `${price} ${t(product.currency.toUpperCase())}`
               )}
             </Card.Link>
           </Col>
-          <Col xs={3}>
+          <Col xs="auto">
             <CTooltip
               content={
                 product.quantity <= 0 ? t("OUT_OF_STOCK") : t("ADD_TO_CART")

@@ -1425,14 +1425,15 @@ select.form-control-input {
 }
 
 .google-btn {
-  width: 265px;
+  max-width: 265px;
+  min-width: 190px;
   display: flex;
   padding: 0.5rem 1.4rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 700;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: capitalize;
   vertical-align: middle;
   align-items: center;
   border-radius: 0.5rem;
@@ -1453,7 +1454,8 @@ select.form-control-input {
 }
 
 .facebook-btn {
-  width: 265px;
+  max-width: 265px;
+  min-width: 190px;
   display: flex;
   background-color: #039be5;
   background-image: linear-gradient(to top right, #0163E0,#18ACFE);

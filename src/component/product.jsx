@@ -52,6 +52,7 @@ const Product = ({
   const [sizes, setSizes] = useState([]);
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
+  const [price, setPrice] = useState(product.price);
   useEffect(() => {
     Promise.all([productHandler(id), getProductReviews({ id: id })]).then(() =>
       setLoading(false)
@@ -114,6 +115,23 @@ const Product = ({
       setColor(colors?.[0]);
     }
   }, [colors?.length, product.size_and_color, size, sizes?.length]);
+
+  useEffect(() => {
+    let _price = product.price;
+    if (product.discount) {
+      _price = (+_price - +_price * +product.discount_rate).toFixed(2);
+    }
+    if (!product.is_commission_included) {
+      _price = (+_price + +_price * +product.commission).toFixed(2);
+    }
+    setPrice(_price);
+  }, [
+    product.commission,
+    product.discount,
+    product.discount_rate,
+    product.is_commission_included,
+    product.price,
+  ]);
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -177,9 +195,7 @@ const Product = ({
           </CCardBody>
           <CCardBody>
             <CCardSubtitle>
-              {`${t("PRICE")}: ${product.price} ${t(
-                product.currency.toUpperCase()
-              )}`}
+              {`${t("PRICE")}: ${price} ${t(product.currency.toUpperCase())}`}
             </CCardSubtitle>
           </CCardBody>
           <CCardBody>
