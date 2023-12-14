@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { CButton, CCol, CRow } from "@coreui/react";
 
 const ProductView = ({ title, id, products, t }) => {
+  console.log("🚀 ~ file: featuredDeals.jsx:8 ~ ProductView ~ products:", products)
   const navigate = useNavigate();
   return (
     <CRow className="mt-4">
