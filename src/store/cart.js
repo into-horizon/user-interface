@@ -1,13 +1,13 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import cookie from "react-cookies";
 import Cart from "../services/Cart";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
 
-let cookieCard = cookie.load("cart");
+let cookieCard = () => cookie.load("cart") ?? [];
 const cart = createSlice({
   name: "cart",
-  initialState: cookieCard ?? [],
+  initialState: cookieCard(),
   reducers: {
     addItem(state, action) {
       action.payload.cookie &&

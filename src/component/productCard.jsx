@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 // import "./productCard.0css";
 import { connect, useSelector } from "react-redux";
 import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
@@ -13,6 +13,7 @@ import { CButton, CFormSelect, CTooltip } from "@coreui/react";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n";
+import { CartItemModel, WishlistItemModel } from "../services/Models";
 
 const ProductCard = ({
   cart,
@@ -34,10 +35,14 @@ const ProductCard = ({
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
   const [price, setPrice] = useState(product.price);
-  const AddBag = (product) => {
+  const wishlistItem = { ...new WishlistItemModel(product) };
+  const cartItem = useMemo(() => {
+    return { ...new CartItemModel({ ...product, size, color, quantity: 1 }) };
+  }, [product, size, color]);
+  const AddBag = () => {
     let item = cart.find(
       (item) =>
-        (item.product_id === product.id || item.id === product.id) &&
+        (item.product_id === cartItem.id || item.id === cartItem.id) &&
         item.color === color &&
         item.size === size
     );
@@ -45,7 +50,7 @@ const ProductCard = ({
       updateCartItemHandler({ ...item, quantity: item.quantity + 1 });
     } else {
       addCartItemHandler({
-        ...product,
+        ...cartItem,
         quantity: 1,
         color,
         size,
@@ -56,10 +61,10 @@ const ProductCard = ({
   const heartFunction = (product) => {
     if (heart) {
       setHeart(0);
-      addItemHandler(product);
+      addItemHandler(wishlistItem);
     } else {
       setHeart(1);
-      deleteItemHandler(product);
+      deleteItemHandler(wishlistItem);
     }
   };
 

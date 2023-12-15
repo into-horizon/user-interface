@@ -216,6 +216,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                       className="mb-2 "
                       required
                       invalid={passwordValidation.invalid}
+                      autoComplete="true"
                     />
                     <CButton
                       className="mb-2 bg-light"
@@ -246,6 +247,8 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     floatingLabel={t("REPEAT_PASSWORD")}
                     name="con_password"
                     id="con_password"
+                    autoComplete="true"
+
                     required
                     invalid={invalidPasswordConfirmation}
                     feedbackInvalid={t("INVALID_REPEATED_PASSWORD")}

@@ -3,14 +3,13 @@ import cookie from "react-cookies";
 import NewWishlist from "../services/Wishlist";
 import { triggerToast } from "./toast";
 import { DialogType } from "react-custom-popup";
-import { WishlistItemModel } from "../services/Models";
 
-let cookieWishlist = cookie.load("wishlist") || [];
+let cookieWishlist = () => cookie.load("wishlist") || [];
 
 const initialState = {
   message: "",
-  items: [...cookieWishlist],
-  ids: cookieWishlist.map((product) => product.id) ?? [],
+  items: [...cookieWishlist()],
+  ids: cookieWishlist().map((product) => product.id) ?? [],
   loading: false,
   params: { limit: 5, offset: 0 },
 };
@@ -21,14 +20,22 @@ const wishlist = createSlice({
     addProduct(state, action) {
       state.items = state.items.concat(action.payload);
       state.ids = state.ids.concat(action.payload.product_id);
+      if (action.payload.cookie) {
+        cookie.save("wishlist", state.items, { path: "/" });
+        cookie.save("wishlist-ids", state.ids, { path: "/" });
+      }
     },
     deleteProduct(state, action) {
-      let arr = state.items;
-      let newState = arr.filter((item) => item.id !== action.payload.id);
-      action.payload.cookie &&
-        cookie.save("wishlist", [...newState], { path: "/" });
-
-      return { ...state, items: [...newState] };
+      const { product_id } = action.payload;
+      state.items = state.items.filter(
+        (item) => item.product_id !== product_id
+      );
+      state.ids = state.ids.filter((id) => id !== product_id);
+      if (action.payload.cookie) {
+        cookie.save("wishlist", state.items, { path: "/" });
+        cookie.save("wishlist-ids", state.ids, { path: "/" });
+      }
+      // state.items = [...newState];
     },
     addItems(state, action) {
       return { ...state, items: action.payload };
@@ -36,8 +43,8 @@ const wishlist = createSlice({
     addMessage(state, action) {
       return { ...state, message: action.payload };
     },
-    resetWishlist(state, action) {
-      return { ...state, items: action.payload };
+    resetWishlist() {
+      return initialState;
     },
     updateWishlistParams(state, { payload }) {
       state.params = payload;
@@ -65,26 +72,19 @@ const wishlist = createSlice({
 export const addItemHandler = (payload) => async (dispatch, state) => {
   const login = state().sign.login;
   try {
-    const wishlistItem = { ...new WishlistItemModel(payload) };
-    dispatch(addProduct(wishlistItem));
+    payload.cookie = !login;
+    dispatch(addProduct(payload));
     if (login) {
       let { status, message } = await NewWishlist.addItem({
-        product_id: [wishlistItem.product_id],
+        product_id: [payload.product_id],
       });
       if (status === 200) {
-        dispatch(triggerToast({ message, type: DialogType.INFO }));
+        // dispatch(triggerToast({ message, type: DialogType.INFO }));
         // dispatch(getWishlistItemsIds());
+        return;
       } else {
         dispatch(triggerToast({ message, type: DialogType.DANGER }));
       }
-    } else {
-      const { items, ids } = state().wishlist;
-      cookie.save("wishlist", items.concat(wishlistItem), {
-        path: "/",
-      });
-      cookie.save("wishlist-ids", ids.concat(wishlistItem.product_id), {
-        path: "/",
-      });
     }
   } catch (error) {
     dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
@@ -99,17 +99,12 @@ export const getItemsHandler = createAsyncThunk(
     try {
       if (login) {
         const wishlistIds = cookie.load("wishlist-ids") ?? [];
-        if (wishlistIds.length > 0) {
-          console.log(
-            "🚀 ~ file: wishlist.js:103 ~  wishlistIds.filter((id) => ids.indexOf(id) === -1):",
-            wishlistIds.filter((id) => ids.indexOf(id) === -1)
-          );
-          console.log("🚀 ~ file: wishlist.js:104 ~ ids:", ids);
+        if (wishlistIds.filter((id) => !ids.includes(id)).length > 0) {
           await NewWishlist.addItem({
-            product_id: wishlistIds.filter((id) => ids.indexOf(id) === -1),
+            product_id: wishlistIds.filter((id) => !ids.includes(id)),
           });
-          cookie.remove("wishlist", { path: "/" });
-          cookie.remove("wishlist-ids", { path: "/" });
+          cookie.save("wishlist", [], { path: "/" });
+          cookie.save("wishlist-ids", [], { path: "/" });
         }
         const { params } = getState().wishlist;
         const { status, message, result } = await NewWishlist.getItems(params);
@@ -151,17 +146,16 @@ export const getWishlistItemsIds = createAsyncThunk(
 export const deleteItemHandler = (payload) => async (dispatch, state) => {
   const login = state().sign.login;
   try {
+    dispatch(deleteProduct({ ...payload, cookie: !login }));
     if (login) {
-      let { status, message, result } = await NewWishlist.deleteItem(payload);
+      let { status, message } = await NewWishlist.deleteItem(payload);
       if (status === 200) {
-        dispatch(getItemsHandler());
+        // dispatch(getItemsHandler());
         dispatch(getWishlistItemsIds());
-        dispatch(triggerToast({ message, type: DialogType.INFO }));
+        // dispatch(triggerToast({ message, type: DialogType.INFO }));
       } else {
         dispatch(triggerToast({ message, type: DialogType.DANGER }));
       }
-    } else {
-      dispatch(deleteProduct({ ...payload, cookie: true }));
     }
   } catch (error) {
     dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
