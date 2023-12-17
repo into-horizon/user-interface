@@ -17,6 +17,7 @@ const ar = {
   SHOW: "عرض",
   HIDE: "إخفاء",
   SELECT_ALL: "Select All",
+  REMOVE: "إزالة",
 };
 
 export default ar;

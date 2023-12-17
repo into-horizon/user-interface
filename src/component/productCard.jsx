@@ -8,7 +8,7 @@ import image from "../assets/no-image.png";
 import { Card, Col, Row } from "react-bootstrap";
 import { addItemHandler, deleteItemHandler } from "../store/wishlist";
 import CIcon from "@coreui/icons-react";
-import { cilBasket } from "@coreui/icons";
+import { cilBasket, cilCheck } from "@coreui/icons";
 import { CButton, CFormSelect, CTooltip } from "@coreui/react";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import { useTranslation } from "react-i18next";
@@ -35,6 +35,7 @@ const ProductCard = ({
   const [color, setColor] = useState(null);
   const [size, setSize] = useState(null);
   const [price, setPrice] = useState(product.price);
+  const [success, setSuccess] = useState(false);
   const wishlistItem = { ...new WishlistItemModel(product) };
   const cartItem = useMemo(() => {
     return { ...new CartItemModel({ ...product, size, color, quantity: 1 }) };
@@ -42,7 +43,7 @@ const ProductCard = ({
   const AddBag = () => {
     let item = cart.find(
       (item) =>
-        (item.product_id === cartItem.id || item.id === cartItem.id) &&
+        item.product_id === cartItem.product_id &&
         item.color === color &&
         item.size === size
     );
@@ -57,8 +58,10 @@ const ProductCard = ({
         price,
       });
     }
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 500);
   };
-  const heartFunction = (product) => {
+  const heartFunction = () => {
     if (heart) {
       setHeart(0);
       addItemHandler(wishlistItem);
@@ -266,14 +269,20 @@ const ProductCard = ({
               >
                 <CIcon icon={cilBasket} size="lg" />
               </Card.Link> */}
-              <CButton
-                onClick={() => AddBag(product)}
-                disabled={product.quantity <= 0}
-                size="lg"
-                className=" text-light "
-              >
-                <CIcon icon={cilBasket} size="xl" />
-              </CButton>
+              {success ? (
+                <CButton color="success" size="lg">
+                  <CIcon icon={cilCheck} size="xl" />
+                </CButton>
+              ) : (
+                <CButton
+                  onClick={() => AddBag(product)}
+                  disabled={product.quantity <= 0}
+                  size="lg"
+                  className=" text-light "
+                >
+                  <CIcon icon={cilBasket} size="xl" />
+                </CButton>
+              )}
             </CTooltip>
           </Col>
         </Card.Body>

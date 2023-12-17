@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children } from "react";
+import React, { useEffect, Children } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import {
   deleteProduct,
@@ -6,10 +6,28 @@ import {
   getItemsHandler,
 } from "../store/wishlist";
 import { addItem, addCartItemHandler } from "../store/cart";
-import { If, Then, Else } from "react-if";
 import image from "../assets/no-image.png";
 import LoadingSpinner from "./common/LoadingSpinner";
-const Wishlist = ({ addItem, addCartItemHandler, cart, deleteItemHandler }) => {
+import {
+  CButton,
+  CCard,
+  CCardBody,
+  CCardFooter,
+  CCardImage,
+  CCardSubtitle,
+  CCardTitle,
+  CCol,
+  CRow,
+} from "@coreui/react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n";
+const Wishlist = ({ deleteItemHandler }) => {
+  const { t, i18n } = useTranslation([
+    namespaces.WISHLIST.ns,
+    namespaces.PRODUCT.ns,
+    namespaces.GLOBAL.ns,
+  ]);
   const dispatch = useDispatch();
   const { loading, items: wishlist } = useSelector((state) => state.wishlist);
   useEffect(() => {
@@ -19,67 +37,63 @@ const Wishlist = ({ addItem, addCartItemHandler, cart, deleteItemHandler }) => {
     return <LoadingSpinner />;
   }
   return (
-    <div className="">
-      <h2 className="wishlistHead">Wishlist</h2>
-      {wishlist.length > 0 ? (
-        Children.toArray(
-          wishlist.map((item) => (
-            <section className="cardw">
-              <img
-                src={item.picture ?? item.pictures?.product_picture ?? image}
-                alt="wishlist"
-              />
-              <h3>{item.entitle}</h3>
-              <div className="btnContainer">
-                <div className="money_bag">
-                  <If
-                    condition={
-                      !cart.find(
-                        (v) =>
-                          v.id === item.product_id ||
-                          v.product_id === item.product_id ||
-                          v.product_id === item.id ||
-                          v.id === item.id
-                      )
-                    }
-                  >
-                    <Then>
-                      <button
-                        onClick={() =>
-                          addCartItemHandler({ ...item, quantity: 1 })
-                        }
+    <div className=" min-vh-100-header pb-5">
+      <h2 className="text-align-center pb-3 mb-3 border-bottom d-block pb-2 mx-auto px-5 border-info w-fit-content">
+        {t("Wishlist".toUpperCase())}
+      </h2>
+
+      <CRow className=" d-flex  justify-content-center w-75 m-auto  gx-1  ">
+        {wishlist.length > 0 ? (
+          Children.toArray(
+            wishlist.map((item) => (
+              <CCard className="mb-3 col-lg-9">
+                <CRow className="g-0">
+                  <CCol xs={4} lg={3}>
+                    <CCardImage
+                      src={
+                        item.picture ?? item.pictures?.product_picture ?? image
+                      }
+                      alt="wishlist"
+                    />
+                  </CCol>
+                  <CCol xs={8}>
+                    <CCardBody>
+                      <CCardTitle>{item[`${i18n.language}title`]}</CCardTitle>
+                      <CCardSubtitle>
+                        {`${t("PRICE", namespaces.PRODUCT)}: ${
+                          item.final_price
+                        } ${t(
+                          item.currency.toUpperCase(),
+                          namespaces.PRODUCT
+                        )}`}
+                      </CCardSubtitle>
+                    </CCardBody>
+                  </CCol>
+                  <CCol xs={12}>
+                    <CCardFooter className=" d-flex  justify-content-between ">
+                      <Link
+                        className="btn btn-outline-info   "
+                        to={`/product/${item.product_id}`}
                       >
-                        <i className="fa fa-shopping-bag" />
-                        Move to Card
-                      </button>
-                    </Then>
-                    <Else>
-                      <button
-                        disabled
-                        onClick={() => addItem({ ...item, quantity: 1 })}
+                        {t("VISIT_PRODUCT")}
+                      </Link>
+                      <CButton
+                        color="danger "
+                        variant="outline"
+                        onClick={() => deleteItemHandler(item)}
                       >
-                        <i className="fa fa-shopping-bag" />
-                        In your Card
-                      </button>
-                    </Else>
-                  </If>
-                  {/* <button onClick={() =>addItem({...item, qty: 1})}><i className="fa fa-shopping-bag"/>Move to Card</button> */}
-                </div>
-                <div className="removeBtn ">
-                  <button
-                    className="removeWishlist"
-                    onClick={() => deleteItemHandler(item)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </section>
-          ))
-        )
-      ) : (
-        <h3 className="cartHeader">Your wishlist is empty</h3>
-      )}
+                        {t("Remove".toUpperCase(), namespaces.GLOBAL)}
+                      </CButton>
+                    </CCardFooter>
+                  </CCol>
+                </CRow>
+              </CCard>
+            ))
+          )
+        ) : (
+          <h3 className=" mx-auto  w-fit-content mt-2">{t('EMPTY_WISHLIST')}</h3>
+        )}
+      </CRow>
     </div>
   );
 };

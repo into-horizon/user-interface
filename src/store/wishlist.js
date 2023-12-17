@@ -5,11 +5,12 @@ import { triggerToast } from "./toast";
 import { DialogType } from "react-custom-popup";
 
 let cookieWishlist = () => cookie.load("wishlist") || [];
+const cookieWishlistIds = () => cookie.load("wishlist-ids") || [];
 
 const initialState = {
   message: "",
   items: [...cookieWishlist()],
-  ids: cookieWishlist().map((product) => product.id) ?? [],
+  ids: cookieWishlistIds(),
   loading: false,
   params: { limit: 5, offset: 0 },
 };

@@ -18,7 +18,7 @@ const Main = () => {
     namespaces.GLOBAL.ns,
   ]);
   const { childCategory } = useSelector((state) => state.parent);
-  const { landingPageCategories, loading } = useSelector(
+  const { landingPageCategories, isLoading } = useSelector(
     (state) => state.category
   );
   const stores = useSelector(selectStores);
@@ -126,7 +126,7 @@ const Main = () => {
           </Col>
         </Row>
       </Col>
-      {loading ? (
+      {isLoading ? (
         <LoadingSpinner />
       ) : (
         Children.toArray(
