@@ -24,6 +24,7 @@ import {
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import { EyeSlash, Eye } from "react-bootstrap-icons";
+import { namespaces } from "../i18n";
 
 const SignInForm = ({ signInHandler }) => {
   const { t } = useTranslation(["sign-in", "sign-up"]);
@@ -39,9 +40,6 @@ const SignInForm = ({ signInHandler }) => {
     });
   };
 
-  const signupNs = {
-    ns: "sign-up",
-  };
   return (
     <div className="bg-light d-flex flex-row align-items-center wrapper w-100 ">
       <CContainer>
@@ -56,7 +54,7 @@ const SignInForm = ({ signInHandler }) => {
               <CCard className=" rounded-0  p-sm-5  p-lg-3  ">
                 <CCardBody className=" d-flex ">
                   <CForm onSubmit={submitHandler} className="my-auto  w-100 ">
-                    <h1>{t("login".toUpperCase(), signupNs)}</h1>
+                    <h1>{t("login".toUpperCase(), namespaces.SIGN_UP)}</h1>
                     <p className="text-medium-emphasis">{t("LOGIN_TEXT")}</p>
                     <CInputGroup className="my-4  ">
                       <CInputGroupText>
@@ -65,7 +63,7 @@ const SignInForm = ({ signInHandler }) => {
                       <CFormInput
                         type="email"
                         name="email"
-                        placeholder={t("EMAIL", signupNs)}
+                        placeholder={t("EMAIL", namespaces.SIGN_UP)}
                       />
                     </CInputGroup>
                     <CInputGroup className="my-2">
@@ -75,7 +73,8 @@ const SignInForm = ({ signInHandler }) => {
                       <CFormInput
                         type={passwordType}
                         name="password"
-                        placeholder={t("password".toUpperCase(), signupNs)}
+                        placeholder={t("password".toUpperCase(), namespaces.SIGN_UP)}
+                        autoComplete="true"
                       />
                       <CButton
                         color="secondary"
@@ -108,7 +107,7 @@ const SignInForm = ({ signInHandler }) => {
                           {loading ? (
                             <Spinner animation="border" size="sm" />
                           ) : (
-                            t("LOGIN", signupNs)
+                            t("LOGIN", namespaces.SIGN_UP)
                           )}
                         </Button>
                       </CCol>
@@ -120,7 +119,7 @@ const SignInForm = ({ signInHandler }) => {
                       <CCol xs={12}>
                         <p className=" text-center ">
                           {t("DONT_HAVE_ACCOUNT")}{" "}
-                          <Link to="/signUp">{t("SIGN_UP", signupNs)} </Link>
+                          <Link to="/signUp">{t("SIGN_UP", namespaces.SIGN_UP)} </Link>
                         </p>
                       </CCol>
                     </CRow>

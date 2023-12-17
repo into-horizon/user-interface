@@ -23,6 +23,7 @@ class Wishlist extends ApiService {
     }
   }
   async addItem(data) {
+    console.log("🚀 ~ file: Wishlist.js:26 ~ Wishlist ~ addItem ~ data:", data)
     try {
       let result = await this.post(`${this.path}`, data);
       return result;

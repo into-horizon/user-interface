@@ -14,6 +14,14 @@ class CategoryService extends ApiService {
       throw new Error(error.message);
     }
   }
+  async getChildWithProducts(){
+    try {
+      return await this.get(`api/v1/category/child-with-products`)
+    } catch (error) {
+      throw new Error(error.message);
+      
+    }
+  }
 }
 
 const categoryService = new CategoryService();

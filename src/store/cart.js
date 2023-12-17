@@ -1,13 +1,13 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import cookie from "react-cookies";
 import Cart from "../services/Cart";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
 
-let cookieCard = cookie.load("cart");
+let cookieCard = () => cookie.load("cart") ?? [];
 const cart = createSlice({
   name: "cart",
-  initialState: cookieCard ?? [],
+  initialState: cookieCard(),
   reducers: {
     addItem(state, action) {
       action.payload.cookie &&
@@ -78,16 +78,16 @@ export const addCartItemHandler = (payload) => async (dispatch, state) => {
     } else {
       dispatch(addItem({ ...payload, cookie: true }));
     }
-    dispatch(
-      triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
-    );
+    // dispatch(
+    //   triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
+    // );
   } catch (error) {
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
 
 export const updateCartItemHandler = (payload) => async (dispatch, state) => {
-  const login = state().sign.login;
+  const { login } = state().sign;
   try {
     if (login) {
       let { status, message, data } = await Cart.updateCartItem(payload);
