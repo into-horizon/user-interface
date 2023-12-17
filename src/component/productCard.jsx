@@ -147,7 +147,7 @@ const ProductCard = ({
         </small>
         <Card.Img
           variant="top"
-          src={product.pictures?.product_picture ?? image}
+          src={product.pictures?.[0] ?? image}
           className="w-100 mx-auto"
         />
         <Card.Header>
@@ -239,12 +239,17 @@ const ProductCard = ({
               {product.discount ? (
                 <>
                   <sup className="text-decoration-line-through">
-                    {`${product.price} ${t(product.currency.toUpperCase())}`}
+                    {`${(
+                      product.final_price *
+                      (1 + product.discount_rate)
+                    ).toFixed(2)} ${t(product.currency.toUpperCase())}`}
                   </sup>{" "}
-                  {`${price} ${t(product.currency.toUpperCase())}`}
+                  {`${product.final_price} ${t(
+                    product.currency.toUpperCase()
+                  )}`}
                 </>
               ) : (
-                `${price} ${t(product.currency.toUpperCase())}`
+                `${product.final_price} ${t(product.currency.toUpperCase())}`
               )}
             </Card.Link>
           </Col>

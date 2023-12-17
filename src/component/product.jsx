@@ -153,7 +153,7 @@ const Product = ({
             <Carousel
               data={
                 product?.pictures?.map((p) => {
-                  return { image: p.product_picture };
+                  return { image: p };
                 }) ?? []
               }
               width="35rem"
@@ -196,7 +196,7 @@ const Product = ({
           </CCardBody>
           <CCardBody>
             <CCardSubtitle>
-              {`${t("PRICE")}: ${price} ${t(product.currency.toUpperCase())}`}
+              {`${t("PRICE")}: ${product.final_price} ${t(product.currency.toUpperCase())}`}
             </CCardSubtitle>
           </CCardBody>
           <CCardBody>

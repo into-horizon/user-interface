@@ -8,28 +8,25 @@ import { Children } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { selectStores } from "../store/landingPage";
 import StarRatings from "react-star-ratings";
-import Product from "../services/Product";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n";
+import LoadingSpinner from "../component/common/LoadingSpinner";
 
 const Main = () => {
   const { t, i18n } = useTranslation([
     namespaces.LANDING_PAGE.ns,
     namespaces.GLOBAL.ns,
   ]);
-  const { parentCategory, childCategory } = useSelector(
-    (state) => state.parent
+  const { childCategory } = useSelector((state) => state.parent);
+  const { landingPageCategories, loading } = useSelector(
+    (state) => state.category
   );
-
   const stores = useSelector(selectStores);
-  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   let o = 68;
   const [offset, setOffset] = useState(o);
   let style = {
-    // position: "fixed",
     top: offset,
-    // zIndex: 22,
   };
   window.addEventListener("scroll", () => {
     if (o - window.pageYOffset > 0) {
@@ -38,24 +35,6 @@ const Main = () => {
       setOffset(0);
     }
   });
-  const getProducts = () => {
-    return parentCategory.slice(0, 3).map(async (category) => {
-      const {
-        data: { data: products },
-      } = await Product.productsSearch({
-        parent_category_id: category.id,
-        limit: 4,
-      });
-      setCategories((state) => [
-        ...state,
-        { id: category.id, title: category[`${i18n.language}title`], products },
-      ]);
-    });
-  };
-  useEffect(() => {
-    getProducts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parentCategory]);
 
   return (
     <Row className=" justify-content-center main w-100 ">
@@ -119,7 +98,7 @@ const Main = () => {
                         <span className="fw-bold">{store.store_name}</span>
                       </Card.Header>
                       <Card.Body>
-                        <span className="fw-bold">{t('RATING')}: </span>
+                        <span className="fw-bold">{t("RATING")}: </span>
                         <StarRatings
                           rating={store.store_rating}
                           starDimension="1.5rem"
@@ -147,16 +126,24 @@ const Main = () => {
           </Col>
         </Row>
       </Col>
-      {Children.toArray(
-        categories?.map((item) => (
-          <Col xs={12} className="w-100 mx-auto ">
-            <Row className="justify-content-center w-100 mx-auto  ">
-              <Col xs={12} xl={10}>
-                <ProductView {...item} t={t}/>
-              </Col>
-            </Row>
-          </Col>
-        ))
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        Children.toArray(
+          landingPageCategories?.map((item) => (
+            <Col xs={12} className="w-100 mx-auto ">
+              <Row className="justify-content-center w-100 mx-auto  ">
+                <Col xs={12} xl={10}>
+                  <ProductView
+                    {...item}
+                    t={t}
+                    title={item[`${i18n.language}title`]}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          ))
+        )
       )}
     </Row>
   );

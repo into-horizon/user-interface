@@ -26,7 +26,7 @@ import ApiService from "./services/ApiService";
 import GlobalToast from "./component/common/Toast";
 import { getTopStores } from "./store/landingPage";
 
-import { getAllCategories } from "./store/category";
+import { getAllCategories, getLandingPageCategories } from "./store/category";
 import MobileNavBar from "./component/common/MobileNavBar";
 import AuthService from "./services/Auth";
 import Page500 from "./pages/page500/500";
@@ -78,7 +78,11 @@ const App = ({
           setDefaultHeaders().then(() => {
             Promise.all([
               parentCategoryHandler(),
-              dispatch(getAllCategories(), getTopStores()),
+              dispatch(
+                getAllCategories(),
+                getTopStores(),
+                dispatch(getLandingPageCategories())
+              ),
             ]);
             if (login) {
               Promise.all([

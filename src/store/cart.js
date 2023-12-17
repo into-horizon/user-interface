@@ -78,16 +78,16 @@ export const addCartItemHandler = (payload) => async (dispatch, state) => {
     } else {
       dispatch(addItem({ ...payload, cookie: true }));
     }
-    dispatch(
-      triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
-    );
+    // dispatch(
+    //   triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
+    // );
   } catch (error) {
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
 
 export const updateCartItemHandler = (payload) => async (dispatch, state) => {
-  const login = state().sign.login;
+  const { login } = state().sign;
   try {
     if (login) {
       let { status, message, data } = await Cart.updateCartItem(payload);
