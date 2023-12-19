@@ -1,6 +1,6 @@
 import React from "react";
 import { CRow, CCol, CSpinner, CContainer } from "@coreui/react";
-function LoadingSpinner() {
+const LoadingSpinner = () => {
   return (
     <CContainer>
       <CRow className="align-items-center justify-content-center my-3 w-100 h-100">
@@ -10,6 +10,6 @@ function LoadingSpinner() {
       </CRow>
     </CContainer>
   );
-}
+};
 
 export default LoadingSpinner;

@@ -17,7 +17,6 @@ import { CartItemModel, WishlistItemModel } from "../services/Models";
 
 const ProductCard = ({
   cart,
-  wishlist,
   addCartItemHandler,
   product,
   addItemHandler,
@@ -292,7 +291,7 @@ const ProductCard = ({
 };
 
 const mapStateToProps = (state) => ({
-  cart: state.cart,
+  cart: state.cart.data,
   wishlist: state.wishlist.items,
 });
 

@@ -1,88 +1,57 @@
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .dropdown-toggle:nth-last-child(n + 3),
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-control,
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-select,
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(
-    .form-floating
-  ) {
+[dir="rtl"] .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n + 3),
+[dir="rtl"] .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+[dir="rtl"] .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+[dir="rtl"] .input-group:not(.has-validation)> :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
   border-top-right-radius: var(--btn-border-radius) !important;
   border-bottom-right-radius: var(--btn-border-radius) !important;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
 
-[dir="rtl"]
-  .input-group
-  > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(
-    .valid-feedback
-  ):not(.invalid-tooltip):not(.invalid-feedback) {
+[dir="rtl"] .input-group> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
   border-top-left-radius: var(--btn-border-radius);
   border-bottom-left-radius: var(--btn-border-radius);
   border-top-right-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
 
-[dir="rtl"] .form-floating > .form-label {
+[dir="rtl"] .form-floating>.form-label {
   right: 0 !important;
   left: auto;
 }
 
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .dropdown-toggle:nth-last-child(n + 3),
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-control,
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-select,
-[dir="rtl"]
-  .input-group:not(.has-validation)
-  > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(
-    .form-floating
-  ) {
+[dir="rtl"] .input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n + 3),
+[dir="rtl"] .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+[dir="rtl"] .input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+[dir="rtl"] .input-group:not(.has-validation)> :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
   border-top-right-radius: var(--btn-border-radius) !important;
   border-bottom-right-radius: var(--btn-border-radius) !important;
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
-.input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n + 3),
-.input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-control,
-.input-group:not(.has-validation)
-  > .form-floating:not(:last-child)
-  > .form-select,
-.input-group:not(.has-validation)
-  > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(
-    .form-floating
-  ) {
+
+.input-group:not(.has-validation)>.dropdown-toggle:nth-last-child(n + 3),
+.input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-control,
+.input-group:not(.has-validation)>.form-floating:not(:last-child)>.form-select,
+.input-group:not(.has-validation)> :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
-.form-floating > .form-control-plaintext:-webkit-autofill,
-.form-floating > .form-control:-webkit-autofill {
+
+.form-floating>.form-control-plaintext:-webkit-autofill,
+.form-floating>.form-control:-webkit-autofill {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
-.form-floating > .form-control-plaintext:focus,
-.form-floating > .form-control-plaintext:not(:placeholder-shown),
-.form-floating > .form-control:focus,
-.form-floating > .form-control:not(:placeholder-shown) {
+
+.form-floating>.form-control-plaintext:focus,
+.form-floating>.form-control-plaintext:not(:placeholder-shown),
+.form-floating>.form-control:focus,
+.form-floating>.form-control:not(:placeholder-shown) {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
+
 [dir="rtl"] .form-control.is-invalid,
 [dir="rtl"] .was-validated .form-control:invalid {
   padding-left: calc(1.5em + 0.75rem);
@@ -104,6 +73,7 @@
 [dir="rtl"] input::placeholder {
   text-align: right;
 }
+
 [dir="rtl"] input {
   text-align: right;
 }
@@ -111,4 +81,9 @@
 [dir="rtl"] .dropdown-menu {
   left: 0 !important;
   text-align: right !important;
+}
+
+[dir=rtl] .form-check .form-check-input {
+  float: right;
+  margin-right: -1.5em;
 }

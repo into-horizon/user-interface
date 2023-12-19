@@ -1,5 +1,5 @@
 import React, { Children } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   addItem,
@@ -16,19 +16,15 @@ import CIcon from "@coreui/icons-react";
 import { cilMinus, cilPlus } from "@coreui/icons";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../i18n";
-
-const Cart = ({
-  cart,
-  updateCartItemHandler,
-  deleteCartItemHandler,
-  login,
-}) => {
+import LoadingSpinner from "./common/LoadingSpinner";
+const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
   const { t, i18n } = useTranslation([
     namespaces.CART.ns,
     namespaces.PRODUCT.ns,
+    namespaces.COLOR.ns,
   ]);
   const navigate = useNavigate();
-
+  const { data: cart, loading } = useSelector((state) => state.cart);
   const qtyChangeHandler = (item) => {
     if (item.quantity === 1) {
       deleteCartItemHandler(item);
@@ -40,12 +36,15 @@ const Cart = ({
     !login && cookie.save("redirectTo", "/checkout", { path: "/" });
     navigate("/checkout");
   };
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
     <>
       <h1 className="text-align-center border-bottom d-block pb-2 mx-auto px-5 border-info w-fit-content">
         {t("Cart".toUpperCase())}
       </h1>
-      <Row className="justify-content-center w-100 ">
+      <Row className="justify-content-center w-100 pb-5 ">
         {cart.length > 0 ? (
           <>
             {" "}
@@ -83,7 +82,7 @@ const Cart = ({
                           item.currency.toUpperCase(),
                           namespaces.PRODUCT
                         )}`}</td>
-                        <td>{item.color ?? "-"}</td>
+                        <td>{t(item.color, namespaces.COLOR) ?? "-"}</td>
                         <td>{item.size ?? "-"}</td>
                         <td>
                           <Row className="justify-content-center align-items-center">
@@ -150,19 +149,19 @@ const Cart = ({
                 </tfoot>
               </Table>
             </Col>
-            <Col xl={3} md={6} xs={12}>
+            <Col xl={3} md={6} xs={"12"}>
               <Button
-                className="border-5 mx-5 text-light"
+                className="border-5 mx-5 text-light rounded-5"
                 variant="info"
                 onClick={submitHandler}
               >
-                Proceed to checkout
+                {t("PROCEED_TO_CHECKOUT")}
               </Button>
             </Col>
           </>
         ) : (
           <Col xs="auto">
-            <h2>your cart is empty</h2>
+            <h2>{t("EMPTY_CART")}</h2>
           </Col>
         )}
       </Row>

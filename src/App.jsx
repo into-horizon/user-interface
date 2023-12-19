@@ -88,7 +88,7 @@ const App = ({
               Promise.all([
                 getCartItemsHandler(),
                 dispatch(getWishlistItemsIds()),
-                dispatch(myAddressHandler({ limit: 5, offset: 0 })),
+                // dispatch(myAddressHandler({ limit: 5, offset: 0 })),
                 getFollowingStores(),
               ]);
             } else if (token && !login) {

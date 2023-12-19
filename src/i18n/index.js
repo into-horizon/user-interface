@@ -1,4 +1,6 @@
+import addressLocalization from "./address";
 import cartLocalization from "./cart";
+import checkoutLocalization from "./checkout";
 import colorLocalization from "./colors";
 import globalLocalization from "./global";
 import landingPageLocalization from "./landing-page";
@@ -20,6 +22,8 @@ export const namespaces = {
   COLOR: { ns: "color" },
   WISHLIST: { ns: "wishlist" },
   CART: { ns: "cart" },
+  ADDRESS: { ns: "address" },
+  CHECKOUT: { ns: "checkout" },
 };
 
 const localizations = [
@@ -33,6 +37,8 @@ const localizations = [
   { ns: namespaces.COLOR.ns, source: colorLocalization },
   { ns: namespaces.WISHLIST.ns, source: wishlistLocalization },
   { ns: namespaces.CART.ns, source: cartLocalization },
+  { ns: namespaces.ADDRESS.ns, source: addressLocalization },
+  { ns: namespaces.CHECKOUT.ns, source: checkoutLocalization },
 ];
 
 const ar = "ar";

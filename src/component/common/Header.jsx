@@ -7,13 +7,19 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { CBadge, CListGroup, CListGroupItem } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilBell, cilHeart, cilCart, cilUser } from "@coreui/icons";
+import {
+  cilBell,
+  cilHeart,
+  cilCart,
+  cilUser,
+  cilSettings,
+  cilAccountLogout,
+} from "@coreui/icons";
 import { namespaces } from "../../i18n";
 
-const Header = (props) => {
+const Header = ({ cart, logOutHandler }) => {
   const login = useSelector((state) => state.sign.login);
   const navigate = useNavigate();
-  const { cart } = props;
   const [displayList, setDisplayList] = useState(false);
   const { t, i18n } = useTranslation([
     namespaces.LANDING_PAGE.ns,
@@ -31,7 +37,7 @@ const Header = (props) => {
   }, []);
 
   const logOutHandle = () => {
-    props.logOutHandler();
+    logOutHandler();
     navigate("/");
   };
   document.addEventListener("click", (e) => {
@@ -81,9 +87,7 @@ const Header = (props) => {
                   </CBadge>
 
                   {displayList && (
-                    <CListGroup
-                      className="position-absolute notifications-list start-0 overflow-y-auto  "
-                    >
+                    <CListGroup className="position-absolute notifications-list start-0 overflow-y-auto  ">
                       <CListGroupItem component="a" href="#">
                         <div className="d-flex w-100 justify-content-between">
                           <h5 className="mb-1">List group item heading</h5>
@@ -141,16 +145,16 @@ const Header = (props) => {
                 </CBadge>
               </Link>
 
-              <NavDropdown
-                title={<CIcon icon={cilUser} size="xxl" />}
-              >
+              <NavDropdown title={<CIcon icon={cilUser} size="xxl" />}>
                 {login ? (
                   <>
                     <Link to="/settings" className="dropdown-item">
-                      {t("settings".toUpperCase())}
+                      <CIcon icon={cilSettings} className=" mx-1 " />
+                      <span>{t("settings".toUpperCase())}</span>
                     </Link>
                     <NavDropdown.Divider />
                     <NavDropdown.Item onClick={logOutHandle}>
+                      <CIcon icon={cilAccountLogout} className=" mx-1 " />
                       {t("logout".toUpperCase())}
                     </NavDropdown.Item>
                   </>
@@ -190,7 +194,7 @@ const Header = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  cart: state.cart,
+  cart: state.cart.data,
   dataLogOut: state.log,
   userSignIn: state.sign ? state.sign : null,
 });
