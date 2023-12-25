@@ -4,8 +4,10 @@ import checkoutLocalization from "./checkout";
 import colorLocalization from "./colors";
 import globalLocalization from "./global";
 import landingPageLocalization from "./landing-page";
+import ordersLocalization from "./orders";
 import passwordLocalization from "./password";
 import productLocalization from "./product";
+import settingsLocalization from "./settings";
 import signInLocalization from "./sign-in";
 import signup from "./signup";
 import verificationLocalization from "./verification";
@@ -24,6 +26,8 @@ export const namespaces = {
   CART: { ns: "cart" },
   ADDRESS: { ns: "address" },
   CHECKOUT: { ns: "checkout" },
+  SETTINGS: { ns: "settings" },
+  ORDERS: { ns: "orders" },
 };
 
 const localizations = [
@@ -39,6 +43,8 @@ const localizations = [
   { ns: namespaces.CART.ns, source: cartLocalization },
   { ns: namespaces.ADDRESS.ns, source: addressLocalization },
   { ns: namespaces.CHECKOUT.ns, source: checkoutLocalization },
+  { ns: namespaces.SETTINGS.ns, source: settingsLocalization },
+  { ns: namespaces.ORDERS.ns, source: ordersLocalization },
 ];
 
 const ar = "ar";

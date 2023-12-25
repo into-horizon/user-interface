@@ -14,6 +14,7 @@ import {
   Link,
   useLocation,
   useNavigate,
+  Navigate,
 } from "react-router-dom";
 import { myProfileHandler } from "../../store/auth";
 import { Col, Row } from "react-bootstrap";
@@ -29,6 +30,7 @@ import {
 } from "@coreui/icons";
 import Loader from "../../component/common/Loader";
 import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n";
 const Account = lazy(() => import("./components/account/account"));
 const Address = lazy(() => import("./components/address/address"));
 const Orders = lazy(() => import("./components/Orders/Orders"));
@@ -41,21 +43,21 @@ const routes = [
   {
     path: "/account",
     exact: true,
-    sidebar: "account!",
+    sidebar: "ACCOUNT",
     main: Account,
     icon: cilUser,
   },
   {
     path: "/address",
     exact: true,
-    sidebar: "address!",
+    sidebar: "ADDRESSES",
     main: Address,
     icon: cilMap,
   },
   {
     path: "/notification",
     exact: true,
-    sidebar: "notification!",
+    sidebar: "NOTIFICATIONS",
     main: Notification,
     icon: cilNotes,
   },
@@ -63,7 +65,7 @@ const routes = [
   {
     path: "/orders",
     exact: true,
-    sidebar: "Orders",
+    sidebar: "ORDERS",
     main: Orders,
     icon: cilTruck,
   },
@@ -78,7 +80,7 @@ const routes = [
 export const SideNavbar = ({ show, setShow, width }) => {
   const [narrow, setNarrow] = useState(false);
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation([namespaces.SETTINGS.ns]);
   const navigate = useNavigate();
   const [icon, setIcon] = useState(cilExpandLeft);
   const [iconPosition, setIconPosition] = useState("text-end");
@@ -113,7 +115,7 @@ export const SideNavbar = ({ show, setShow, width }) => {
     <Fragment>
       <CSidebar narrow={narrow} visible={show} onHide={hideSidebar}>
         <CSidebarBrand className="bg-primary border-top border-light">
-          Settings
+          {t("SETTINGS")}
         </CSidebarBrand>
         <CSidebarNav className="bg-light">
           {Children.toArray(
@@ -126,7 +128,7 @@ export const SideNavbar = ({ show, setShow, width }) => {
                       icon={route.icon}
                       className="mx-auto"
                     />
-                    {route.sidebar}
+                    {t(route.sidebar)}
                   </Link>
                 </li>
               )
@@ -150,13 +152,10 @@ export const SideNavbar = ({ show, setShow, width }) => {
   );
 };
 const Settings = () => {
+  const { t } = useTranslation([namespaces.SETTINGS.ns]);
+  const location = useLocation();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [show, setShow] = useState(true);
-  useEffect(() => {
-    if (windowWidth < 1000) {
-    } else {
-    }
-  }, [windowWidth]);
   const handleResize = () => {
     setWindowWidth(window.innerWidth);
   };
@@ -176,7 +175,7 @@ const Settings = () => {
           className=" position-relative"
           onClick={() => setShow(true)}
         >
-          Settings Menu
+          {t("SETTINGS_MENU")}
         </CButton>
       )}
       <Col xs={"auto"}>
@@ -192,6 +191,9 @@ const Settings = () => {
             )}
           </Routes>
         </Suspense>
+        {location.pathname === "/settings" && (
+          <Navigate to={"/settings/account"} />
+        )}
       </Col>
     </Row>
   );

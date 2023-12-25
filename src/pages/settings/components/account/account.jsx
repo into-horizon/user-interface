@@ -8,25 +8,26 @@ import {
   changePasswordHandler,
   deleteProfilePicture,
 } from "../../../../store/auth";
-import { useNavigate } from "react-router-dom";
-import cookie from "react-cookies";
-import { Button, Row, Form, Col, Spinner, Accordion } from "react-bootstrap";
-import {
-  usePopup,
-  OutAnimationType,
-  AnimationType,
-  DialogType,
-  ToastPosition,
-} from "react-custom-popup";
+import { Button, Row, Form, Col, Accordion } from "react-bootstrap";
+import { usePopup } from "react-custom-popup";
 import ChangeEmail from "./changeEmail";
 import CIcon from "@coreui/icons-react";
 import { cilCloudUpload } from "@coreui/icons";
 import DeleteModal from "../../../../component/common/DeleteModal";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { CFormInput, CFormSelect, CRow } from "@coreui/react";
+import {
+  CFormInput,
+  CFormSelect,
+  CFormText,
+  CInputGroup,
+  CRow,
+  CSpinner,
+} from "@coreui/react";
 import { State } from "country-state-city";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../../i18n";
+import { Eye, EyeSlash } from "react-bootstrap-icons";
+import { validatePassword } from "../../../../services/utils";
 
 const Account = ({
   updateProfileHandler,
@@ -38,88 +39,61 @@ const Account = ({
   deleteProfilePicture,
 }) => {
   const {
-    message,
-    // _loading,
+    loading,
     user: { first_name, last_name, city, profile_picture },
   } = useSelector((state) => state.sign);
-  const navigate = useNavigate();
-  const { t } = useTranslation(["", "sign-up"]);
-  const { showOptionDialog, showToast, showAlert } = usePopup();
-  const [_loadingXX, setLoading] = useState(true);
+  // const navigate = useNavigate();
+  const { t, i18n } = useTranslation([
+    namespaces.SETTINGS.ns,
+    namespaces.SIGN_UP.ns,
+    namespaces.GLOBAL.ns,
+  ]);
+  const { showOptionDialog } = usePopup();
   const [cities, setCities] = useState([]);
+  const [passwordType, setPasswordType] = useState("password");
+  const [newPasswordType, setNewPasswordType] = useState("password");
+  const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
+    useState(false);
+  const [passwordValidation, setPasswordValidation] = useState({
+    invalid: false,
+    message: "",
+  });
 
-  const [loading2, setLoading2] = useState(true);
-
-  useEffect(() => {
-    if (!cookie.load("access_token")) {
-      navigate("/pageInvalidToken");
-    }
-  }, [navigate]);
-  useEffect(() => {
-    if (message && !message.title ? message.includes("deactivated") : null) {
-      navigate("/signIn");
-    }
-  }, [message, navigate, profileData]);
-  useEffect(() => {
-    setLoading(false);
-    setLoading2(false);
-  }, [profileData]);
   let data;
   const updateHandler = (e) => {
     e.preventDefault();
     data = {
       first_name: e.target.first_name.value,
       last_name: e.target.last_name.value,
-      country: e.target.country.value,
       city: e.target.city.value,
     };
-    showPopup(data);
+    updateProfileHandler(data);
   };
   const deactivateHandler = () => {
-    showPopup2();
+    showPopup();
   };
 
-  const showPopup = (data) => {
+  const showPopup = () => {
     showOptionDialog({
       containerStyle: { width: 350 },
-      text: "Are you sure you want to update your profile? You won't be able to revert that action.",
-      title: "Update Profile?",
+      text: (
+        <p className={i18n.language === "ar" ? " text-end" : ""}>
+          {t("DEACTIVATE_MESSAGE")}
+        </p>
+      ),
+      title: t("DEACTIVATE"),
       options: [
         {
-          name: "Cancel",
+          name: t("CANCEL", namespaces.GLOBAL),
           type: "cancel",
         },
         {
-          name: "Update",
+          name: t("CONFIRM", namespaces.GLOBAL),
           type: "confirm",
           style: { background: "lightcoral" },
         },
       ],
       onConfirm: () => {
-        setLoading2(true);
-        updateProfileHandler(data);
-      },
-    });
-  };
-
-  const showPopup2 = (data) => {
-    showOptionDialog({
-      containerStyle: { width: 350 },
-      text: "Are you sure you want to deactivate your profile? You can activate your profile any time signin twice",
-      title: "Deactivate Profile?",
-      options: [
-        {
-          name: "Cancel",
-          type: "cancel",
-        },
-        {
-          name: "Deactivate",
-          type: "confirm",
-          style: { background: "lightcoral" },
-        },
-      ],
-      onConfirm: () => {
-        setLoading2(true);
         deactivateProfileHandler();
         logOutHandler();
       },
@@ -127,7 +101,6 @@ const Account = ({
   };
 
   const changeHandler = (e) => {
-    setLoading(true);
     let formData = new FormData();
     formData.append("image", e.target.files[0]);
     updatePictureHandler(formData);
@@ -135,70 +108,39 @@ const Account = ({
 
   const updatePasswordHandler = (e) => {
     e.preventDefault();
-    const obj = {
-      current: e.target.password.value,
-      new: e.target.newPassword.value,
-      repeatedPassword: e.target.repeatedPassword.value,
-    };
-    if (obj.new !== obj.repeatedPassword) {
-      return showAlert({
-        type: DialogType.DANGER,
-        text: "Passwords don`t match",
-        title: "Please make sure to repeat new password correctly",
-        animationType: AnimationType.FADE_IN,
-        outAnimationType: OutAnimationType.FADE_OUT,
-      });
+    const { password, newPassword, repeatedPassword } = e.target;
+    try {
+      validatePassword(newPassword.value);
+      setPasswordValidation({ invalid: false });
+    } catch (error) {
+      setPasswordValidation({ invalid: true, message: error });
+      return;
     }
-    Promise.all([changePasswordHandler(obj)]).then(
-      ([{ status, message: msg }]) => {
-        const { title, details } = msg;
-        if (title) {
-          showAlert({
-            type: DialogType.DANGER,
-            text: <Error data={details} />,
-            title: title,
-            animationType: AnimationType.FADE_IN,
-            outAnimationType: OutAnimationType.FADE_OUT,
-          });
-        } else if (status === 403) {
-          showAlert({
-            type: DialogType.DANGER,
-            text: msg,
-            title: "Error",
-            animationType: AnimationType.FADE_IN,
-            outAnimationType: OutAnimationType.FADE_OUT,
-          });
-        } else if (status === 200) {
-          showToast({
-            text: msg,
-            type: DialogType.INFO,
-            position: ToastPosition.BOTTOM_RIGHT,
-            timeoutDuration: 3000,
-          });
-          e.target.reset();
-        }
-      }
-    );
+    if (newPassword.value !== repeatedPassword.value) {
+      setInvalidPasswordConfirmation(true);
+      return;
+    } else {
+      setInvalidPasswordConfirmation(false);
+    }
+    const obj = {
+      current: password.value,
+      new: newPassword.value,
+      repeatedPassword: repeatedPassword.value,
+    };
+    changePasswordHandler(obj);
   };
 
-  const Error = ({ data }) => {
-    return (
-      <React.Fragment>
-        <ol>
-          {data.map((d, i) => (
-            <li key={`detail${i}`}>{d}</li>
-          ))}
-        </ol>
-      </React.Fragment>
-    );
-  };
+  // const Error = ({ data }) => {
+  //   return (
+  //     <React.Fragment>
+  //       <ol>{Children.toArray(data.map((d, i) => <li>{d}</li>))}</ol>
+  //     </React.Fragment>
+  //   );
+  // };
 
   useEffect(() => {
     setCities(State.getStatesOfCountry(String("JO")));
   }, []);
-  const signupNs = {
-    ns: "sign-up",
-  };
   return (
     <div>
       <>
@@ -252,22 +194,28 @@ const Account = ({
         <Col xs={12}>
           <Accordion defaultActiveKey="0" className="w-100">
             <Accordion.Item eventKey="0" className="w-100">
-              <Accordion.Header>Personal Information</Accordion.Header>
+              <Accordion.Header>{t("PERSONAL_INFO")}</Accordion.Header>
               <Accordion.Body>
                 <Form onSubmit={updateHandler} className="w-100">
                   <CRow xs={{ gutterY: 2 }}>
                     <Col xs="12" lg="6">
                       <CFormInput
                         floatingLabel={t("FIRST_NAME", namespaces.SIGN_UP)}
-                        placeholder={t("FIRST_NAME", signupNs)}
+                        placeholder={t("FIRST_NAME", namespaces.SIGN_UP)}
                         id="first_name"
                         value={first_name ?? ""}
                       />
                     </Col>
                     <Col xs="12" lg="6">
                       <CFormInput
-                        floatingLabel={t("last_name".toUpperCase(), namespaces.SIGN_UP)}
-                        placeholder={t("last_name".toUpperCase(), namespaces.SIGN_UP)}
+                        floatingLabel={t(
+                          "last_name".toUpperCase(),
+                          namespaces.SIGN_UP
+                        )}
+                        placeholder={t(
+                          "last_name".toUpperCase(),
+                          namespaces.SIGN_UP
+                        )}
                         id="last_name"
                         value={last_name ?? ""}
                       />
@@ -275,8 +223,14 @@ const Account = ({
 
                     <Col xs="12" lg="6">
                       <CFormSelect
-                        floatingLabel={t("city".toUpperCase(), namespaces.SIGN_UP)}
-                        placeholder={t("city".toUpperCase(), namespaces.SIGN_UP)}
+                        floatingLabel={t(
+                          "city".toUpperCase(),
+                          namespaces.SIGN_UP
+                        )}
+                        placeholder={t(
+                          "city".toUpperCase(),
+                          namespaces.SIGN_UP
+                        )}
                         name="city"
                         id="city"
                         defaultValue={profileData ? city : "City"}
@@ -293,72 +247,144 @@ const Account = ({
                         )}
                       </CFormSelect>
                     </Col>
-                    <Col xs="12" lg="6">
+                    {/* <Col xs="12" lg="6">
                       <CFormSelect
-                        floatingLabel={t("gender".toUpperCase(), namespaces.SIGN_UP)}
+                        floatingLabel={t(
+                          "gender".toUpperCase(),
+                          namespaces.SIGN_UP
+                        )}
                         placeholder="city"
                         name="city"
                         id="city"
                         defaultValue={profileData ? profileData?.gender : ""}
                       >
-                        <option value="male">{t("MALE", namespaces.SIGN_UP)}</option>
-                        <option value="female">{t("FEMALE", namespaces.SIGN_UP)}</option>
+                        <option value="male">
+                          {t("MALE", namespaces.SIGN_UP)}
+                        </option>
+                        <option value="female">
+                          {t("FEMALE", namespaces.SIGN_UP)}
+                        </option>
                       </CFormSelect>
-                    </Col>
+                    </Col> */}
                   </CRow>
 
                   <Button
                     variant="outline-primary"
                     className="mt-2"
                     type="submit"
+                    disabled={loading}
                   >
-                    Update
+                    {loading ? (
+                      <CSpinner size="sm" variant="grow" />
+                    ) : (
+                      t("SAVE_CHANGES", namespaces.GLOBAL)
+                    )}
                   </Button>
-                  {loading2 ? <Spinner animation="border" /> : null}
                 </Form>
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
-              <Accordion.Header>Account info</Accordion.Header>
+              <Accordion.Header>{t("ACCOUNT_INFO")}</Accordion.Header>
               <Accordion.Body>
-                <ChangeEmail signupNs={signupNs} />
+                <ChangeEmail />
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
-              <Accordion.Header>Change Password</Accordion.Header>
+              <Accordion.Header>{t("CHANGE_PASSWORD")}</Accordion.Header>
               <Accordion.Body>
                 <Form onSubmit={updatePasswordHandler} className="h-100">
-                  <Row className=" gy-3">
+                  <Row className="gy-3">
                     <Col xs="12">
-                      <CFormInput
-                        placeholder="current password"
-                        floatingLabel="current password"
-                        type="password"
-                        id="password"
-                        required
-                      />
+                      <CInputGroup>
+                        <CFormInput
+                          placeholder={t("CURRENT_PASSWORD")}
+                          floatingLabel={t("CURRENT_PASSWORD")}
+                          type={passwordType}
+                          id="password"
+                          name="password"
+                          autoComplete="true"
+                          required
+                        />
+                        <Button
+                          className="bg-light"
+                          color="secondary"
+                          variant="outline"
+                          onClick={() =>
+                            setPasswordType(
+                              passwordType === "password" ? "text" : "password"
+                            )
+                          }
+                        >
+                          {passwordType === "password" ? (
+                            <Eye color="secondary" />
+                          ) : (
+                            <EyeSlash color="secondary" />
+                          )}
+                        </Button>
+                      </CInputGroup>
+                    </Col>
+                    <Col xs="12">
+                      <CInputGroup>
+                        <CFormInput
+                          placeholder={t("NEW_PASSWORD")}
+                          floatingLabel={t("NEW_PASSWORD")}
+                          type={newPasswordType}
+                          id="newPassword"
+                          invalid={passwordValidation.invalid}
+                          required
+                          autoComplete="true"
+                        />
+                        <Button
+                          className="bg-light"
+                          color="secondary"
+                          variant="outline"
+                          onClick={() =>
+                            setNewPasswordType(
+                              newPasswordType === "password"
+                                ? "text"
+                                : "password"
+                            )
+                          }
+                        >
+                          {newPasswordType === "password" ? (
+                            <Eye color="secondary" />
+                          ) : (
+                            <EyeSlash color="secondary" />
+                          )}
+                        </Button>
+                      </CInputGroup>
+                      {passwordValidation.invalid && (
+                        <CFormText className=" text-danger mb-2 mt-0">
+                          {passwordValidation.message}
+                        </CFormText>
+                      )}
                     </Col>
                     <Col xs="12">
                       <CFormInput
-                        placeholder="new password"
-                        floatingLabel="new password"
-                        type="password"
-                        id="newPassword"
-                        required
-                      />
-                    </Col>
-                    <Col xs="12">
-                      <CFormInput
-                        placeholder="repeat new password"
-                        floatingLabel="repeat new password"
-                        type="password"
+                        placeholder={t("CONFIRM_NEW_PASSWORD")}
+                        floatingLabel={t("CONFIRM_NEW_PASSWORD")}
+                        type={newPasswordType}
                         id="repeatedPassword"
                         required
+                        invalid={invalidPasswordConfirmation}
+                        autoComplete="true"
+                        feedbackInvalid={t(
+                          "INVALID_REPEATED_PASSWORD",
+                          namespaces.SIGN_UP
+                        )}
                       />
                     </Col>
                     <Col xs="12">
-                      <Button variant="outline-primary" type="submit">
-                        Update
+                      <Button
+                        variant="outline-primary"
+                        type="submit"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <CSpinner size="sm" variant="grow" />
+                        ) : (
+                          t("SAVE_CHANGES", namespaces.GLOBAL)
+                        )}
                       </Button>
                     </Col>
                   </Row>
@@ -374,7 +400,7 @@ const Account = ({
         type="submit"
         onClick={deactivateHandler}
       >
-        Deactivate
+        {t("DEACTIVATE")}
       </Button>
     </div>
   );

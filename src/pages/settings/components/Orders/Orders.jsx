@@ -5,7 +5,6 @@ import {
   CCard,
   CCardHeader,
   CCardTitle,
-  CCardText,
   CButton,
   CCardBody,
   CRow,
@@ -13,7 +12,6 @@ import {
   CModal,
   CModalHeader,
   CModalTitle,
-  CModalBody,
   CModalFooter,
   CTable,
   CTableHead,
@@ -28,8 +26,17 @@ import Paginator from "../../../../component/common/Paginator";
 import { Placeholder } from "react-bootstrap";
 import { Children } from "react";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../../i18n";
 
 export const Orders = ({ getOrderHandler, getOrderLogs }) => {
+  const { t } = useTranslation([
+    namespaces.ORDERS.ns,
+    namespaces.SETTINGS.ns,
+    namespaces.GLOBAL.ns,
+    namespaces.PRODUCT.ns,
+    namespaces.CHECKOUT.ns,
+  ]);
   const {
     orders: { data, count },
     logs,
@@ -61,7 +68,7 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
   };
   useEffect(() => {
     getOrderHandler(params);
-  }, []);
+  }, [getOrderHandler, params]);
   return (
     <div>
       <CModal
@@ -101,68 +108,73 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
           </CButton>
         </CModalFooter>
       </CModal>
-      <CRow xs={{ gutterY: 5 }}>
-        {loading
-          ? Children.toArray(
-              _.range(0, 3).map(() => (
-                <CCol xl={12}>
-                  <CCard>
-                    <Placeholder as={CCardHeader} animation="glow">
-                      <Placeholder xs={4} />
-                    </Placeholder>
-                    <CCardBody>
-                      <CRow>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <hr style={styles} />
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
+      <h2 className="mb-3">{t("YOUR_ORDERS")}</h2>
+      <CRow xs={{ gutterY: 2 }}>
+        {loading ? (
+          Children.toArray(
+            _.range(0, 3).map(() => (
+              <CCol xl={12}>
+                <CCard>
+                  <Placeholder as={CCardHeader} animation="glow">
+                    <Placeholder xs={4} />
+                  </Placeholder>
+                  <CCardBody>
+                    <CRow>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <hr style={styles} />
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
 
-                        <hr style={styles} />
-                      </CRow>
-                      <CRow>
-                        <CCol sm="auto">
-                          <Placeholder.Button
-                            animation="wave"
-                            variant="primary"
-                            size="lg"
-                          />
-                        </CCol>
-                        <CCol sm="auto">
-                          <Placeholder.Button
-                            animation="wave"
-                            variant="secondary"
-                            size="lg"
-                          />
-                        </CCol>
-                      </CRow>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
-              ))
-            )
-          : React.Children.toArray(
+                      <hr style={styles} />
+                    </CRow>
+                    <CRow>
+                      <CCol sm="auto">
+                        <Placeholder.Button
+                          animation="wave"
+                          variant="primary"
+                          size="lg"
+                        />
+                      </CCol>
+                      <CCol sm="auto">
+                        <Placeholder.Button
+                          animation="wave"
+                          variant="secondary"
+                          size="lg"
+                        />
+                      </CCol>
+                    </CRow>
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            ))
+          )
+        ) : data.length === 0 ? (
+          <h4>{t("NO_ORDERS")}</h4>
+        ) : (
+          <>
+            {React.Children.toArray(
               data?.map(
                 ({
                   id,
@@ -184,7 +196,12 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                             <CCardTitle>{`shipped to: ${first_name} ${last_name}`}</CCardTitle>
                           </CCol>
                           <CCol xl={4}>
-                            <CCardTitle>{`price: ${grand_total}`} </CCardTitle>
+                            <CCardTitle>
+                              {`${t(
+                                "TOTAL_PRICE",
+                                namespaces.CHECKOUT
+                              )}: ${grand_total}`}{" "}
+                            </CCardTitle>
                           </CCol>
                           <CCol xl={4}>
                             <CCardTitle>status: {status} </CCardTitle>
@@ -222,14 +239,16 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                 )
               )
             )}
+            <Paginator
+              count={count}
+              params={params}
+              // changeData={getOrderHandler}
+              onPageChange={handlePageChange}
+              // cookieName="orders"
+            />
+          </>
+        )}
       </CRow>
-      <Paginator
-        count={count}
-        params={params}
-        // changeData={getOrderHandler}
-        onPageChange={handlePageChange}
-        // cookieName="orders"
-      />
     </div>
   );
 };

@@ -9,6 +9,8 @@ const en = {
   REGION: "Region",
   MOBILE: "Mobile",
   ADD_ADDRESS_TOOLTIP: "Add new address",
+  DEFAULT_ADDRESS: "Default Address",
+  NO_ADDRESSES: "you don't have any address",
 };
 
 export default en;

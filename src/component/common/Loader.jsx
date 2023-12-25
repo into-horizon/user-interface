@@ -1,6 +1,6 @@
 import { CCol, CContainer, CRow } from "@coreui/react";
 import React from "react";
-import { Rings } from "react-loader-spinner";
+// import { Rings } from "react-loader-spinner";
 
 const Loader = () => {
   return (

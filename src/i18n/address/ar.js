@@ -9,6 +9,8 @@ const ar = {
   REGION: "المنطقة",
   MOBILE: "رقم الهاتف",
   ADD_ADDRESS_TOOLTIP: "إضافة عنوان جديد",
+  DEFAULT_ADDRESS: "عنوان إفتراضي",
+  NO_ADDRESSES: "ليس لديك أي عنوان",
 };
 
 export default ar;

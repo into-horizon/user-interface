@@ -58,6 +58,14 @@ const cart = createSlice({
     resetCartItems() {
       return initialState;
     },
+    updateItemId(state, { payload }) {
+      state.data = state.data.map((item) => {
+        if (payload.currentId === item.id) {
+          return { ...item, id: payload.updatedId };
+        }
+        return item;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCartItemsHandler.fulfilled, (state) => {
@@ -74,26 +82,16 @@ const cart = createSlice({
 
 export const addCartItemHandler = (payload) => async (dispatch, state) => {
   const { login } = state().sign;
+  dispatch(addItem({ ...payload, cookie: !login }));
   try {
     if (login) {
       let { data, status, message } = await Cart.addCartItem([payload]);
-
       if (status === 200) {
-        dispatch(
-          addItem({
-            ...payload,
-            ...data[0],
-          })
-        );
+        dispatch(updateItemId({ currentId: payload.id, updateId: data.id }));
       } else {
         dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
       }
-    } else {
-      dispatch(addItem({ ...payload, cookie: true }));
     }
-    // dispatch(
-    //   triggerToast({ message: "added to your card", type: ToastTypes.SUCCESS })
-    // );
   } catch (error) {
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
@@ -141,7 +139,7 @@ export const getCartItemsHandler = createAsyncThunk(
       cookie.save("cart", [], { path: "/" });
       let { data, status, message } = await Cart.getCartItems();
       if (status === 200) {
-        if (cart.length > 0) {
+        if (cart?.length > 0) {
           const newCart = cart.filter(
             ({ size, color, product_id }) =>
               data.findIndex(
@@ -202,4 +200,5 @@ export const {
   updateCartItem,
   addCartItems,
   resetCartItems,
+  updateItemId,
 } = cart.actions;

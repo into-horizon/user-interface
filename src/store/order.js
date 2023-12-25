@@ -3,6 +3,7 @@ import Order from "../services/Order";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
+import { DialogType } from "react-custom-popup";
 
 const order = createSlice({
   name: "order",
@@ -11,7 +12,7 @@ const order = createSlice({
     placedOrder: {},
     orders: { count: 0, data: [] },
     logs: [],
-    loading: false
+    loading: false,
   },
   reducers: {
     addPlacedOrder(state, action) {
@@ -35,31 +36,47 @@ const order = createSlice({
       return { ...state, orders: { ...state.orders, data: action.payload } };
     },
   },
-  extraReducers: builder =>{
-    builder.addCase(getOrderHandler.fulfilled, (state)=>{
-        state.loading = false
-    })
-    builder.addCase(getOrderHandler.rejected, (state)=>{
-        state.loading = false
-    })
-    builder.addCase(getOrderHandler.pending, (state)=>{
-        state.loading = true
-    })
-  }
+  extraReducers: (builder) => {
+    builder.addCase(getOrderHandler.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(getOrderHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(getOrderHandler.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(placedOrderHandler.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(placedOrderHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(placedOrderHandler.pending, (state) => {
+      state.loading = true;
+    });
+  },
 });
 
-export const placedOrderHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { order, status, message } = await Order.placeOrder(payload);
-    if (status === 200) {
-      dispatch(addPlacedOrder({ placedOrder: order }));
-    } else {
-      dispatch(addMessage(message));
+export const placedOrderHandler = createAsyncThunk(
+  "order/placeOrder",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      let { data, status, message } = await Order.placeOrder(payload);
+      if (status === 200) {
+        dispatch(addPlacedOrder({ placedOrder: data }));
+      } else {
+        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(addMessage(error.message));
   }
-};
+);
 
 export const getOrderHandler = createAsyncThunk(
   "order/get",

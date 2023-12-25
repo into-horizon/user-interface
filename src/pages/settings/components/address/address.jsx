@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React, { Children, Fragment, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
 import { Row, Col, ListGroup, Placeholder } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -16,6 +16,8 @@ import {
 } from "../../../../store/address";
 import { useState } from "react";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../../i18n";
 
 const Address = ({
   updateAddressHandler,
@@ -24,6 +26,11 @@ const Address = ({
   myAddressHandler,
 }) => {
   const [params, setParams] = useState({ limit: 5, offset: 0 });
+  const { t } = useTranslation([
+    namespaces.ADDRESS.ns,
+    namespaces.GLOBAL.ns,
+    namespaces.SIGN_UP.ns,
+  ]);
   const {
     data: addresses,
     count,
@@ -35,13 +42,14 @@ const Address = ({
   };
 
   const AddBtnComponent = (props) => (
-    <CButton className="my-2" {...props}>
-      <CIcon icon={cilPlus} className="mx-1" />
-      add address
-    </CButton>
+    <CTooltip content={t("ADD_ADDRESS_TOOLTIP")}>
+      <CButton className="my-2" {...props}>
+        <CIcon icon={cilPlus} />
+      </CButton>
+    </CTooltip>
   );
   const UpdateBtnComponent = (props) => (
-    <CTooltip content={"edit"}>
+    <CTooltip content={t("EDIT", namespaces.GLOBAL)}>
       <CButton color="secondary" {...props} size="sm">
         <CIcon icon={cilPen} size="sm" />
       </CButton>
@@ -61,6 +69,21 @@ const Address = ({
       return newParams;
     });
   };
+
+  useEffect(() => {
+    myAddressHandler(params);
+  }, [myAddressHandler, params]);
+  const AddressItem = ({ label, value }) => (
+    <Fragment>
+      {value && (
+        <>
+          {label}: <bdi>{value}</bdi>
+          <br />
+        </>
+      )}
+    </Fragment>
+  );
+
   return (
     <>
       <AddressModal
@@ -113,6 +136,8 @@ const Address = ({
               </ListGroup>
             ))
           )
+        ) : addresses.length === 0 ? (
+          <h3>{t("NO_ADDRESSES")}</h3>
         ) : (
           <>
             <ListGroup>
@@ -128,29 +153,41 @@ const Address = ({
                     <Row>
                       <Col xs={"10"}>
                         <p>
-                          {`Address: ${el.street_name} Street, Building ${el.building_number} , apartment ${el.apartment_number} `}
-                          <br />
-                          {`Name : ${el.first_name}  ${el.last_name} `}
-                          <br />
-                          {`Mobile : ${el.mobile}`}
-                          <br />
+                          <AddressItem
+                            value={`${el.first_name}  ${el.last_name}`}
+                            label={t("NAME")}
+                          />
+                          <AddressItem
+                            value={t(el.city, namespaces.SIGN_UP)}
+                            label={t("CITY")}
+                          />
+                          <AddressItem value={el.region} label={t("REGION")} />
+                          <AddressItem
+                            value={el.street_name}
+                            label={t("STREET")}
+                          />
+                          <AddressItem value={el.mobile} label={t("MOBILE")} />
                         </p>
                       </Col>
 
-                      <Col xs={"2"}>
-                        <AddressModal
-                          addressProp={el}
-                          BtnComponent={UpdateBtnComponent}
-                          handleSubmit={async (address, close) => {
-                            await updateAddressHandler(address);
-                            myAddressHandler(params);
-                            close();
-                          }}
-                        />
-                        <DeleteModal
-                          onConfirm={() => handleDelete(el.id)}
-                          btnSize={"sm"}
-                        />
+                      <Col xs={"2"} className=" d-flex gap-1  ">
+                        <div>
+                          <AddressModal
+                            addressProp={el}
+                            BtnComponent={UpdateBtnComponent}
+                            handleSubmit={async (address, close) => {
+                              await updateAddressHandler(address);
+                              myAddressHandler(params);
+                              close();
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <DeleteModal
+                            onConfirm={() => handleDelete(el.id)}
+                            btnSize={"sm"}
+                          />
+                        </div>
                       </Col>
                     </Row>
                   </ListGroup.Item>

@@ -26,6 +26,7 @@ export class CartItemModel {
     price,
     currency,
     final_price,
+    store_id
   }) {
     this.id = product_id ? id : crypto.randomUUID();
     this.product_id = product_id ?? id;
@@ -39,5 +40,6 @@ export class CartItemModel {
     this.price = price;
     this.currency = currency;
     this.final_price = final_price;
+    this.store_id = store_id;
   }
 }

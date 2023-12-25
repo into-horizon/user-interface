@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React from "react";
+import { connect, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button, Row, Form, Col } from "react-bootstrap";
-import { usePopup } from "react-custom-popup";
-import { updateEmailHandler } from "../../../../store/auth";
-import { CFormInput } from "@coreui/react";
+import { updateAccountInfo } from "../../../../store/auth";
+import { CFormInput, CSpinner } from "@coreui/react";
 import { namespaces } from "../../../../i18n";
+import CFormInputWithMask from "../../../../component/common/CFormInputWithMask";
 
-const Email = ({ updateEmailHandler, profileData }) => {
-  const [_loading, setLoading] = useState(true);
-  const { t } = useTranslation(["settings", "sign-up"]);
-  const { showOptionDialog } = usePopup();
+const Email = ({ updateAccountInfo, profileData }) => {
+  const { loading } = useSelector((state) => state.sign);
+  const { t } = useTranslation([
+    namespaces.SETTINGS.ns,
+    namespaces.SIGN_UP.ns,
+    namespaces.GLOBAL.ns,
+  ]);
   const { email, mobile } = profileData.user;
-  useEffect(() => {
-    setLoading(false);
-  }, [profileData]);
 
   const updateHandler = (e) => {
     e.preventDefault();
@@ -22,76 +22,48 @@ const Email = ({ updateEmailHandler, profileData }) => {
       email: e.target.email.value,
       mobile: e.target.mobile.value,
     };
-    showPopup(data);
-  };
-  const showPopup = (data) => {
-    showOptionDialog({
-      containerStyle: { width: 350 },
-      text: "Are you sure you want to update your Email? You won't be able to revert that action.",
-      title: "Update Email?",
-      options: [
-        {
-          name: "Update",
-          type: "confirm",
-          style: { background: "lightcoral" },
-        },
-        {
-          name: "Cancel",
-          type: "cancel",
-        },
-      ],
-      onConfirm: () => {
-        setLoading(true);
-        updateEmailHandler(data);
-      },
-    });
+    updateAccountInfo(data);
   };
 
   return (
     <div>
       <Form onSubmit={updateHandler} className="h-100">
-        <fieldset>
-          {/* <legend>Account info</legend> */}
-
-          <Row className=" gy-3 ">
-            <Col xs={12} md={12}>
-              <CFormInput
-                placeholder={t("EMAIL", namespaces.SIGN_UP)}
-                name="email"
-                defaultValue={email}
-                floatingLabel={t("EMAIL", namespaces.SIGN_UP)}
-              />
-              {/* <Form.Group className="mb-3" controlid="formBasicEmail">
-                <Form.Label>Email Address </Form.Label>
-
-                <Form.Control
-                  placeholder="email"
-                  name="email"
-                  defaultValue={email}
-                  style={{ maxWidth: "100%" }}
-                />
-              </Form.Group> */}
-            </Col>
-            <Col xs={12} md={12}>
-              <CFormInput
-                placeholder={t("PHONE", namespaces.SIGN_UP)}
-                floatingLabel={t("PHONE", namespaces.SIGN_UP)}
-                name="mobile"
-                defaultValue={mobile}
-                style={{ maxWidth: "100%" }}
-              />
-            </Col>
-            <Col>
-              <Button
-                variant="outline-primary"
-                type="submit"
-                controlid="button-email"
-              >
-                Update
-              </Button>
-            </Col>
-          </Row>
-        </fieldset>
+        <Row className=" gy-3 ">
+          <Col xs={12} md={12}>
+            <CFormInput
+              placeholder={t("EMAIL", namespaces.SIGN_UP)}
+              name="email"
+              defaultValue={email}
+              floatingLabel={t("EMAIL", namespaces.SIGN_UP)}
+            />
+          </Col>
+          <Col xs={12} md={12}>
+            <CFormInputWithMask
+              placeholder={t("PHONE", namespaces.SIGN_UP)}
+              floatingLabel={t("PHONE", namespaces.SIGN_UP)}
+              name="mobile"
+              mask="+{962}000000000"
+              defaultValue={mobile}
+              className="w-100"
+              dir="ltr"
+              autoComplete="phone"
+            />
+          </Col>
+          <Col>
+            <Button
+              variant="outline-primary"
+              type="submit"
+              controlid="button-email"
+              disabled={loading}
+            >
+              {loading ? (
+                <CSpinner size="sm" variant="grow" />
+              ) : (
+                t("SAVE_CHANGES", namespaces.GLOBAL)
+              )}
+            </Button>
+          </Col>
+        </Row>
       </Form>
     </div>
   );
@@ -100,5 +72,5 @@ const Email = ({ updateEmailHandler, profileData }) => {
 const mapStateToProps = (state) => ({
   profileData: state.sign ? state.sign : null,
 });
-const mapDispatchToProps = { updateEmailHandler };
+const mapDispatchToProps = { updateAccountInfo };
 export default connect(mapStateToProps, mapDispatchToProps)(Email);

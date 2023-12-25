@@ -173,8 +173,10 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     floatingLabel={t("PHONE")}
                     mask="+{962}000000000"
                     name="mobile"
+                    dir="ltr"
                     id="mobile"
                     type="tel"
+                    autoComplete="phone"
                     className="mb-2 "
                     required
                     onChange={onChange}
@@ -248,7 +250,6 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     name="con_password"
                     id="con_password"
                     autoComplete="true"
-
                     required
                     invalid={invalidPasswordConfirmation}
                     feedbackInvalid={t("INVALID_REPEATED_PASSWORD")}
@@ -291,7 +292,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     >
                       <button className="google-btn">
                         <img src={google} alt="google" />
-                       {t('CONTINUE_WITH_GOOGLE')}
+                        {t("CONTINUE_WITH_GOOGLE")}
                       </button>
                     </a>
                   </CCol>
@@ -305,7 +306,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     >
                       <button className="facebook-btn">
                         <img src={facebook} alt="facebook" />
-                       {t('CONTINUE_WITH_FACEBOOK')}
+                        {t("CONTINUE_WITH_FACEBOOK")}
                       </button>
                     </a>
                   </CCol>

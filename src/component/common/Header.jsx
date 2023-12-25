@@ -14,6 +14,10 @@ import {
   cilUser,
   cilSettings,
   cilAccountLogout,
+  cilUserPlus,
+  cilArrowCircleRight,
+  cifSa,
+  cifUs,
 } from "@coreui/icons";
 import { namespaces } from "../../i18n";
 
@@ -148,22 +152,36 @@ const Header = ({ cart, logOutHandler }) => {
               <NavDropdown title={<CIcon icon={cilUser} size="xxl" />}>
                 {login ? (
                   <>
-                    <Link to="/settings" className="dropdown-item">
-                      <CIcon icon={cilSettings} className=" mx-1 " />
+                    <Link
+                      to="/settings"
+                      className="dropdown-item d-flex gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilSettings} />
                       <span>{t("settings".toUpperCase())}</span>
                     </Link>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={logOutHandle}>
-                      <CIcon icon={cilAccountLogout} className=" mx-1 " />
+                    <NavDropdown.Item
+                      onClick={logOutHandle}
+                      className="d-flex gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilAccountLogout} />
                       {t("logout".toUpperCase())}
                     </NavDropdown.Item>
                   </>
                 ) : (
                   <>
-                    <Link className="dropdown-item" to="/signin">
+                    <Link
+                      className="dropdown-item d-flex gap-2 align-items-center "
+                      to="/signin"
+                    >
+                      <CIcon icon={cilArrowCircleRight} />
                       {t("LOGIN", namespaces.SIGN_UP)}
                     </Link>
-                    <Link to="/signUp" className="dropdown-item">
+                    <Link
+                      to="/signUp"
+                      className="dropdown-item d-flex  gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilUserPlus} />
                       {t("SIGN_UP", namespaces.SIGN_UP)}
                     </Link>
                   </>
@@ -176,14 +194,18 @@ const Header = ({ cart, logOutHandler }) => {
               as={Button}
               active={i18n.language === "ar"}
               onClick={() => i18n.changeLanguage("ar")}
+              className=" d-flex  gap-2  align-items-center "
             >
+              <CIcon icon={cifSa} />
               العربية
             </NavDropdown.Item>
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "en"}
               onClick={() => i18n.changeLanguage("en")}
+              className=" d-flex  gap-2  align-items-center "
             >
+              <CIcon icon={cifUs} />
               English
             </NavDropdown.Item>
           </NavDropdown>

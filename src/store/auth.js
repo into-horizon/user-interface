@@ -23,6 +23,7 @@ const initialState = {
     isResetTokenInvalid: false,
     success: false,
   },
+  changePassword: { isSuccess: undefined, feedback: "" },
 };
 const sign = createSlice({
   name: "sign",
@@ -130,6 +131,35 @@ const sign = createSlice({
       state.resetPassword.feedback = action.payload;
     });
     builder.addCase(resetPassword.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changePasswordHandler.fulfilled, (state) => {
+      state.loading = false;
+      state.changePassword.isSuccess = true;
+    });
+    builder.addCase(changePasswordHandler.rejected, (state, action) => {
+      state.loading = false;
+      state.changePassword.feedback = action.payload;
+    });
+    builder.addCase(changePasswordHandler.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateAccountInfo.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateAccountInfo.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateAccountInfo.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateProfileHandler.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateProfileHandler.rejected, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateProfileHandler.pending, (state) => {
       state.loading = true;
     });
   },
@@ -270,40 +300,58 @@ export const myProfileHandler = createAsyncThunk(
   }
 );
 
-export const updateProfileHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { status, user, message } = await AuthService.updateProfileInfo(
-      payload
-    );
-    if (status === 200) {
-      dispatch(loginAction({ user: { ...state().sign.user, ...user } }));
-    } else {
-      dispatch(loginAction({ message: message }));
-    }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
-  }
-};
-export const updateEmailHandler = (payload) => async (dispatch, state) => {
-  try {
-    let {
-      user: { email, mobile },
-      status,
-      message,
-    } = await AuthService.updateEmail(payload);
-    if (status === 200) {
-      dispatch(
-        loginAction({
-          user: { ...state().sign.user, email: email, mobile: mobile },
-        })
+export const updateProfileHandler = createAsyncThunk(
+  "auth/updateProfile",
+  async (payload, { dispatch, rejectWithValue, getState }) => {
+    try {
+      let { status, user, message } = await AuthService.updateProfileInfo(
+        payload
       );
-    } else {
-      dispatch(loginAction({ message: message }));
+      if (status === 200) {
+        dispatch(loginAction({ user: { ...getState().sign.user, ...user } }));
+        dispatch(triggerToast({ message, type: DialogType.INFO }));
+      } else {
+        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
+
+export const updateAccountInfo = createAsyncThunk(
+  "auth/updateAccountInfo",
+  async (payload, { dispatch, rejectWithValue, getState }) => {
+    try {
+      let {
+        user: { email, mobile },
+        status,
+        message,
+      } = await AuthService.updateEmail(payload);
+      if (status === 200) {
+        dispatch(
+          loginAction({
+            user: { ...getState().sign.user, email: email, mobile: mobile },
+          })
+        );
+        dispatch(triggerToast({ message, type: DialogType.INFO }));
+      } else {
+        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const updateMobileHandler = (payload) => async (dispatch, state) => {
   try {
     let data = await AuthService.updateMobile(payload);
@@ -373,20 +421,25 @@ export const deactivateProfileHandler = () => async (dispatch, state) => {
   }
 };
 
-export const changePasswordHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { status, message } = await AuthService.changePassword(payload);
-    if (status === 200) {
-      dispatch(loginAction({ message: message, status: status }));
-      return { message: message, status: status };
-    } else {
-      dispatch(loginAction({ message: message, status: status }));
-      return { message: message, status: status };
+export const changePasswordHandler = createAsyncThunk(
+  "auth/changePassword",
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      let { status, message } = await AuthService.changePassword(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ message, type: DialogType.INFO }));
+      } else {
+        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ type: DialogType.DANGER, message: error.message })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(triggerToast({ type: DialogType.DANGER, message: error.message }));
   }
-};
+);
 
 export const checkVerificationCode = createAsyncThunk(
   "auth/verifyCode",

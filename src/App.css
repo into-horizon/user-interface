@@ -1095,7 +1095,7 @@ fieldset {
 
 .sidebar {
   --cui-sidebar-bg: #fff;
-  /* --cui-sidebar-color: black; */
+  --cui-sidebar-color: blueviolet;
   --cui-sidebar-nav-link-color: blue;
   --ci-primary-color: blue;
   --cui-sidebar-nav-link-hover-color: skyblue;

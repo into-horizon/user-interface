@@ -18,6 +18,9 @@ const en = {
   HIDE: "Hide",
   SELECT_ALL: "Select All",
   REMOVE: "Remove",
+  EDIT: "Edit",
+  DELETE_CONFIRMATION: "Delete Confirmation",
+  DELETE_TEXT: "Are you sure delete this?",
 };
 
 export default en;
