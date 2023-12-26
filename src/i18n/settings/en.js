@@ -14,8 +14,6 @@ const en = {
   DEACTIVATE: "Deactivate my account",
   DEACTIVATE_MESSAGE:
     "Are you sure you want to deactivate your account? You can activate your account any time login again",
-  NO_ORDERS: "You don't have orders yet",
-  YOUR_ORDERS: "Your orders",
 };
 
 export default en;

@@ -1,6 +1,32 @@
-const ar ={
-    NO_ORDERS: "ليس لديك  طلبات حتى الآن",
-    YOUR_ORDERS: "الطلبات الخاصة بك",
-}
+const ar = {
+  NO_ORDERS: "ليس لديك  طلبات حتى الآن",
+  YOUR_ORDERS: "الطلبات الخاصة بك",
+  ORDER_NUMBER: "رقم الطلب",
+  RECIPIENT_NAME: "اسم المستلم",
+  STATUS: "الحالة",
+  VIEW_DETAILS: "عرض التفاصيل",
+  CANCELLED: "ملغى",
+  PLACED_AT: "تاريخ الطلب",
+  PRODUCTS: "المنتجات",
+  PAYMENT_METHOD: "طريقة الدفع",
+  TRACK: "تتبع",
+  COD: "الدفع عند الإستلام",
+  ORDER_TRACKING: "تتبع الطلب",
+  DATE: "التاريخ",
+  DELIVERED: "تم التوصيل",
+  READY_TO_BE_SHIPPED: "جاهزة للشحن",
+  READY_FOR_SHIPPING: "جاهزة للشحن",
+  OUT_FOR_DELIVERY: "خارج للتوصيل",
+  ACCEPTED: "تم قبوله",
+  PENDING: "بانتظار القبول",
+  ACTIONS: "الإجراءات",
+  SUBMIT_REVIEW: "إرسال المراجعة",
+  REQUEST_RETURN: "طلب إرجاع",
+  PRODUCT_REVIEW: "تقييم المنتج",
+  WRITE_REVIEW: "أكتب تعليقا",
+  REVIEW_SUBMITTED: "شكرا لمراجعتك",
+  ORDER_ITEMS: "عناصر الطلب",
 
-export default ar
+};
+
+export default ar;

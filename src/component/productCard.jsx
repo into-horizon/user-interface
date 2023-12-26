@@ -180,7 +180,7 @@ const ProductCard = ({
           <Row className=" justify-content-between  align-content-center ">
             {sizes.length > 0 && (
               <Col
-                xs="4"
+                xs='auto'
                 // xs={4} sm={4} md={5} lg={4} xl={4}
               >
                 <>
@@ -203,7 +203,7 @@ const ProductCard = ({
             )}
             {colors.length > 0 && (
               <Col
-                xs="6"
+                xs="auto"
                 // xs={{ span: 5, offset: 3 }}
                 // md={{ span: 7, offset: 0 }}
                 // lg={{ span: 5, offset: 3 }}

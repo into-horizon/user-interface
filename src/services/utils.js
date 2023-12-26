@@ -1,4 +1,5 @@
 import i18next from "i18next";
+import { namespaces } from "../i18n";
 
 export const ToastTypes = {
   PRIMARY: "primary",
@@ -21,15 +22,15 @@ export function validatePassword(password) {
     return true;
   } else {
     // Generate an error message based on the specific missing criteria
-    let errorMessage = i18next.t("INVALID_PASSWORD", { ns: "sign-up" });
+    let errorMessage = i18next.t("INVALID_PASSWORD", namespaces.SIGN_UP);
     if (!/(?=.*[0-9])/.test(password)) {
-      errorMessage += i18next.t("INVALID_NUMBER", { ns: "sign-up" });
+      errorMessage += i18next.t("INVALID_NUMBER", namespaces.SIGN_UP);
     }
     if (!/(?=.*[A-Z])/.test(password)) {
-      errorMessage += i18next.t("INVALID_CAPITAL_LETTER", { ns: "sign-up" });
+      errorMessage += i18next.t("INVALID_CAPITAL_LETTER", namespaces.SIGN_UP);
     }
     if (!/(?=.*[a-z])/.test(password)) {
-      errorMessage += i18next.t("INVALID_SMALL_LETTER", { ns: "sign-up" });
+      errorMessage += i18next.t("INVALID_SMALL_LETTER", namespaces.SIGN_UP);
     }
     if (!/(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])/.test(password)) {
       errorMessage += i18next.t("INVALID_SPECIAL_CHARACTERS", {
@@ -37,7 +38,7 @@ export function validatePassword(password) {
       });
     }
     if (password.length < 8) {
-      errorMessage += i18next.t("INVALID_LENGTH", { ns: "sign-up" });
+      errorMessage += i18next.t("INVALID_LENGTH", namespaces.SIGN_UP);
     }
     errorMessage = errorMessage.slice(0, -2); // Remove the trailing comma and space
     errorMessage += ".";
@@ -45,3 +46,10 @@ export function validatePassword(password) {
     throw errorMessage;
   }
 }
+
+export const formatLocalizationKey = (key) => {
+  if (typeof key === "string") {
+    return key.toUpperCase().replaceAll(" ", "_");
+  }
+  return "";
+};

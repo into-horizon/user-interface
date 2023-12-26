@@ -49,7 +49,7 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
           <>
             {" "}
             <Col xxl={10}>
-              <Table responsive striped bordered>
+              <Table responsive striped bordered className="custom-table">
                 <thead>
                   <tr>
                     <th>{t("PRODUCT_IMAGE")}</th>
@@ -73,8 +73,7 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                               item.pictures?.product_picture ??
                               image
                             }
-                            alt=""
-                            className="cartImg"
+                            alt="img"
                           />
                         </td>
                         <td>{item[`${i18n.language}title`]}</td>
