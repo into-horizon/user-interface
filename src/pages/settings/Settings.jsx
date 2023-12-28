@@ -181,7 +181,7 @@ const Settings = () => {
       <Col xs={"auto"}>
         <SideNavbar show={show} setShow={setShow} width={windowWidth} />
       </Col>
-      <Col lg={6} md={9} className="m-3">
+      <Col lg={6} md={9} sm={11} xs={12} className="m-3">
         <Suspense fallback={<Loader />}>
           <Routes>
             {Children.toArray(

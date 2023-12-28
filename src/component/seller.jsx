@@ -5,7 +5,6 @@ import StarRatings from "react-star-ratings";
 import { Tabs, Tab } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import ProductCard from "./productCard";
-import Store from "../services/Store";
 import { CButton, CRow, CCol } from "@coreui/react";
 import {
   getStoreProductsHandler,
@@ -22,12 +21,15 @@ import {
 } from "../store/following";
 import LoadingSpinner from "./common/LoadingSpinner";
 import Paginator from "./common/Paginator";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../i18n";
 
 const Seller = ({
   getStoreProductsHandler,
   followStoreHandler,
   unFollowStoreHandler,
 }) => {
+  const { t } = useTranslation([namespaces.STORE.ns]);
   const { login } = useSelector((state) => state.sign);
   const { following, store, isLoading } = useSelector((state) => state.follow);
   const dispatch = useDispatch();
@@ -108,7 +110,7 @@ const Seller = ({
             </CCol>
             <CCol xs="auto" className="my-2">
               <span className="border border-1 rounded border-black p-2 ">
-                followers: {followers}
+                {t("FOLLOWERS")} : {followers}
               </span>
             </CCol>
             <CCol xs={12} className="">
@@ -122,9 +124,10 @@ const Seller = ({
                           setFollowers((x) => --x)
                         )
                       }
+                      className=" d-flex gap-1"
                     >
                       <CIcon icon={cilUserUnfollow} size="lg" />
-                      unfollow
+                      {t("UNFOLLOW")}
                     </CButton>
                   ) : (
                     <CButton
@@ -134,9 +137,10 @@ const Seller = ({
                           setFollowers((x) => ++x)
                         )
                       }
+                      className=" d-flex gap-1"
                     >
                       <CIcon icon={cilUserFollow} size="lg" />
-                      follow
+                      {t("FOLLOW")}
                     </CButton>
                   )}
                 </>
@@ -149,35 +153,37 @@ const Seller = ({
       <hr />
       <CCol>
         <Tabs defaultActiveKey="Products" className="mb-3">
-          <Tab eventKey="Products" title="Products" className="mx-auto">
+          <Tab eventKey="Products" title={t("PRODUCTS")} className="mx-auto">
             <h2 className=" border-1 border-bottom  border-info text-center pb-3 w-50 mx-auto ">
-              Our Products
+              {t("OUR_PRODUCTS")}
             </h2>
             <div>
               <Row className="pb-5 w-100 justify-content-center gy-4  ">
-                {React.Children.toArray(
-                  products.map((product) => (
-                    <Col lg={6} md={6} sm={8} xs={10} xl={4} xxl={4}>
-                      <ProductCard
-                        product={product}
-                        itemType="product"
-                        pic="array"
-                      />
-                    </Col>
-                  ))
-                )}
-                <Col xs={12}>
-                  <Paginator
-                    onPageChange={handlePageChange}
-                    count={count}
-                    pageSize={10}
-                    params={params}
-                  />
-                </Col>
+                {products.length > 0 ?<>
+                  {React.Children.toArray(
+                    products.map((product) => (
+                      <Col lg={6} md={6} sm={8} xs={10} xl={4} xxl={3}>
+                        <ProductCard product={product} />
+                      </Col>
+                    ))
+                  )}
+                  <Col xs={12}>
+                    <Paginator
+                      onPageChange={handlePageChange}
+                      count={count}
+                      pageSize={10}
+                      params={params}
+                    />
+                  </Col>
+                </> : <h5>{t('NO_PRODUCTS')}</h5>}
               </Row>
             </div>
           </Tab>
-          <Tab eventKey="contact" title="Offers (Coming Soon)" disabled>
+          <Tab
+            eventKey="contact"
+            title={`${t("OFFERS")} (${t("COMING_SOON")})`}
+            disabled
+          >
             <p>
               Take all my loves, my love, yea take them all; What hast thou then
               more than thou hadst before? No love, my love, that thou mayst

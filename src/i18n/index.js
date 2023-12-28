@@ -10,6 +10,7 @@ import productLocalization from "./product";
 import settingsLocalization from "./settings";
 import signInLocalization from "./sign-in";
 import signup from "./signup";
+import storeLocalization from "./store";
 import verificationLocalization from "./verification";
 import wishlistLocalization from "./wishlist";
 
@@ -28,6 +29,7 @@ export const namespaces = {
   CHECKOUT: { ns: "checkout" },
   SETTINGS: { ns: "settings" },
   ORDERS: { ns: "orders" },
+  STORE: { ns: "store" },
 };
 
 const localizations = [
@@ -45,6 +47,7 @@ const localizations = [
   { ns: namespaces.CHECKOUT.ns, source: checkoutLocalization },
   { ns: namespaces.SETTINGS.ns, source: settingsLocalization },
   { ns: namespaces.ORDERS.ns, source: ordersLocalization },
+  { ns: namespaces.STORE.ns, source: storeLocalization },
 ];
 
 const ar = "ar";
