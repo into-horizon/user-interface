@@ -730,7 +730,7 @@ a {
   margin: 3rem auto;
 }
 
-.custom-table  th {
+.custom-table th {
   justify-content: center;
 }
 
@@ -1135,19 +1135,6 @@ form.form {
   margin: auto;
 }
 
-.mb-3 input {
-  border: 1px solid #333;
-  /* border: none; */
-  border-bottom: 1px solid #333;
-  display: block;
-  /* width:100%;
-  height:30px; */
-  padding-right: 0;
-  margin-bottom: 25px;
-
-  /* border-radius: 40px; */
-}
-
 a.btn.btn-sign {
   color: blueviolet;
   text-align: center;
@@ -1352,7 +1339,7 @@ select.form-control-input {
   text-align: right !important;
 }
 
-.main>div:nth-child(odd) {
+.main > div:nth-child(odd) {
   background-color: #e9e6e6 !important;
 }
 
@@ -1379,8 +1366,7 @@ select.form-control-input {
   margin-bottom: 350px;
 } */
 
-
-.main> :nth-child(odd) {
+.main > :nth-child(odd) {
   background-color: #fff;
 }
 
@@ -1406,7 +1392,6 @@ select.form-control-input {
   height: 100%;
   border-radius: 30px;
   animation: moving 1s ease-in-out infinite;
-  ;
 }
 
 @keyframes moving {
@@ -1443,7 +1428,7 @@ select.form-control-input {
   color: rgb(65, 63, 63);
   background-color: #fff;
   cursor: pointer;
-  transition: all .6s ease;
+  transition: all 0.6s ease;
 }
 
 .google-btn img {
@@ -1459,7 +1444,7 @@ select.form-control-input {
   min-width: 190px;
   display: flex;
   background-color: #039be5;
-  background-image: linear-gradient(to top right, #0163E0, #18ACFE);
+  background-image: linear-gradient(to top right, #0163e0, #18acfe);
   color: #ffffff;
   padding: 0.5rem 1.4rem;
   font-size: 0.875rem;
@@ -1471,9 +1456,10 @@ select.form-control-input {
   border-radius: 0.5rem;
   gap: 0.75rem;
   border: none;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   cursor: pointer;
-  transition: .6s ease;
+  transition: 0.6s ease;
 }
 
 .facebook-btn img {
@@ -1486,5 +1472,5 @@ select.form-control-input {
 }
 
 .items-container {
-  max-height: 90dvh
+  max-height: 90dvh;
 }

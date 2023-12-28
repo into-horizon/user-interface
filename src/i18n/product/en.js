@@ -10,6 +10,20 @@ const en = {
   COLORS: "Colors",
   ADD_TO_WISHLIST: "Add to wishlist",
   REVIEWS: "Reviews",
+  STORE: "Store",
+  BRAND: "Brand",
+  ALL: "All",
+  UNDER_15: "Under 15 JD",
+  "15_30": "15 JD to 30 JD",
+  "30_45": "30 JD to 45 JD",
+  "45_60": "45 JD to 60 JD",
+  OVER_60: "60 JD & Above",
+  RESET_FILTER: "Reset filter",
+  SEARCH: "Search",
+  PRODUCTS_FILTER: "Products Filter",
+  FIRST_CATEGORY: "First category",
+  SECOND_CATEGORY: "Second Category",
+  THIRD_CATEGORY: "Third category",
 };
 
 export default en;

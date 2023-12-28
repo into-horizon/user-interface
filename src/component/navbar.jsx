@@ -43,7 +43,7 @@ const MainNavbar = () => {
                               {Children.toArray(
                                 grandChildren.map((grandchild) => (
                                   <Link
-                                    to={`/products?grandchild_category_id=${grandchild.id}`}
+                                    to={`/products?grandchild_category_id=${grandchild.id}&child_category_id=${child.id}&parent_category_id=${parent.id}`}
                                     className="nav-link text-capitalize"
                                   >
                                     {grandchild[`${i18n.language}title`]}
@@ -53,7 +53,7 @@ const MainNavbar = () => {
                             </NavDropdown>
                           ) : (
                             <Link
-                              to={`/products?child_category_id=${child.id}`}
+                              to={`/products?child_category_id=${child.id}&parent_category_id=${parent.id}`}
                               className="nav-link text-capitalize"
                             >
                               {child[`${i18n.language}title`]}
