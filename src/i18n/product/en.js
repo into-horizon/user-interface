@@ -24,6 +24,9 @@ const en = {
   FIRST_CATEGORY: "First category",
   SECOND_CATEGORY: "Second Category",
   THIRD_CATEGORY: "Third category",
+  SEARCH_RESULT: "Search result",
+  NO_RESULTS:
+    "There's no results with current filtration, try to change selected filtration or reset the filter",
 };
 
 export default en;

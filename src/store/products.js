@@ -1,19 +1,54 @@
 import ProductService from "../services/Product";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { updateOrders } from "./order";
+import { triggerToast } from "./toast";
+import { DialogType } from "react-custom-popup";
+import _ from "lodash";
+
+const initialSearchQuery = {
+  limit: 10,
+  offset: 0,
+};
+const initialState = {
+  product: {},
+  message: "",
+  searchedProducts: { data: [], count: 0 },
+  storeProducts: { count: 0, data: [] },
+  reviews: [],
+  loading: false,
+  searchQuery: initialSearchQuery,
+};
+
 let Product = createSlice({
   name: "product",
-  initialState: {
-    product: {},
-    message: "",
-    searchedProducts: { data: [], count: 0 },
-    storeProducts: { count: 0, data: [] },
-    reviews: [],
-  },
+  initialState,
   reducers: {
     productAction(state, action) {
       return { ...state, ...action.payload };
     },
+    updateSearchQuery(state, { payload }) {
+      const array = Object.entries({
+        ...state.searchQuery,
+        ...payload,
+      }).filter(([_key, value]) => !_.isEmpty(value));
+      state.searchQuery = Object.fromEntries(array);
+    },
+    resetSearchQuery(state) {
+      state.searchQuery = initialSearchQuery;
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(searchProductsHandler.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(searchProductsHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(searchProductsHandler.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.searchedProducts = payload;
+    });
   },
 });
 
@@ -27,25 +62,29 @@ export const productHandler = (payload) => async (dispatch, state) => {
   }
 };
 
-export const searchProductsHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { message, status, data } = await ProductService.productsSearch(
-      payload
-    );
-    if (status === 200) {
-      dispatch(
-        productAction({
-          message: data.data.length > 0 ? "yes" : "no",
-          searchedProducts: data,
-        })
+export const searchProductsHandler = createAsyncThunk(
+  "products/search",
+  async (__, { dispatch, rejectWithValue, getState }) => {
+    // dispatch(updateSearchQuery({}));
+    const { searchQuery } = getState().products;
+    try {
+      const { message, status, data } = await ProductService.productsSearch(
+        searchQuery
       );
-    } else {
-      dispatch(productAction({ message: "something went wrong" }));
+      if (status === 200) {
+        return data;
+      } else {
+        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      dispatch(
+        triggerToast({ message: error.message, type: DialogType.DANGER })
+      );
+      return rejectWithValue(error.message);
     }
-  } catch (error) {
-    dispatch(productAction({ message: error.message }));
   }
-};
+);
 
 export const getStoreProductsHandler = (payload) => async (dispatch, state) => {
   try {
@@ -110,4 +149,5 @@ export const getProductReviews =
   };
 
 export default Product.reducer;
-export const { productAction } = Product.actions;
+export const { productAction, updateSearchQuery, resetSearchQuery } =
+  Product.actions;

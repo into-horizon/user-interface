@@ -24,6 +24,9 @@ const ar = {
   FIRST_CATEGORY: "الفئة الأولى",
   SECOND_CATEGORY: "الفئة الثانية",
   THIRD_CATEGORY: "الفئة الثالثة",
+  SEARCH_RESULT: "نتيجة البحث",
+  NO_RESULTS:
+    "لا توجد نتائج مع التصنيف الحالي، حاول تغيير التصنيف المحدد أو إزالة خيارات البحث",
 };
 
 export default ar;
