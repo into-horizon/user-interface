@@ -5,7 +5,6 @@ import {
   CCard,
   CCardHeader,
   CCardTitle,
-  CCardText,
   CButton,
   CCardBody,
   CRow,
@@ -13,7 +12,6 @@ import {
   CModal,
   CModalHeader,
   CModalTitle,
-  CModalBody,
   CModalFooter,
   CTable,
   CTableHead,
@@ -28,8 +26,18 @@ import Paginator from "../../../../component/common/Paginator";
 import { Placeholder } from "react-bootstrap";
 import { Children } from "react";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../../i18n";
+import { formatLocalizationKey } from "../../../../services/utils";
 
 export const Orders = ({ getOrderHandler, getOrderLogs }) => {
+  const { t, i18n } = useTranslation([
+    namespaces.ORDERS.ns,
+    namespaces.SETTINGS.ns,
+    namespaces.GLOBAL.ns,
+    namespaces.PRODUCT.ns,
+    namespaces.CHECKOUT.ns,
+  ]);
   const {
     orders: { data, count },
     logs,
@@ -61,7 +69,11 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
   };
   useEffect(() => {
     getOrderHandler(params);
-  }, []);
+  }, [getOrderHandler, params]);
+  const dateLocales = {
+    en: "en-US",
+    ar: "ar-EG",
+  };
   return (
     <div>
       <CModal
@@ -71,24 +83,32 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
         onClose={onCloseModal}
       >
         <CModalHeader>
-          <CModalTitle>order tracking</CModalTitle>
+          <CModalTitle>{t("ORDER_TRACKING")}</CModalTitle>
         </CModalHeader>
         {modalLoading ? (
-          <CSpinner />
+          <CRow className=" justify-content-center  align-items-center ">
+            <CCol xs="auto">
+              <CSpinner color="primary" />
+            </CCol>
+          </CRow>
         ) : (
           <CTable>
             <CTableHead>
               <CTableRow>
-                <CTableHeaderCell scope="col">status</CTableHeaderCell>
-                <CTableHeaderCell scope="col">date</CTableHeaderCell>
+                <CTableHeaderCell scope="col">{t("STATUS")}</CTableHeaderCell>
+                <CTableHeaderCell scope="col">{t("DATE")}</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
               {logs?.map((log) => (
                 <CTableRow key={log.id}>
-                  <CTableDataCell>{log.status}</CTableDataCell>
                   <CTableDataCell>
-                    {new Date(log.at).toLocaleString()}
+                    {t(formatLocalizationKey(log.status))}
+                  </CTableDataCell>
+                  <CTableDataCell>
+                    {new Date(log.at).toLocaleString(
+                      dateLocales[i18n.language]
+                    )}
                   </CTableDataCell>
                 </CTableRow>
               ))}
@@ -97,72 +117,77 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
         )}
         <CModalFooter>
           <CButton color="secondary" onClick={onCloseModal}>
-            Close
+            {t("CLOSE", namespaces.GLOBAL)}
           </CButton>
         </CModalFooter>
       </CModal>
-      <CRow xs={{ gutterY: 5 }}>
-        {loading
-          ? Children.toArray(
-              _.range(0, 3).map(() => (
-                <CCol xl={12}>
-                  <CCard>
-                    <Placeholder as={CCardHeader} animation="glow">
-                      <Placeholder xs={4} />
-                    </Placeholder>
-                    <CCardBody>
-                      <CRow>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <hr style={styles} />
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
-                        <CCol xl={4}>
-                          <Placeholder as={CCardTitle} animation="glow">
-                            <Placeholder xs={6} />
-                          </Placeholder>
-                        </CCol>
+      <h2 className="mb-3">{t("YOUR_ORDERS")}</h2>
+      <CRow xs={{ gutterY: 2 }}>
+        {loading ? (
+          Children.toArray(
+            _.range(0, 3).map(() => (
+              <CCol xl={12}>
+                <CCard>
+                  <Placeholder as={CCardHeader} animation="glow">
+                    <Placeholder xs={4} />
+                  </Placeholder>
+                  <CCardBody>
+                    <CRow>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <hr style={styles} />
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
+                      <CCol xl={4}>
+                        <Placeholder as={CCardTitle} animation="glow">
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      </CCol>
 
-                        <hr style={styles} />
-                      </CRow>
-                      <CRow>
-                        <CCol sm="auto">
-                          <Placeholder.Button
-                            animation="wave"
-                            variant="primary"
-                            size="lg"
-                          />
-                        </CCol>
-                        <CCol sm="auto">
-                          <Placeholder.Button
-                            animation="wave"
-                            variant="secondary"
-                            size="lg"
-                          />
-                        </CCol>
-                      </CRow>
-                    </CCardBody>
-                  </CCard>
-                </CCol>
-              ))
-            )
-          : React.Children.toArray(
+                      <hr style={styles} />
+                    </CRow>
+                    <CRow>
+                      <CCol sm="auto">
+                        <Placeholder.Button
+                          animation="wave"
+                          variant="primary"
+                          size="lg"
+                        />
+                      </CCol>
+                      <CCol sm="auto">
+                        <Placeholder.Button
+                          animation="wave"
+                          variant="secondary"
+                          size="lg"
+                        />
+                      </CCol>
+                    </CRow>
+                  </CCardBody>
+                </CCard>
+              </CCol>
+            ))
+          )
+        ) : data?.length === 0 ? (
+          <h4>{t("NO_ORDERS")}</h4>
+        ) : (
+          <>
+            {React.Children.toArray(
               data?.map(
                 ({
                   id,
@@ -173,30 +198,55 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                   address: { first_name, last_name },
                   created_at,
                 }) => (
-                  <CCol xl={12}>
+                  <CCol xs={12}>
                     <CCard>
                       <CCardHeader component="h5">
-                        order# {customer_order_id}
+                        {t("ORDER_NUMBER")} {customer_order_id}
                       </CCardHeader>
                       <CCardBody>
                         <CRow>
-                          <CCol xl={4}>
-                            <CCardTitle>{`shipped to: ${first_name} ${last_name}`}</CCardTitle>
+                          <CCol xs={6} md={6} lg={4}>
+                            <CCardTitle>
+                              <strong>{t("RECIPIENT_NAME")}</strong>
+                              {`: ${first_name} ${last_name}`}
+                            </CCardTitle>
                           </CCol>
-                          <CCol xl={4}>
-                            <CCardTitle>{`price: ${grand_total}`} </CCardTitle>
+                          <CCol xs={6} md={6} lg={4}>
+                            <CCardTitle>
+                              <strong>
+                                {t("TOTAL_PRICE", namespaces.CHECKOUT)}
+                              </strong>
+                              {`: ${grand_total} ${t(
+                                "JOD",
+                                namespaces.PRODUCT
+                              )}`}{" "}
+                            </CCardTitle>
                           </CCol>
-                          <CCol xl={4}>
-                            <CCardTitle>status: {status} </CCardTitle>
+                          <CCol xs={6} md={6} lg={4}>
+                            <CCardTitle>
+                              <strong>{t("STATUS")}: </strong>
+                              {t(formatLocalizationKey(status))}{" "}
+                            </CCardTitle>
                           </CCol>
                           <hr style={styles} />
-                          <CCol xl={4}>
-                            <CCardTitle>{`Placed At: ${
-                              created_at.split("T")[0]
-                            }`}</CCardTitle>
+                          <CCol xs={6} md={6} lg={4}>
+                            <CCardTitle>
+                              <strong>{t("PLACED_AT")}</strong>
+                              {`: ${Intl.DateTimeFormat(
+                                dateLocales[i18n.language],
+                                {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                  year: "numeric",
+                                }
+                              ).format(new Date(created_at))}`}
+                            </CCardTitle>
                           </CCol>
-                          <CCol xl={4}>
-                            <CCardTitle>{`Payment Method: ${payment_method}`}</CCardTitle>
+                          <CCol xs={6} md={6} lg={4}>
+                            <CCardTitle>
+                              <strong>{t("PAYMENT_METHOD")}</strong>
+                              {`: ${t(payment_method)}`}
+                            </CCardTitle>
                           </CCol>
 
                           <hr style={styles} />
@@ -204,7 +254,7 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                         <CRow>
                           <CCol sm="auto">
                             <Link to={`/settings/orderItems/${id}`}>
-                              <CButton>order details</CButton>
+                              <CButton>{t("VIEW_DETAILS")}</CButton>
                             </Link>
                           </CCol>
                           <CCol sm="auto">
@@ -212,7 +262,7 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                               color="secondary"
                               onClick={() => logsModal(id)}
                             >
-                              order tracking
+                              {t("TRACK")}
                             </CButton>
                           </CCol>
                         </CRow>
@@ -222,14 +272,16 @@ export const Orders = ({ getOrderHandler, getOrderLogs }) => {
                 )
               )
             )}
+            <Paginator
+              count={count}
+              params={params}
+              // changeData={getOrderHandler}
+              onPageChange={handlePageChange}
+              // cookieName="orders"
+            />
+          </>
+        )}
       </CRow>
-      <Paginator
-        count={count}
-        params={params}
-        // changeData={getOrderHandler}
-        onPageChange={handlePageChange}
-        // cookieName="orders"
-      />
     </div>
   );
 };

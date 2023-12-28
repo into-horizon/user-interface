@@ -6,8 +6,8 @@ import { signupHandler, verificationHandler } from "../store/auth";
 import { signInHandlerWithGoogle } from "../store/google";
 import { signInHandlerWithFacebook } from "../store/facebook";
 
-import facebook from "../assets/f.png";
-import google from "../assets/g.png";
+import facebook from "../assets/facebook.svg";
+import google from "../assets/google.svg";
 
 import { State } from "country-state-city";
 import { Spinner, Button } from "react-bootstrap";
@@ -173,13 +173,15 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     floatingLabel={t("PHONE")}
                     mask="+{962}000000000"
                     name="mobile"
+                    dir="ltr"
                     id="mobile"
                     type="tel"
+                    autoComplete="phone"
                     className="mb-2 "
                     required
                     onChange={onChange}
                   />
-                  <CFormSelect
+                  {/* <CFormSelect
                     name="gender"
                     className="mb-2"
                     id="gender"
@@ -189,7 +191,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                   >
                     <option value="male">{t("MALE")}</option>
                     <option value="female">{t("FEMALE")}</option>
-                  </CFormSelect>
+                  </CFormSelect> */}
 
                   <CFormSelect
                     name="city"
@@ -216,6 +218,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                       className="mb-2 "
                       required
                       invalid={passwordValidation.invalid}
+                      autoComplete="true"
                     />
                     <CButton
                       className="mb-2 bg-light"
@@ -246,6 +249,7 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                     floatingLabel={t("REPEAT_PASSWORD")}
                     name="con_password"
                     id="con_password"
+                    autoComplete="true"
                     required
                     invalid={invalidPasswordConfirmation}
                     feedbackInvalid={t("INVALID_REPEATED_PASSWORD")}
@@ -279,20 +283,34 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
                   />
                 </form>
 
-                <div className=" mx-auto w-auto d-flex justify-content-center mt-2    ">
-                  <a
-                    href={`${process.env.REACT_APP_API}/auth/google`}
-                    onClick={() => localStorage.setItem("provider", "google")}
-                  >
-                    <img className=" w-75 " src={google} alt="" />
-                  </a>
-                  <a
-                    href={`${process.env.REACT_APP_API}/auth/facebook`}
-                    onClick={() => localStorage.setItem("provider", "facebook")}
-                  >
-                    <img className=" w-75 " src={facebook} alt="" />
-                  </a>
-                </div>
+                <CRow className=" mx-auto w-auto d-flex justify-content-center  mt-2 gy-2 ">
+                  <CCol xs="8" className=" d-flex ">
+                    <a
+                      href={`${process.env.REACT_APP_API}/auth/google`}
+                      onClick={() => localStorage.setItem("provider", "google")}
+                      className=" mx-auto "
+                    >
+                      <button className="google-btn">
+                        <img src={google} alt="google" />
+                        {t("CONTINUE_WITH_GOOGLE")}
+                      </button>
+                    </a>
+                  </CCol>
+                  <CCol xs="8" className=" d-flex ">
+                    <a
+                      href={`${process.env.REACT_APP_API}/auth/facebook`}
+                      onClick={() =>
+                        localStorage.setItem("provider", "facebook")
+                      }
+                      className=" mx-auto "
+                    >
+                      <button className="facebook-btn">
+                        <img src={facebook} alt="facebook" />
+                        {t("CONTINUE_WITH_FACEBOOK")}
+                      </button>
+                    </a>
+                  </CCol>
+                </CRow>
                 <div className="mt-2">
                   <p className=" text-center ">
                     {t("HAVE_ACCOUNT")}{" "}

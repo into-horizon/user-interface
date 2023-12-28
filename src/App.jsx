@@ -15,14 +15,18 @@ import cookie from "react-cookies";
 import { myProfileHandler, stopLoading } from "./store/auth";
 import { useSelector } from "react-redux";
 import { getCartItemsHandler, resetCartItems } from "./store/cart";
-import { getItemsHandler, resetWishlist } from "./store/wishlist";
+import {
+  getItemsHandler,
+  getWishlistItemsIds,
+  resetWishlist,
+} from "./store/wishlist";
 import { myAddressHandler } from "./store/address";
 import { getFollowingStores } from "./store/following";
 import ApiService from "./services/ApiService";
 import GlobalToast from "./component/common/Toast";
 import { getTopStores } from "./store/landingPage";
 
-import { getAllCategories } from "./store/category";
+import { getAllCategories, getLandingPageCategories } from "./store/category";
 import MobileNavBar from "./component/common/MobileNavBar";
 import AuthService from "./services/Auth";
 import Page500 from "./pages/page500/500";
@@ -74,13 +78,17 @@ const App = ({
           setDefaultHeaders().then(() => {
             Promise.all([
               parentCategoryHandler(),
-              dispatch(getAllCategories(), getTopStores()),
+              dispatch(
+                getAllCategories(),
+                getTopStores(),
+                dispatch(getLandingPageCategories())
+              ),
             ]);
             if (login) {
               Promise.all([
                 getCartItemsHandler(),
-                getItemsHandler(),
-                dispatch(myAddressHandler({ limit: 5, offset: 0 })),
+                dispatch(getWishlistItemsIds()),
+                // dispatch(myAddressHandler({ limit: 5, offset: 0 })),
                 getFollowingStores(),
               ]);
             } else if (token && !login) {

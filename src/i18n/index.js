@@ -1,9 +1,18 @@
+import addressLocalization from "./address";
+import cartLocalization from "./cart";
+import checkoutLocalization from "./checkout";
+import colorLocalization from "./colors";
 import globalLocalization from "./global";
 import landingPageLocalization from "./landing-page";
+import ordersLocalization from "./orders";
 import passwordLocalization from "./password";
+import productLocalization from "./product";
+import settingsLocalization from "./settings";
 import signInLocalization from "./sign-in";
 import signup from "./signup";
+import storeLocalization from "./store";
 import verificationLocalization from "./verification";
+import wishlistLocalization from "./wishlist";
 
 export const namespaces = {
   SIGN_IN: { ns: "sign-in" },
@@ -12,6 +21,15 @@ export const namespaces = {
   GLOBAL: { ns: "global" },
   PASSWORD: { ns: "password" },
   LANDING_PAGE: { ns: "landing-page" },
+  PRODUCT: { ns: "product" },
+  COLOR: { ns: "color" },
+  WISHLIST: { ns: "wishlist" },
+  CART: { ns: "cart" },
+  ADDRESS: { ns: "address" },
+  CHECKOUT: { ns: "checkout" },
+  SETTINGS: { ns: "settings" },
+  ORDERS: { ns: "orders" },
+  STORE: { ns: "store" },
 };
 
 const localizations = [
@@ -21,6 +39,15 @@ const localizations = [
   { ns: namespaces.GLOBAL.ns, source: globalLocalization },
   { ns: namespaces.PASSWORD.ns, source: passwordLocalization },
   { ns: namespaces.LANDING_PAGE.ns, source: landingPageLocalization },
+  { ns: namespaces.PRODUCT.ns, source: productLocalization },
+  { ns: namespaces.COLOR.ns, source: colorLocalization },
+  { ns: namespaces.WISHLIST.ns, source: wishlistLocalization },
+  { ns: namespaces.CART.ns, source: cartLocalization },
+  { ns: namespaces.ADDRESS.ns, source: addressLocalization },
+  { ns: namespaces.CHECKOUT.ns, source: checkoutLocalization },
+  { ns: namespaces.SETTINGS.ns, source: settingsLocalization },
+  { ns: namespaces.ORDERS.ns, source: ordersLocalization },
+  { ns: namespaces.STORE.ns, source: storeLocalization },
 ];
 
 const ar = "ar";

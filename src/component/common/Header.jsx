@@ -7,13 +7,23 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { CBadge, CListGroup, CListGroupItem } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilBell, cilHeart, cilCart, cilUser } from "@coreui/icons";
+import {
+  cilBell,
+  cilHeart,
+  cilCart,
+  cilUser,
+  cilSettings,
+  cilAccountLogout,
+  cilUserPlus,
+  cilArrowCircleRight,
+  cifSa,
+  cifUs,
+} from "@coreui/icons";
 import { namespaces } from "../../i18n";
 
-const Header = (props) => {
+const Header = ({ cart, logOutHandler }) => {
   const login = useSelector((state) => state.sign.login);
   const navigate = useNavigate();
-  const { cart } = props;
   const [displayList, setDisplayList] = useState(false);
   const { t, i18n } = useTranslation([
     namespaces.LANDING_PAGE.ns,
@@ -30,19 +40,8 @@ const Header = (props) => {
     }
   }, []);
 
-  const changeLanguage = (lang) => {
-    if (lang === "en") {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", "en");
-      document.documentElement.setAttribute("dir", "ltl");
-    } else {
-      i18n.changeLanguage(lang);
-      document.documentElement.setAttribute("lang", "ar");
-      document.documentElement.setAttribute("dir", "rtl");
-    }
-  };
   const logOutHandle = () => {
-    props.logOutHandler();
+    logOutHandler();
     navigate("/");
   };
   document.addEventListener("click", (e) => {
@@ -55,11 +54,16 @@ const Header = (props) => {
   });
 
   return (
-    <Navbar bg="primary" variant="dark" className="pt-3 w-100 ">
+    <Navbar bg="primary" variant="dark" className=" w-100 ">
       <Container>
-        <Navbar.Brand>
-          <Link to="/" className="nav-link">
-            <span className="logo">Horizon</span>
+        <Navbar.Brand className=" my-auto ">
+          <Link to="/" className="nav-link my-auto w-50 ">
+            {/* <span className="logo">Horizon</span> */}
+            <img
+              src={process.env.REACT_APP_HORIZON_LOGO}
+              alt="logo"
+              className="h-100 w-75"
+            />
           </Link>
         </Navbar.Brand>
         <Nav className="lg-show">
@@ -72,24 +76,22 @@ const Header = (props) => {
               {login && (
                 <Nav.Link
                   as={"div"}
-                  className="nav-link position-relative px-0 mx-2 pointer "
+                  className="nav-link position-relative px-0 mx-2 pointer"
                   key="notification"
                   onClick={() => setDisplayList((x) => !x)}
                 >
-                  <CIcon icon={cilBell} size="xxl" className="" />
+                  <CIcon icon={cilBell} size="xxl" />
                   <CBadge
                     color="danger"
                     position="top-end"
                     shape="rounded-pill"
+                    className="mt-1"
                   >
-                    9 <span className="visually-hidden">unread messages</span>
+                    9
                   </CBadge>
 
                   {displayList && (
-                    <CListGroup
-                      style={{ width: "16rem !important" }}
-                      className="position-absolute notifications-list"
-                    >
+                    <CListGroup className="position-absolute notifications-list start-0 overflow-y-auto  ">
                       <CListGroupItem component="a" href="#">
                         <div className="d-flex w-100 justify-content-between">
                           <h5 className="mb-1">List group item heading</h5>
@@ -136,7 +138,8 @@ const Header = (props) => {
               >
                 <CIcon icon={cilCart} size="xxl" />
                 <CBadge
-                  style={{ position: "absolute", top: -10, right: "22%" }}
+                  style={{ top: -10, right: "22%" }}
+                  className=" position-absolute mt-1"
                 >
                   <h6>
                     {cart.reduce((x, y) => {
@@ -146,26 +149,39 @@ const Header = (props) => {
                 </CBadge>
               </Link>
 
-              <NavDropdown
-                id="collasible-nav-dropdown2"
-                title={<CIcon icon={cilUser} size="xxl" />}
-              >
+              <NavDropdown title={<CIcon icon={cilUser} size="xxl" />}>
                 {login ? (
                   <>
-                    <Link to="/settings" className="dropdown-item">
-                      {t("settings".toUpperCase())}
+                    <Link
+                      to="/settings"
+                      className="dropdown-item d-flex gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilSettings} />
+                      <span>{t("settings".toUpperCase())}</span>
                     </Link>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={logOutHandle}>
+                    <NavDropdown.Item
+                      onClick={logOutHandle}
+                      className="d-flex gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilAccountLogout} />
                       {t("logout".toUpperCase())}
                     </NavDropdown.Item>
                   </>
                 ) : (
                   <>
-                    <Link className="dropdown-item" to="/signin">
+                    <Link
+                      className="dropdown-item d-flex gap-2 align-items-center "
+                      to="/signin"
+                    >
+                      <CIcon icon={cilArrowCircleRight} />
                       {t("LOGIN", namespaces.SIGN_UP)}
                     </Link>
-                    <Link to="/signUp" className="dropdown-item">
+                    <Link
+                      to="/signUp"
+                      className="dropdown-item d-flex  gap-2 align-items-center "
+                    >
+                      <CIcon icon={cilUserPlus} />
                       {t("SIGN_UP", namespaces.SIGN_UP)}
                     </Link>
                   </>
@@ -177,15 +193,19 @@ const Header = (props) => {
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "ar"}
-              onClick={() => changeLanguage("ar")}
+              onClick={() => i18n.changeLanguage("ar")}
+              className=" d-flex  gap-2  align-items-center "
             >
+              <CIcon icon={cifSa} />
               العربية
             </NavDropdown.Item>
             <NavDropdown.Item
               as={Button}
               active={i18n.language === "en"}
-              onClick={() => changeLanguage("en")}
+              onClick={() => i18n.changeLanguage("en")}
+              className=" d-flex  gap-2  align-items-center "
             >
+              <CIcon icon={cifUs} />
               English
             </NavDropdown.Item>
           </NavDropdown>
@@ -196,7 +216,7 @@ const Header = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  cart: state.cart,
+  cart: state.cart.data,
   dataLogOut: state.log,
   userSignIn: state.sign ? state.sign : null,
 });

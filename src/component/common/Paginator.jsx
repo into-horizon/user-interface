@@ -10,9 +10,10 @@ const Paginator = ({
   params,
   updateParams,
   onPageChange,
+  pageSize,
 }) => {
   const [pages, setPages] = useState([]);
-  const { limit } = params;
+  const limit = params?.limit ?? pageSize;
   const [selectedPage, setSelectedPage] = useState(
     Number(cookie.load(cookieName)) || 1
   );

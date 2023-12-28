@@ -17,6 +17,10 @@ const ar = {
   SHOW: "عرض",
   HIDE: "إخفاء",
   SELECT_ALL: "Select All",
+  REMOVE: "إزالة",
+  EDIT: "تعديل",
+  DELETE_CONFIRMATION: "تأكيد الحذف",
+  DELETE_TEXT: "هل أنت متأكد من حذف هذا؟",
 };
 
 export default ar;

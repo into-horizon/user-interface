@@ -1,9 +1,7 @@
-import CIcon from "@coreui/icons-react";
 import {
   CModal,
   CModalHeader,
   CModalTitle,
-  CModalBody,
   CModalFooter,
   CButton,
   CForm,
@@ -11,28 +9,23 @@ import {
   CCol,
   CFormTextarea,
 } from "@coreui/react";
-import React, { useState, useEffect } from "react";
-import { connect, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { addReviewHandler } from "../../../../store/products";
-import { cilStar } from "@coreui/icons";
 import { Star, StarFill } from "react-bootstrap-icons";
-import { ToastContainer, toast } from "react-toastify";
-import {
-  AnimationType,
-  DialogType,
-  OutAnimationType,
-  PopupProvider,
-  usePopup,
-  ToastPosition,
-} from "react-custom-popup";
+import { DialogType } from "react-custom-popup";
+import { triggerToast } from "../../../../store/toast";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../../../i18n";
 export const ProductReviewModal = ({
   addReviewHandler,
   visible,
   onClose,
   id,
 }) => {
-  const { showModal, showToast } = usePopup();
   const [rating, setRating] = useState(1);
+  const { t } = useTranslation([namespaces.ORDERS.ns, namespaces.GLOBAL.ns]);
+  const dispatch = useDispatch();
   const submitHandler = (e) => {
     e.preventDefault();
     Promise.all([
@@ -42,12 +35,12 @@ export const ProductReviewModal = ({
         review: e.target.review.value,
       }),
     ]).then(() =>
-      showToast({
-        text: "Thanks for you review",
-        type: DialogType.INFO,
-        position: ToastPosition.BOTTOM_RIGHT,
-        timeoutDuration: 5000,
-      })
+      dispatch(
+        triggerToast({
+          message: t("REVIEW_SUBMITTED"),
+          type: DialogType.INFO,
+        })
+      )
     );
     e.target.reset();
     closeDialog();
@@ -66,7 +59,7 @@ export const ProductReviewModal = ({
         backdrop={false}
       >
         <CModalHeader>
-          <CModalTitle>product review</CModalTitle>
+          <CModalTitle>{t("PRODUCT_REVIEW")}</CModalTitle>
         </CModalHeader>
         <CForm onSubmit={submitHandler}>
           <CRow className="justify-content-md-center mg-1">
@@ -88,7 +81,8 @@ export const ProductReviewModal = ({
             <CCol xs={11} className="mg-1">
               <CFormTextarea
                 id="review"
-                label="Write Review"
+                floatingLabel={t("WRITE_REVIEW")}
+                label={t("WRITE_REVIEW")}
                 rows="3"
               ></CFormTextarea>
             </CCol>
@@ -97,12 +91,12 @@ export const ProductReviewModal = ({
             <CRow>
               <CCol>
                 <CButton color="primary" type="submit">
-                  submit
+                  {t("SUBMIT", namespaces.GLOBAL)}
                 </CButton>
               </CCol>
               <CCol>
                 <CButton color="secondary" onClick={closeDialog}>
-                  close
+                  {t("CLOSE", namespaces.GLOBAL)}
                 </CButton>
               </CCol>
             </CRow>

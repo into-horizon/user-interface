@@ -11,12 +11,15 @@ import {
 } from "@coreui/react";
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { namespaces } from "../../i18n";
 
 const DeleteModal = ({ onConfirm, tooltipContent, btnSize, disabled }) => {
+  const { t } = useTranslation([namespaces.GLOBAL.ns]);
   const [visible, setVisible] = useState(false);
   return (
     <>
-      <CTooltip content={tooltipContent ?? "delete"}>
+      <CTooltip content={tooltipContent ?? t("DELETE")}>
         <CButton
           size={btnSize}
           color="danger"
@@ -30,20 +33,21 @@ const DeleteModal = ({ onConfirm, tooltipContent, btnSize, disabled }) => {
         visible={visible}
         alignment="center"
         onClose={() => setVisible(false)}
+        backdrop={false}
       >
         <CModalHeader>
-          <CModalTitle>Delete Confirmation</CModalTitle>
+          <CModalTitle>{t('DELETE_CONFIRMATION')}</CModalTitle>
         </CModalHeader>
-        <CModalBody>Are you sure delete this?</CModalBody>
+        <CModalBody>{t('DELETE_TEXT')}</CModalBody>
         <CModalFooter>
           <CButton
             color="danger"
             onClick={() => onConfirm(() => setVisible(false))}
           >
-            Confirm
+            {t("CONFIRM")}
           </CButton>
           <CButton color="secondary" onClick={() => setVisible(false)}>
-            Cancel
+            {t("CANCEL")}
           </CButton>
         </CModalFooter>
       </CModal>

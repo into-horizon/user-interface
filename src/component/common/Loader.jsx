@@ -1,6 +1,6 @@
 import { CCol, CContainer, CRow } from "@coreui/react";
 import React from "react";
-import { Rings } from "react-loader-spinner";
+// import { Rings } from "react-loader-spinner";
 
 const Loader = () => {
   return (
@@ -8,7 +8,11 @@ const Loader = () => {
       <CContainer>
         <CRow className="justify-content-center">
           <CCol xs="auto">
-            <Rings height="35rem" width="150" color="blue" />
+            {/* <Rings height="35rem" width="150" color="blue" /> */}
+            {/* <div class="progress">
+              <div class="inner"></div>
+            </div> */}
+            <div className="loader"></div>
           </CCol>
         </CRow>
       </CContainer>

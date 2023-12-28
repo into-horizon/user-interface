@@ -34,6 +34,8 @@ const ar = {
   INVALID_SMALL_LETTER: "حرف صغير واحد على الأقل، ",
   INVALID_CAPITAL_LETTER: "ما لا يقل عن حرف واحد، ",
   HAVE_ACCOUNT: "لديك حساب بالفعل؟",
+  CONTINUE_WITH_GOOGLE: "الإستمرار عبر جوجل",
+  CONTINUE_WITH_FACEBOOK: "الإستمرار عبر فيسبوك",
 };
 
 export default ar;

@@ -57,6 +57,7 @@
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
 .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n + 3),
 .input-group:not(.has-validation)
   > .form-floating:not(:last-child)
@@ -71,11 +72,13 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
+
 .form-floating > .form-control-plaintext:-webkit-autofill,
 .form-floating > .form-control:-webkit-autofill {
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
+
 .form-floating > .form-control-plaintext:focus,
 .form-floating > .form-control-plaintext:not(:placeholder-shown),
 .form-floating > .form-control:focus,
@@ -83,6 +86,7 @@
   padding-top: 1.625rem;
   padding-bottom: 0.625rem;
 }
+
 [dir="rtl"] .form-control.is-invalid,
 [dir="rtl"] .was-validated .form-control:invalid {
   padding-left: calc(1.5em + 0.75rem);
@@ -104,6 +108,7 @@
 [dir="rtl"] input::placeholder {
   text-align: right;
 }
+
 [dir="rtl"] input {
   text-align: right;
 }
@@ -111,4 +116,14 @@
 [dir="rtl"] .dropdown-menu {
   left: 0 !important;
   text-align: right !important;
+}
+
+[dir="rtl"] .form-check .form-check-input {
+  float: right;
+}
+[dir="rtl"] .form-check .form-check-label {
+  margin-right: 1.5em;
+}
+[dir="rtl"] .form-check {
+  margin: 0;
 }
