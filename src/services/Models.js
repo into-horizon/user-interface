@@ -37,9 +37,9 @@ export class CartItemModel {
     this.size = size;
     this.color = color;
     this.quantity = quantity;
-    this.price = price;
+    this.price = price?.toFixed(2);
     this.currency = currency;
-    this.final_price = final_price;
+    this.final_price = final_price?.toFixed(2);
     this.store_id = store_id;
   }
 }

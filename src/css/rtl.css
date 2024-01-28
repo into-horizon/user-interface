@@ -121,9 +121,11 @@
 [dir="rtl"] .form-check .form-check-input {
   float: right;
 }
+
 [dir="rtl"] .form-check .form-check-label {
   margin-right: 1.5em;
 }
+
 [dir="rtl"] .form-check {
   margin: 0;
 }

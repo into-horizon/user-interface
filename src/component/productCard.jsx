@@ -246,12 +246,12 @@ const ProductCard = ({
                       (1 + product.discount_rate)
                     ).toFixed(2)} ${t(product.currency.toUpperCase())}`}
                   </sup>{" "}
-                  {`${product.final_price} ${t(
+                  {`${product.final_price.toFixed(2)} ${t(
                     product.currency.toUpperCase()
                   )}`}
                 </>
               ) : (
-                `${product.final_price} ${t(product.currency.toUpperCase())}`
+                `${product.final_price.toFixed(2)} ${t(product.currency.toUpperCase())}`
               )}
             </Card.Link>
           </Col>
