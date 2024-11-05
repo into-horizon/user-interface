@@ -3,7 +3,7 @@ import Order from "../services/Order";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 
 const order = createSlice({
   name: "order",
@@ -66,12 +66,12 @@ export const placedOrderHandler = createAsyncThunk(
       if (status === 200) {
         dispatch(addPlacedOrder({ placedOrder: data }));
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }

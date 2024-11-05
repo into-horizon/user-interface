@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { addReviewHandler } from "../../../../store/products";
 import { Star, StarFill } from "react-bootstrap-icons";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 import { triggerToast } from "../../../../store/toast";
 import { useTranslation } from "react-i18next";
 import { namespaces } from "../../../../i18n";
@@ -38,7 +38,7 @@ export const ProductReviewModal = ({
       dispatch(
         triggerToast({
           message: t("REVIEW_SUBMITTED"),
-          type: DialogType.INFO,
+          type: PopupType.INFO,
         })
       )
     );

@@ -2,7 +2,7 @@ import ProductService from "../services/Product";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { updateOrders } from "./order";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 import _ from "lodash";
 
 const initialSearchQuery = {
@@ -74,12 +74,12 @@ export const searchProductsHandler = createAsyncThunk(
       if (status === 200) {
         return data;
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }

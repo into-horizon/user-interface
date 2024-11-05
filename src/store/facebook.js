@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AuthService from "../services/Auth";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 
 const initialState = { loading: false, user: {} };
 let signInWithFacebook = createSlice({
@@ -42,12 +42,12 @@ export const signInHandlerWithFacebook = createAsyncThunk(
       if (status === 200) {
         return user;
       } else {
-        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        dispatch(triggerToast({ type: PopupType.DANGER, message }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }

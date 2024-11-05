@@ -125,11 +125,11 @@ const ProductCard = ({
   useEffect(() => {
     if (product.discount) {
       setPrice((price) =>
-        (+price - +price * +product.discount_rate).toFixed(2)
+        (+price - +price * +product.discount_rate)?.toFixed(2)
       );
     }
     if (!product.is_commission_included) {
-      setPrice((price) => (+price + +price * +product.commission).toFixed(2));
+      setPrice((price) => (+price + +price * +product.commission)?.toFixed(2));
     }
   }, [product]);
   return (
@@ -244,14 +244,14 @@ const ProductCard = ({
                     {`${(
                       product.final_price *
                       (1 + product.discount_rate)
-                    ).toFixed(2)} ${t(product.currency.toUpperCase())}`}
+                    )?.toFixed(2)} ${t(product.currency.toUpperCase())}`}
                   </sup>{" "}
-                  {`${product.final_price.toFixed(2)} ${t(
+                  {`${product.final_price?.toFixed(2)} ${t(
                     product.currency.toUpperCase()
                   )}`}
                 </>
               ) : (
-                `${product.final_price.toFixed(2)} ${t(product.currency.toUpperCase())}`
+                `${product.final_price?.toFixed(2)} ${t(product.currency.toUpperCase())}`
               )}
             </Card.Link>
           </Col>

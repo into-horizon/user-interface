@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import cookie from "react-cookies";
 import NewWishlist from "../services/Wishlist";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 
 let cookieWishlist = () => cookie.load("wishlist") || [];
 const cookieWishlistIds = () => cookie.load("wishlist-ids") || [];
@@ -80,15 +80,15 @@ export const addItemHandler = (payload) => async (dispatch, state) => {
         product_id: [payload.product_id],
       });
       if (status === 200) {
-        // dispatch(triggerToast({ message, type: DialogType.INFO }));
+        // dispatch(triggerToast({ message, type: PopupType.INFO }));
         // dispatch(getWishlistItemsIds());
         return;
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
       }
     }
   } catch (error) {
-    dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
+    dispatch(triggerToast({ message: error.message, type: PopupType.DANGER }));
   }
 };
 
@@ -112,13 +112,13 @@ export const getItemsHandler = createAsyncThunk(
         if (status === 200) {
           dispatch(addItems(result));
         } else {
-          dispatch(triggerToast({ message, type: DialogType.DANGER }));
+          dispatch(triggerToast({ message, type: PopupType.DANGER }));
         }
       } else {
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -137,7 +137,7 @@ export const getWishlistItemsIds = createAsyncThunk(
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -153,13 +153,13 @@ export const deleteItemHandler = (payload) => async (dispatch, state) => {
       if (status === 200) {
         // dispatch(getItemsHandler());
         dispatch(getWishlistItemsIds());
-        // dispatch(triggerToast({ message, type: DialogType.INFO }));
+        // dispatch(triggerToast({ message, type: PopupType.INFO }));
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
       }
     }
   } catch (error) {
-    dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
+    dispatch(triggerToast({ message: error.message, type: PopupType.DANGER }));
   }
 };
 
