@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 import AuthService from "../services/Auth";
 
 let signInWithGoogle = createSlice({
@@ -24,10 +24,10 @@ export const signInHandlerWithGoogle = (payload) => async (dispatch, state) => {
     if (status === 200) {
       dispatch(addUserWithGoogle(user));
     } else {
-      dispatch(triggerToast({ type: DialogType.DANGER, message }));
+      dispatch(triggerToast({ type: PopupType.DANGER, message }));
     }
   } catch (error) {
-    dispatch(triggerToast({ type: DialogType.DANGER, message: error.message }));
+    dispatch(triggerToast({ type: PopupType.DANGER, message: error.message }));
   }
 };
 

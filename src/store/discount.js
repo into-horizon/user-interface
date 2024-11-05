@@ -1,7 +1,7 @@
 import Discount from "../services/Discount";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 
 const initialState = {
   message: "",
@@ -55,7 +55,7 @@ export const checkCodeHandler = createAsyncThunk(
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }

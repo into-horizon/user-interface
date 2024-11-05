@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import categoryService from "../services/CategoryService";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 
 const category = createSlice({
   name: "category",
@@ -41,11 +41,11 @@ export const getAllCategories = createAsyncThunk(
       if (status === 200) {
         return data;
       }
-      dispatch(triggerToast({ message, type: DialogType.DANGER }));
+      dispatch(triggerToast({ message, type: PopupType.DANGER }));
       return rejectWithValue(message);
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -61,11 +61,11 @@ export const getLandingPageCategories = createAsyncThunk(
       if (status === 200) {
         return data;
       }
-      dispatch(triggerToast({ type: DialogType.DANGER, message }));
+      dispatch(triggerToast({ type: PopupType.DANGER, message }));
       return rejectWithValue(message);
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }

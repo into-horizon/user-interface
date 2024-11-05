@@ -4,7 +4,7 @@ import AuthService from "../services/Auth";
 import { triggerToast } from "./toast";
 import { ToastTypes } from "../services/utils";
 import { showDialog } from "./dialog";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 import { resetCartItems } from "./cart";
 import { resetWishlist } from "./wishlist";
 import { resetGoogleUser } from "./google";
@@ -182,7 +182,7 @@ export const signupHandler = createAsyncThunk(
           showDialog({
             title: "something went wrong",
             message: message,
-            type: DialogType.DANGER,
+            type: PopupType.DANGER,
           })
         );
         return rejectWithValue(message);
@@ -193,7 +193,7 @@ export const signupHandler = createAsyncThunk(
         showDialog({
           title: "something went wrong",
           message: error.message,
-          type: DialogType.DANGER,
+          type: PopupType.DANGER,
         })
       );
       return rejectWithValue(error.message);
@@ -216,7 +216,7 @@ export const signInHandler = createAsyncThunk(
         dispatch(
           showDialog({
             message,
-            type: DialogType.DANGER,
+            type: PopupType.DANGER,
             title: "something went wrong",
           })
         );
@@ -239,17 +239,17 @@ export const logOutHandler = createAsyncThunk(
         cookie.remove("session_id", { path: "/" });
         dispatch(loginAction({ login: false }));
         dispatch(
-          triggerToast({ type: DialogType.INFO, message: data.message })
+          triggerToast({ type: PopupType.INFO, message: data.message })
         );
       } else {
         dispatch(
-          triggerToast({ type: DialogType.DANGER, message: data.message })
+          triggerToast({ type: PopupType.DANGER, message: data.message })
         );
         return rejectWithValue(data.message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }
@@ -288,12 +288,12 @@ export const myProfileHandler = createAsyncThunk(
       if (status === 200) {
         dispatch(loginAction({ login: true, user: user }));
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -309,14 +309,14 @@ export const updateProfileHandler = createAsyncThunk(
       );
       if (status === 200) {
         dispatch(loginAction({ user: { ...getState().sign.user, ...user } }));
-        dispatch(triggerToast({ message, type: DialogType.INFO }));
+        dispatch(triggerToast({ message, type: PopupType.INFO }));
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -338,14 +338,14 @@ export const updateAccountInfo = createAsyncThunk(
             user: { ...getState().sign.user, email: email, mobile: mobile },
           })
         );
-        dispatch(triggerToast({ message, type: DialogType.INFO }));
+        dispatch(triggerToast({ message, type: PopupType.INFO }));
       } else {
-        dispatch(triggerToast({ message, type: DialogType.DANGER }));
+        dispatch(triggerToast({ message, type: PopupType.DANGER }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -427,14 +427,14 @@ export const changePasswordHandler = createAsyncThunk(
     try {
       let { status, message } = await AuthService.changePassword(payload);
       if (status === 200) {
-        dispatch(triggerToast({ message, type: DialogType.INFO }));
+        dispatch(triggerToast({ message, type: PopupType.INFO }));
       } else {
-        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        dispatch(triggerToast({ type: PopupType.DANGER, message }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }
@@ -447,14 +447,14 @@ export const checkVerificationCode = createAsyncThunk(
     try {
       const { message, status } = await AuthService.verifyCode(payload);
       if (status === 200) {
-        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+        dispatch(triggerToast({ type: PopupType.SUCCESS, message }));
       } else {
-        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        dispatch(triggerToast({ type: PopupType.DANGER, message }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }
@@ -466,14 +466,14 @@ export const requestVerificationCode = createAsyncThunk(
     try {
       const { message, status } = await AuthService.requestVerificationCode();
       if (status === 200) {
-        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+        dispatch(triggerToast({ type: PopupType.SUCCESS, message }));
       } else {
-        dispatch(triggerToast({ type: DialogType.DANGER, message }));
+        dispatch(triggerToast({ type: PopupType.DANGER, message }));
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }
@@ -487,14 +487,14 @@ export const provideResetPasswordReference = createAsyncThunk(
       const { message, status } =
         await AuthService.resetPasswordProvideReference(payload);
       if (status === 200) {
-        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+        dispatch(triggerToast({ type: PopupType.SUCCESS, message }));
       } else {
         return rejectWithValue(message);
         // return message;
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       return rejectWithValue(error.message);
     }
@@ -513,7 +513,7 @@ export const validateResetToken = createAsyncThunk(
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }
@@ -526,13 +526,13 @@ export const resetPassword = createAsyncThunk(
     try {
       const { message, status } = await AuthService.resetPassword(payload);
       if (status === 200) {
-        dispatch(triggerToast({ type: DialogType.SUCCESS, message }));
+        dispatch(triggerToast({ type: PopupType.SUCCESS, message }));
       } else {
         return rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ type: DialogType.DANGER, message: error.message })
+        triggerToast({ type: PopupType.DANGER, message: error.message })
       );
       return rejectWithValue(error.message);
     }

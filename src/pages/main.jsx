@@ -85,7 +85,7 @@ const Main = () => {
           <Col md={12} lg={8} xl={9} xxl={8}>
             <Row className="justify-content-center align-items-center w-100 ">
               {Children.toArray(
-                stores.slice(0, 2).map((store) => (
+                stores?.slice(0, 2).map((store) => (
                   <Col md={6} xs={10} sm={8} xl={5} className="mt-2">
                     <Card className="h-75">
                       <Card.Img

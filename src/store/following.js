@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Following from "../services/Following";
 import { triggerToast } from "./toast";
-import { DialogType } from "react-custom-popup";
+import { PopupType } from "react-custom-popup";
 import StoreService from "../services/Store";
 
 const follow = createSlice({
@@ -40,9 +40,9 @@ export const followStoreHandler = (payload) => async (dispatch, state) => {
     let { result, message, status } = await Following.followStore(payload);
     if (status === 200) {
       dispatch(addFollowStore(result));
-    } else dispatch(triggerToast(message, DialogType.DANGER));
+    } else dispatch(triggerToast(message, PopupType.DANGER));
   } catch (error) {
-    dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
+    dispatch(triggerToast({ message: error.message, type: PopupType.DANGER }));
   }
 };
 
@@ -54,9 +54,9 @@ export const unFollowStoreHandler = (payload) => async (dispatch, state) => {
         (f) => f.store_id !== result.store_id
       );
       dispatch(removeStoreFollow(newState));
-    } else dispatch(triggerToast(message, DialogType.DANGER));
+    } else dispatch(triggerToast(message, PopupType.DANGER));
   } catch (error) {
-    dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
+    dispatch(triggerToast({ message: error.message, type: PopupType.DANGER }));
   }
 };
 
@@ -65,9 +65,9 @@ export const getFollowingStores = () => async (dispatch, state) => {
     let { result, message, status } = await Following.getFollowingStore();
     if (status === 200) {
       dispatch(addFollowingStores(result));
-    } else dispatch(triggerToast(message, DialogType.DANGER));
+    } else dispatch(triggerToast(message, PopupType.DANGER));
   } catch (error) {
-    dispatch(triggerToast({ message: error.message, type: DialogType.DANGER }));
+    dispatch(triggerToast({ message: error.message, type: PopupType.DANGER }));
   }
 };
 
@@ -79,12 +79,12 @@ export const getStore = createAsyncThunk(
       if (status === 200) {
         return data;
       } else {
-        dispatch(triggerToast(message, DialogType.DANGER));
+        dispatch(triggerToast(message, PopupType.DANGER));
         rejectWithValue(message);
       }
     } catch (error) {
       dispatch(
-        triggerToast({ message: error.message, type: DialogType.DANGER })
+        triggerToast({ message: error.message, type: PopupType.DANGER })
       );
       rejectWithValue(error.message);
     }
