@@ -1,19 +1,19 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import cookie from "react-cookies";
-import Cart from "../services/Cart";
-import { triggerToast } from "./toast";
-import { ToastTypes } from "../services/utils";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import cookie from 'react-cookies';
+import Cart from '../services/Cart';
+import { triggerToast } from './toast';
+import { ToastTypes } from '../services/utils';
 
-let cookieCard = () => cookie.load("cart") ?? [];
+let cookieCard = () => cookie.load('cart') || [];
 const initialState = { loading: false, data: cookieCard() };
 const cart = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
   reducers: {
     addItem(state, action) {
       state.data = state.data.concat(action.payload);
       if (action.payload.cookie) {
-        cookie.save("cart", state.data);
+        cookie.save('cart', state.data);
       }
     },
     decrementQuantity(state, action) {
@@ -23,7 +23,7 @@ const cart = createSlice({
         }
         return value;
       });
-      if (action.payload.cookie) cookie.save("cart", state.data);
+      if (action.payload.cookie) cookie.save('cart', state.data);
     },
     incrementQuantity(state, action) {
       state.data = state.data.map((value) => {
@@ -32,13 +32,13 @@ const cart = createSlice({
         }
         return value;
       });
-      if (action.payload.cookie) cookie.save("cart", state.data);
+      if (action.payload.cookie) cookie.save('cart', state.data);
     },
 
     deleteItem(state, action) {
       state.data = state.data.filter((item) => item.id !== action.payload.id);
       if (action.payload.cookie) {
-        cookie.save("cart", state.data);
+        cookie.save('cart', state.data);
       }
     },
     updateCartItem(state, action) {
@@ -49,7 +49,7 @@ const cart = createSlice({
         return value;
       });
       if (action.payload.cookie) {
-        cookie.save("cart", state.data);
+        cookie.save('cart', state.data);
       }
     },
     addCartItems(state, action) {
@@ -132,11 +132,11 @@ export const deleteCartItemHandler = (payload) => async (dispatch, state) => {
 };
 
 export const getCartItemsHandler = createAsyncThunk(
-  "cart/getItems",
+  'cart/getItems',
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const cart = cookie.load("cart");
-      cookie.save("cart", [], { path: "/" });
+      const cart = cookie.load('cart');
+      cookie.save('cart', [], { path: '/' });
       let { data, status, message } = await Cart.getCartItems();
       if (status === 200) {
         if (cart?.length > 0) {

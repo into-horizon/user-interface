@@ -1,7 +1,7 @@
-import React, { useState, useEffect, Children } from "react";
-import { connect, useSelector, useDispatch } from "react-redux";
-import cookie from "react-cookies";
-import { Col, Row } from "react-bootstrap";
+import React, { useState, useEffect, Children } from 'react';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import cookie from 'react-cookies';
+import { Col, Row } from 'react-bootstrap';
 import {
   CForm,
   CFormInput,
@@ -19,19 +19,19 @@ import {
   CInputGroup,
   CFormText,
   CSpinner,
-} from "@coreui/react";
-import { cilPlus, cilXCircle, cilCheckAlt } from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
-import image from "../assets/no-image.png";
-import { checkCodeHandler, clearDiscount } from "../store/discount";
-import { placedOrderHandler } from "../store/order";
-import { resetCartItems } from "../store/cart";
-import { useNavigate } from "react-router-dom";
-import AddressModal from "./settings/components/address/AddressModal";
-import { addAddressHandler, myAddressHandler } from "../store/address";
-import LoadingSpinner from "../component/common/LoadingSpinner";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../i18n";
+} from '@coreui/react';
+import { cilPlus, cilXCircle, cilCheckAlt } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import image from '../assets/no-image.png';
+import { checkCodeHandler, clearDiscount } from '../store/discount';
+import { placedOrderHandler } from '../store/order';
+import { resetCartItems } from '../store/cart';
+import { useNavigate } from 'react-router-dom';
+import AddressModal from './settings/components/address/AddressModal';
+import { addAddressHandler, myAddressHandler } from '../store/address';
+import LoadingSpinner from '../component/common/LoadingSpinner';
+import { useTranslation } from 'react-i18next';
+import { namespaces } from '../i18n';
 export const Checkout = ({
   checkCodeHandler,
   placedOrderHandler,
@@ -49,6 +49,7 @@ export const Checkout = ({
     namespaces.GLOBAL.ns,
   ]);
   const { data: addresses } = useSelector((state) => state.address);
+  console.log("🚀 ~ addresses:", addresses)
   const { data: cart, loading } = useSelector((state) => state.cart);
   const { placedOrder, loading: orderLoading } = useSelector(
     (state) => state.order
@@ -57,9 +58,11 @@ export const Checkout = ({
   const { message, valid, discount, invalid } = useSelector(
     (state) => state.discount
   );
-  const [selectedAddress, setSelectedAddress] = useState({});
+  const [selectedAddress, setSelectedAddress] = useState(
+    addresses.find((address) => address.is_default)
+  );
   useEffect(() => {
-    cookie.remove("redirectTo", { path: "/" });
+    cookie.remove('redirectTo', { path: '/' });
     myAddressHandler();
   }, [myAddressHandler]);
 
@@ -117,27 +120,27 @@ export const Checkout = ({
   useEffect(() => {
     if (placedOrder?.id) {
       dispatch(resetCartItems([]));
-      navigate("/successOrder");
+      navigate('/successOrder');
     }
   }, [dispatch, navigate, placedOrder?.id]);
 
   useEffect(() => {
     if (cart.length === 0 && !loading) {
-      navigate("/");
+      navigate('/');
     }
   }, [cart.length, loading, navigate]);
 
   return (
-    <CRow className="justify-content-center  cart gap-1 pt-3 w-100 h-100">
-      <CCol xs={11} lg={6} xl={4} className=" overflow-y-auto items-container ">
-        <h5>{t("YOUR_ITEMS")}</h5>
+    <CRow className='justify-content-center  cart gap-1 pt-3 w-100 h-100'>
+      <CCol xs={11} lg={6} xl={4} className=' overflow-y-auto items-container '>
+        <h5>{t('YOUR_ITEMS')}</h5>
         {loading ? (
           <LoadingSpinner />
         ) : (
           Children.toArray(
             cart.map((item) => (
-              <CCard className="mb-3">
-                <CRow className="g-0">
+              <CCard className='mb-3'>
+                <CRow className='g-0'>
                   <CRow>
                     <CCol xs={4}>
                       <CCardImage
@@ -153,24 +156,24 @@ export const Checkout = ({
                         <CCardTitle>{item[`${i18n.language}title`]}</CCardTitle>
                         <CCardText>
                           <ul>
-                            <li>{`${t("PRICE", namespaces.PRODUCT)}: ${
+                            <li>{`${t('PRICE', namespaces.PRODUCT)}: ${
                               item.final_price
                             } ${t(
                               item.currency.toUpperCase(),
                               namespaces.PRODUCT
                             )}`}</li>
                             <li>{`${t(
-                              "quantity".toUpperCase(),
+                              'quantity'.toUpperCase(),
                               namespaces.CART
                             )}: ${item.quantity}`}</li>
                             {item.size && (
-                              <li>{`${t("size".toUpperCase())} ${
+                              <li>{`${t('size'.toUpperCase())} ${
                                 item.size
                               }`}</li>
                             )}
                             {item.color && (
                               <li>{`${t(
-                                "color".toUpperCase(),
+                                'color'.toUpperCase(),
                                 namespaces.PRODUCT
                               )}: ${t(item.color, namespaces.COLOR)}`}</li>
                             )}
@@ -209,7 +212,7 @@ export const Checkout = ({
             <AddressModal
               BtnComponent={(props) => (
                 <CTooltip
-                  content={t("ADD_ADDRESS_TOOLTIP", namespaces.ADDRESS)}
+                  content={t('ADD_ADDRESS_TOOLTIP', namespaces.ADDRESS)}
                 >
                   <CButton {...props}>
                     <CIcon icon={cilPlus} />
@@ -226,98 +229,98 @@ export const Checkout = ({
         {selectedAddress && (
           <Col
             md={12}
-            className=" my-2 border  border-success rounded-2  bg-secondary py-3"
+            className=' my-2 border  border-success rounded-2  bg-secondary py-3'
           >
             <ul>
               <li>
-                {`${t("name".toUpperCase(), namespaces.ADDRESS)}: ${
+                {`${t('name'.toUpperCase(), namespaces.ADDRESS)}: ${
                   selectedAddress?.first_name
                 } ${selectedAddress?.last_name}`}
               </li>
-              <li>{`${t("city".toUpperCase(), namespaces.ADDRESS)}: ${
+              <li>{`${t('city'.toUpperCase(), namespaces.ADDRESS)}: ${
                 selectedAddress?.city
               } - ${selectedAddress?.country}`}</li>
-              <li>{`${t("REGION", namespaces.ADDRESS)}: ${
-                selectedAddress?.region ?? "-"
+              <li>{`${t('REGION', namespaces.ADDRESS)}: ${
+                selectedAddress?.region ?? '-'
               }`}</li>
-              <li>{`${t("street".toUpperCase(), namespaces.ADDRESS)}: ${
+              <li>{`${t('street'.toUpperCase(), namespaces.ADDRESS)}: ${
                 selectedAddress?.street_name
               }`}</li>
-              <li>{`${t("MOBILE", namespaces.ADDRESS)}: ${
+              <li>{`${t('MOBILE', namespaces.ADDRESS)}: ${
                 selectedAddress?.mobile
               }`}</li>
               <li>{`${t(
-                "BUILDING_NUMBER".toUpperCase(),
+                'BUILDING_NUMBER'.toUpperCase(),
                 namespaces.ADDRESS
               )}: ${selectedAddress?.building_number}`}</li>
-              <li>{`${t("APARTMENT_NUMBER", namespaces.ADDRESS)}: ${
+              <li>{`${t('APARTMENT_NUMBER', namespaces.ADDRESS)}: ${
                 selectedAddress?.apartment_number
               }`}</li>
             </ul>
           </Col>
         )}
-        <CRow className="p-1rem">
-          <h5 className="m-1rem">{t("SELECT_PAYMENT_METHOD")}</h5>
+        <CRow className='p-1rem'>
+          <h5 className='m-1rem'>{t('SELECT_PAYMENT_METHOD')}</h5>
           <CFormCheck
-            type="radio"
-            name="payment"
-            label={t("CASH_ON_DELIVERY")}
+            type='radio'
+            name='payment'
+            label={t('CASH_ON_DELIVERY')}
             defaultChecked
           />
           <CFormCheck
-            type="radio"
-            name="payment"
-            label={t("CREDIT_CARD")}
+            type='radio'
+            name='payment'
+            label={t('CREDIT_CARD')}
             disabled
           />
         </CRow>
       </CCol>
-      <CCol xs={10} lg={5} xl={3} className="">
+      <CCol xs={10} lg={5} xl={3} className=''>
         <CForm onSubmit={discountCodeHandler}>
-          <CRow className="justify-content-center align-items-center">
+          <CRow className='justify-content-center align-items-center'>
             <CCol xs={12}>
               <CInputGroup>
                 <CFormInput
-                  placeholder={t("PROMO_CODE")}
-                  id="discount_code"
+                  placeholder={t('PROMO_CODE')}
+                  id='discount_code'
                   value={discount?.discount_code}
                   invalid={invalid}
                   valid={valid}
                   required
                 />
                 {discount.id ? (
-                  <CButton type="submit" color="danger">
+                  <CButton type='submit' color='danger'>
                     <CIcon icon={cilXCircle} />
-                    {t("REMOVE", namespaces.GLOBAL)}
+                    {t('REMOVE', namespaces.GLOBAL)}
                   </CButton>
                 ) : (
-                  <CButton type="submit" color="success">
+                  <CButton type='submit' color='success'>
                     <CIcon icon={cilCheckAlt} />
-                    {t("APPLY")}
+                    {t('APPLY')}
                   </CButton>
                 )}
               </CInputGroup>
               <CFormText
-                className={`${valid ? "text-success" : "text-danger"}`}
+                className={`${valid ? 'text-success' : 'text-danger'}`}
               >
                 {message}
               </CFormText>
             </CCol>
           </CRow>
         </CForm>
-        <div className="p-3 my-3 bg-info border-5 rounded w-100">
-          <h5>{t("ORDER_SUMMARY")}</h5>
+        <div className='p-3 my-3 bg-info border-5 rounded w-100'>
+          <h5>{t('ORDER_SUMMARY')}</h5>
           <ul>
-            <li>{`${t("SUBTOTAL", namespaces.CART)}: ${total.subtotal}`}</li>
-            <li>{`${t("DELIVERY_FEES")}: ${total.shipping}`}</li>
-            <li>{`${t("TAX")}: 0.0`}</li>
+            <li>{`${t('SUBTOTAL', namespaces.CART)}: ${total.subtotal}`}</li>
+            <li>{`${t('DELIVERY_FEES')}: ${total.shipping}`}</li>
+            <li>{`${t('TAX')}: 0.0`}</li>
             {total.discount > 0 && (
-              <li>{`${t("DISCOUNT")}: ${total.discount} ${t(
-                "JOD",
+              <li>{`${t('DISCOUNT')}: ${total.discount} ${t(
+                'JOD',
                 namespaces.PRODUCT
               )} `}</li>
             )}
-            <li>{`${t("TOTAL_PRICE")}: ${(
+            <li>{`${t('TOTAL_PRICE')}: ${(
               Number(total.subtotal) +
               Number(total.shipping) -
               Number(total.discount)
@@ -326,11 +329,11 @@ export const Checkout = ({
         </div>
         <Col md={12}>
           <CButton
-            className=" w-100 "
+            className=' w-100 '
             onClick={orderHandler}
             disabled={orderLoading || !selectedAddress?.id}
           >
-            {orderLoading ? <CSpinner variant="grow" /> : t("PLACE_ORDER")}
+            {orderLoading ? <CSpinner variant='grow' /> : t('PLACE_ORDER')}
           </CButton>
         </Col>
         <span>{placedOrder?.id}</span>
