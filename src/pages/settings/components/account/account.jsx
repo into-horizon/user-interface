@@ -180,7 +180,7 @@ const Account = ({
                         deleteProfilePicture();
                         close();
                       }}
-                      disabled={profile_picture.includes("default")}
+                      disabled={profile_picture?.includes("default")}
                     />
                   </Col>
                 </Row>
