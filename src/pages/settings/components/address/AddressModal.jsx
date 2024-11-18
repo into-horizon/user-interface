@@ -83,16 +83,6 @@ const AddressModal = ({
             <Row className=' gy-2 '>
               <Col xs={'12'} md={'6'}>
                 <CFormInput
-                  placeholder={t('CITY')}
-                  floatingLabel={t('CITY')}
-                  name='city'
-                  id='city'
-                  value={address.city ?? ''}
-                  onChange={onChange}
-                />
-              </Col>
-              <Col xs={'12'} md={'6'}>
-                <CFormInput
                   placeholder={t('FIRST_NAME', namespaces.SIGN_UP)}
                   floatingLabel={t('FIRST_NAME', namespaces.SIGN_UP)}
                   name='first_name'
@@ -108,6 +98,16 @@ const AddressModal = ({
                   name='last_name'
                   id='last_name'
                   value={address.last_name ?? ''}
+                  onChange={onChange}
+                />
+              </Col>
+              <Col xs={'12'} md={'6'}>
+                <CFormInput
+                  placeholder={t('CITY')}
+                  floatingLabel={t('CITY')}
+                  name='city'
+                  id='city'
+                  value={address.city ?? ''}
                   onChange={onChange}
                 />
               </Col>
