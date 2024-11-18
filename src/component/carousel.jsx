@@ -5,8 +5,8 @@ import { Carousel } from "react-bootstrap";
 const CarouselItem = () => {
   const CarouselItems = [
     {
-      img: "https://www.efficy.com/wp-content/uploads/2019/03/crm-for-e-commerce-900x412.jpg",
-      description: "shop from diffetent categoreis in one cart",
+      img: "https://d1u4v6449fgzem.cloudfront.net/2020/03/The-Ecommerce-Business-Model-Explained.jpg",
+      description: "shop from different categories in one cart",
     },
     {
       img: "https://media.istockphoto.com/id/1217702156/photo/asian-postman-deliveryman-wearing-mask-carry-small-box-deliver-to-customer-in-front-of-door.jpg?s=612x612&w=0&k=20&c=rqniTEtz1C0EwOipHl6YxwkX9mZe1YTrFiGjYoyIy5U=",
