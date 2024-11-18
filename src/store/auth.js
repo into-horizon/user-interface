@@ -1,32 +1,32 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import cookie from "react-cookies";
-import AuthService from "../services/Auth";
-import { triggerToast } from "./toast";
-import { ToastTypes } from "../services/utils";
-import { showDialog } from "./dialog";
-import { PopupType } from "react-custom-popup";
-import { resetCartItems } from "./cart";
-import { resetWishlist } from "./wishlist";
-import { resetGoogleUser } from "./google";
-import { resetFacebookState } from "./facebook";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import cookie from 'react-cookies';
+import AuthService from '../services/Auth';
+import { triggerToast } from './toast';
+import { ToastTypes } from '../services/utils';
+import { showDialog } from './dialog';
+import { PopupType } from 'react-custom-popup';
+import { resetCartItems } from './cart';
+import { resetWishlist } from './wishlist';
+import { resetGoogleUser } from './google';
+import { resetFacebookState } from './facebook';
 
 const initialState = {
   login: false,
   user: {},
-  message: "",
+  message: '',
   verificationCodeRequested: false,
   loading: false,
   globalLoading: true,
   resetPassword: {
     isReferenceInvalid: false,
-    feedback: "",
+    feedback: '',
     isResetTokenInvalid: false,
     success: false,
   },
-  changePassword: { isSuccess: undefined, feedback: "" },
+  changePassword: { isSuccess: undefined, feedback: '' },
 };
 const sign = createSlice({
-  name: "sign",
+  name: 'sign',
   initialState,
   reducers: {
     loginAction(state, action) {
@@ -116,7 +116,7 @@ const sign = createSlice({
     });
     builder.addCase(provideResetPasswordReference.fulfilled, (state) => {
       state.resetPassword.isReferenceInvalid = false;
-      state.resetPassword.feedback = "";
+      state.resetPassword.feedback = '';
       state.loading = false;
     });
     builder.addCase(provideResetPasswordReference.pending, (state, action) => {
@@ -165,22 +165,22 @@ const sign = createSlice({
   },
 });
 export const signupHandler = createAsyncThunk(
-  "auth/sign-up",
+  'auth/sign-up',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       let { status, message, access_token, refresh_token, session_id, user } =
         await AuthService.register(payload);
       if (status === 200) {
-        cookie.save("access_token", access_token, { path: "/" });
-        cookie.save("refresh_token", refresh_token, { path: "/" });
-        cookie.save("session_id", session_id, { path: "/" });
+        cookie.save('access_token', access_token, { path: '/' });
+        cookie.save('refresh_token', refresh_token, { path: '/' });
+        cookie.save('session_id', session_id, { path: '/' });
         dispatch(resetGoogleUser());
         dispatch(resetFacebookState());
         return user;
       } else if (status === 403) {
         dispatch(
           showDialog({
-            title: "something went wrong",
+            title: 'something went wrong',
             message: message,
             type: PopupType.DANGER,
           })
@@ -191,7 +191,7 @@ export const signupHandler = createAsyncThunk(
     } catch (error) {
       dispatch(
         showDialog({
-          title: "something went wrong",
+          title: 'something went wrong',
           message: error.message,
           type: PopupType.DANGER,
         })
@@ -202,22 +202,22 @@ export const signupHandler = createAsyncThunk(
 );
 
 export const signInHandler = createAsyncThunk(
-  "auth/login",
+  'auth/login',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       let { access_token, refresh_token, status, session_id, message, user } =
         await AuthService.login(payload);
       if (status === 200) {
-        cookie.save("access_token", access_token, { path: "/" });
-        cookie.save("refresh_token", refresh_token, { path: "/" });
-        cookie.save("session_id", session_id, { path: "/" });
+        cookie.save('access_token', access_token, { path: '/' });
+        cookie.save('refresh_token', refresh_token, { path: '/' });
+        cookie.save('session_id', session_id, { path: '/' });
         dispatch(loginAction({ login: true, user }));
       } else {
         dispatch(
           showDialog({
             message,
             type: PopupType.DANGER,
-            title: "something went wrong",
+            title: 'something went wrong',
           })
         );
         return rejectWithValue(message);
@@ -229,18 +229,16 @@ export const signInHandler = createAsyncThunk(
   }
 );
 export const logOutHandler = createAsyncThunk(
-  "auth/logout",
+  'auth/logout',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       let data = await AuthService.logout();
       if (data.status === 200) {
-        cookie.remove("access_token", { path: "/" });
-        cookie.remove("refresh_token", { path: "/" });
-        cookie.remove("session_id", { path: "/" });
+        cookie.remove('access_token', { path: '/' });
+        cookie.remove('refresh_token', { path: '/' });
+        cookie.remove('session_id', { path: '/' });
         dispatch(loginAction({ login: false }));
-        dispatch(
-          triggerToast({ type: PopupType.INFO, message: data.message })
-        );
+        dispatch(triggerToast({ type: PopupType.INFO, message: data.message }));
       } else {
         dispatch(
           triggerToast({ type: PopupType.DANGER, message: data.message })
@@ -281,7 +279,7 @@ export const verifyHandler = (payload) => async (dispatch, state) => {
   }
 };
 export const myProfileHandler = createAsyncThunk(
-  "auth/getProfile",
+  'auth/getProfile',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       let { user, status, message } = await AuthService.getProfile();
@@ -301,7 +299,7 @@ export const myProfileHandler = createAsyncThunk(
 );
 
 export const updateProfileHandler = createAsyncThunk(
-  "auth/updateProfile",
+  'auth/updateProfile',
   async (payload, { dispatch, rejectWithValue, getState }) => {
     try {
       let { status, user, message } = await AuthService.updateProfileInfo(
@@ -324,7 +322,7 @@ export const updateProfileHandler = createAsyncThunk(
 );
 
 export const updateAccountInfo = createAsyncThunk(
-  "auth/updateAccountInfo",
+  'auth/updateAccountInfo',
   async (payload, { dispatch, rejectWithValue, getState }) => {
     try {
       let {
@@ -385,7 +383,7 @@ export const updatePictureHandler = (payload) => async (dispatch, state) => {
 };
 
 export const deleteProfilePicture = createAsyncThunk(
-  "profile/picture/delete",
+  'profile/picture/delete',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       const { message, status, data } = await AuthService.removePicture(
@@ -422,7 +420,7 @@ export const deactivateProfileHandler = () => async (dispatch, state) => {
 };
 
 export const changePasswordHandler = createAsyncThunk(
-  "auth/changePassword",
+  'auth/changePassword',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       let { status, message } = await AuthService.changePassword(payload);
@@ -442,7 +440,7 @@ export const changePasswordHandler = createAsyncThunk(
 );
 
 export const checkVerificationCode = createAsyncThunk(
-  "auth/verifyCode",
+  'auth/verifyCode',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       const { message, status } = await AuthService.verifyCode(payload);
@@ -461,7 +459,7 @@ export const checkVerificationCode = createAsyncThunk(
   }
 );
 export const requestVerificationCode = createAsyncThunk(
-  "auth/requestVerificationCode",
+  'auth/requestVerificationCode',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const { message, status } = await AuthService.requestVerificationCode();
@@ -481,7 +479,7 @@ export const requestVerificationCode = createAsyncThunk(
 );
 
 export const provideResetPasswordReference = createAsyncThunk(
-  "auth/provideReference",
+  'auth/provideReference',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       const { message, status } =
@@ -502,7 +500,7 @@ export const provideResetPasswordReference = createAsyncThunk(
 );
 
 export const validateResetToken = createAsyncThunk(
-  "auth/validate/ResetToken",
+  'auth/validate/ResetToken',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       const { message, status } = await AuthService.validateResetToken(payload);
@@ -521,7 +519,7 @@ export const validateResetToken = createAsyncThunk(
 );
 
 export const resetPassword = createAsyncThunk(
-  "auth/resetPassword",
+  'auth/resetPassword',
   async (payload, { dispatch, rejectWithValue }) => {
     try {
       const { message, status } = await AuthService.resetPassword(payload);

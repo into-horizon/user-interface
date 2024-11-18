@@ -81,17 +81,17 @@ const SignupForm = ({ signInHandlerWithGoogle }) => {
     }
 
     let obj = {
-      email: email.value,
-      password: password.value,
-      first_name: first_name.value,
-      last_name: last_name.value,
-      mobile: mobile.value.substring(1),
-      city: city.value,
+      email: email?.value,
+      password: password?.value,
+      first_name: first_name?.value,
+      last_name: last_name?.value,
+      mobile: mobile?.value.substring(1),
+      city: city?.value,
       country: "jordan",
       country_code: 962,
-      gender: gender.value,
-      google_id: google_id.value,
-      facebook_id: facebook_id.value || null,
+      gender: gender?.value,
+      google_id: google_id?.value,
+      facebook_id: facebook_id?.value,
     };
     dispatch(signupHandler(obj));
   };
