@@ -23,12 +23,20 @@ import {
   CInputGroup,
   CRow,
 } from '@coreui/react';
-import { BagPlus, HeartFill, Heart } from 'react-bootstrap-icons';
+import {
+  BagPlus,
+  HeartFill,
+  Heart,
+  Plus,
+  FileMinus,
+} from 'react-bootstrap-icons';
 import { addCartItemHandler, updateCartItemHandler } from '../store/cart';
 import { addItemHandler, deleteItemHandler } from '../store/wishlist';
 import LoadingSpinner from './common/LoadingSpinner';
 import { useTranslation } from 'react-i18next';
 import { namespaces } from '../i18n';
+import CIcon from '@coreui/icons-react';
+import { cilMinus, cilPlus } from '@coreui/icons';
 
 const Product = ({
   productHandler,
@@ -256,7 +264,7 @@ const Product = ({
                     disabled={qty === 1}
                     color='info'
                   >
-                    -
+                    <CIcon icon={cilMinus} />
                   </CButton>
                   <CFormInput
                     className=' bg-info  text-center border-info '
@@ -268,7 +276,7 @@ const Product = ({
                     disabled={qty === product.quantity}
                     color='info'
                   >
-                    +
+                    <CIcon icon={cilPlus} />
                   </CButton>
                 </CInputGroup>
               </CCol>

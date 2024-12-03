@@ -1,14 +1,15 @@
-import ProductService from "../services/Product";
-import { createSlice } from "@reduxjs/toolkit";
+import { type } from 'os';
+import ProductService from '../services/Product';
+import { createSlice } from '@reduxjs/toolkit';
 
 let Parent = createSlice({
-  name: "parent",
+  name: 'parent',
   initialState: {
     parentCategory: [],
     childCategory: [],
     grandChildCategory: [],
     product: [],
-    message: "",
+    message: '',
   },
   reducers: {
     productAction(state, action) {
@@ -24,8 +25,7 @@ export const parentCategoryHandler = () => async (dispatch, state) => {
       ProductService.getChildCategory(),
       ProductService.getGrandChildCategory(),
     ]);
-
-    if (parent.length && child.length && grandchild.length) {
+    if ([parent, child, grandchild].every((item) => Array.isArray(item))) {
       dispatch(
         productAction({
           parentCategory: parent,
@@ -34,10 +34,10 @@ export const parentCategoryHandler = () => async (dispatch, state) => {
         })
       );
     } else {
-      dispatch(productAction({ message: "something went wrong" }));
+      dispatch(productAction({ message: 'something went wrong' }));
     }
   } catch (error) {
-    throw new Error(error.message)
+    throw new Error(error.message);
   }
 };
 

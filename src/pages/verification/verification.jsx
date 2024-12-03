@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import {
   checkVerificationCode,
   requestVerificationCode,
   verificationHandler,
   verifyHandler,
-} from "../../store/auth";
-import { useTranslation } from "react-i18next";
+} from '../../store/auth';
+import { useTranslation } from 'react-i18next';
 import {
   CButton,
   CCard,
@@ -22,11 +22,11 @@ import {
   CInputGroup,
   CRow,
   CSpinner,
-} from "@coreui/react";
+} from '@coreui/react';
 // import './verification.css';
 
-const Verification = (props) => {
-  const { t } = useTranslation("verification");
+const Verification = () => {
+  const { t } = useTranslation('verification');
   const dispatch = useDispatch();
   const { loading, verificationCodeRequested } = useSelector(
     (state) => state.sign
@@ -38,38 +38,38 @@ const Verification = (props) => {
   };
 
   useEffect(() => {
-    console.log("here");
+    console.log('here');
     if (!verificationCodeRequested) {
       dispatch(requestVerificationCode());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verificationCodeRequested]);
   return (
-    <div className=" min-vw-100 wrapper bg-light align-items-center  d-flex flex-row">
+    <div className=' min-vw-100 wrapper bg-light align-items-center  d-flex flex-row'>
       <CContainer>
-        <CRow className=" justify-content-center align-items-center ">
+        <CRow className=' justify-content-center align-items-center '>
           <CCol xs={6}>
             <CCard>
               <CCardHeader>
-                <CCardTitle>{t("VERIFICATION")}</CCardTitle>
+                <CCardTitle>{t('VERIFICATION')}</CCardTitle>
               </CCardHeader>
               <CCardBody>
                 <CCardText>
-                  <p>{t("VERIFICATION_TEXT")}</p>
+                  <p>{t('VERIFICATION_TEXT')}</p>
                 </CCardText>
-                <CForm onSubmit={handleVerification} className=" mt-5">
+                <CForm onSubmit={handleVerification} className=' mt-5'>
                   <CInputGroup>
                     <CFormInput
-                      name="code"
-                      id="code"
+                      name='code'
+                      id='code'
                       required
-                      placeholder={t("PLEASE_ENTER_CODE")}
+                      placeholder={t('PLEASE_ENTER_CODE')}
                     />
-                    <CButton type="submit" disabled={loading}>
+                    <CButton type='submit' disabled={loading}>
                       {loading ? (
-                        <CSpinner size="sm" />
+                        <CSpinner size='sm' />
                       ) : (
-                        t("verify".toUpperCase())
+                        t('verify'.toUpperCase())
                       )}
                     </CButton>
                   </CInputGroup>
@@ -77,12 +77,12 @@ const Verification = (props) => {
               </CCardBody>
               <CCardFooter>
                 <CCardText>
-                  {t("NEW_CODE_TEXT")}
+                  {t('NEW_CODE_TEXT')}
                   <CButton
-                    color="link"
+                    color='link'
                     onClick={() => dispatch(requestVerificationCode())}
                   >
-                    {t("NEW_CODE")}
+                    {t('NEW_CODE')}
                   </CButton>
                 </CCardText>
               </CCardFooter>
@@ -94,10 +94,4 @@ const Verification = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  userSignUp: state.sign ? state.sign : null,
-});
-
-const mapDispatchToProps = { verificationHandler, verifyHandler };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Verification);
+export default Verification;
