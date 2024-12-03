@@ -1,154 +1,64 @@
-import ApiService from "./ApiService";
+import ApiService from './ApiService';
 class Auth extends ApiService {
   constructor() {
     super();
-    this.path = "auth";
-    this.path2 = "api/v1";
-    //    this.token=cookie.load('access_token');
+    this.path = 'auth';
+    this.path2 = 'api/v1';
   }
   async register(data) {
-    try {
-      let response = await this.post(`${this.path}/signup`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path}/signup`, data);
   }
   async getProfile() {
-    try {
-      let response = await this.get(`${this.path}/profile`);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.get(`${this.path}/profile`);
   }
   async updateProfileInfo(data) {
-    try {
-      let response = await this.update(`${this.path}/update/profile`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path}/update/profile`, data);
   }
   async updateEmail(data) {
-    try {
-      let response = await this.update(`${this.path}/user/email`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path}/user/email`, data);
   }
   async updateMobile(data) {
-    try {
-      let response = await this.update(`${this.path}/user/mobile`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path}/user/mobile`, data);
   }
   async insertAddress(data) {
-    try {
-      let response = await this.post(`${this.path2}/add/address`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path2}/add/address`, data);
   }
   async getAddress(data) {
-    try {
-      let response = await this.get(`${this.path2}/get/address`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.get(`${this.path2}/get/address`, data);
   }
   async updateAddress(data) {
-    try {
-      let response = await this.update(`${this.path2}/update/address`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path2}/update/address`, data);
   }
   async removeAddress(data) {
-    try {
-      let response = await this.update(`${this.path2}/remove/address`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path2}/remove/address`, data);
   }
   async updatePicture(data) {
-    try {
-      let response = await this.update(`${this.path2}/profile/picture`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path2}/profile/picture`, data);
   }
   async removePicture(data) {
-    try {
-      let response = await this.delete(`${this.path2}/profile/picture`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.delete(`${this.path2}/profile/picture`, data);
   }
   async deactivate() {
-    try {
-      let response = await this.update(`${this.path}/deactivate`, null);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path}/deactivate`, null);
   }
   async verification() {
-    try {
-      let response = await this.post(`${this.path}/user/verification`, null);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path}/user/verification`, null);
   }
   async verify(data) {
-    try {
-      let response = await this.post(`${this.path}/user/verify`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path}/user/verify`, data);
   }
   async login(data) {
-    try {
-      let response = await this.post(
-        `${this.path}/signin`,
-        null,
-        this.basic(data)
-      );
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path}/signin`, null, this.basic(data));
   }
   async logout() {
-    try {
-      let response = await this.post(`${this.path}/signout`, null);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.post(`${this.path}/signout`, null);
   }
   async changePassword(data) {
-    try {
-      let response = await this.update(`${this.path}/user/password`, data);
-      return response;
-    } catch (error) {
-      return error;
-    }
+    return await this.update(`${this.path}/user/password`, data);
   }
   async checkAPI() {
     try {
-      return await this.get("");
+      return await this.get('');
     } catch (error) {
       throw error;
     }
@@ -171,7 +81,7 @@ class Auth extends ApiService {
     try {
       return this.post(`${this.path}/user/password/generateToken`, {
         reference,
-        userType: "user",
+        userType: 'user',
       });
     } catch (error) {
       throw new Error(error.message);

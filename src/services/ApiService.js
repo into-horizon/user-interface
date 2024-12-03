@@ -19,18 +19,9 @@ export default class ApiService {
     });
   }
 
-  // static headers(token) {
-  //   return token
-  //     ? {
-  //         session_id: cookie.load('session_id'),
-  //         Authorization: `Bearer ${token}`,
-  //         locale: localStorage.getItem('i18nextLng'),
-  //       }
-  //     : { locale: localStorage.getItem('i18nextLng') };
-  // }
   basic(data) {
     return {
-      Authorization: ` Basic ${btoa(`${data.email}:${data.password}`)}`,
+      Authorization: `Basic ${btoa(`${data.email}:${data.password}`)}`,
     };
   }
 
@@ -116,7 +107,7 @@ export default class ApiService {
     }
   }
   session() {
-    let session_id = cookie.load('session_id');
+    const session_id = cookie.load('session_id');
     return session_id;
   }
 }
