@@ -1,6 +1,6 @@
-import React, { Children } from "react";
-import { connect, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import React, { Children } from 'react';
+import { connect, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   addItem,
   decrementQuantity,
@@ -8,15 +8,15 @@ import {
   deleteItem,
   updateCartItemHandler,
   deleteCartItemHandler,
-} from "../store/cart";
-import image from "../assets/no-image.png";
-import cookie from "react-cookies";
-import { Button, Col, Row, Table } from "react-bootstrap";
-import CIcon from "@coreui/icons-react";
-import { cilMinus, cilPlus } from "@coreui/icons";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../i18n";
-import LoadingSpinner from "./common/LoadingSpinner";
+} from '../store/cart';
+import image from '../assets/no-image.png';
+import cookie from 'react-cookies';
+import { Button, Col, Row, Table } from 'react-bootstrap';
+import CIcon from '@coreui/icons-react';
+import { cilMinus, cilPlus } from '@coreui/icons';
+import { useTranslation } from 'react-i18next';
+import { namespaces } from '../i18n';
+import LoadingSpinner from './common/LoadingSpinner';
 const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
   const { t, i18n } = useTranslation([
     namespaces.CART.ns,
@@ -33,32 +33,32 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
     }
   };
   const submitHandler = () => {
-    !login && cookie.save("redirectTo", "/checkout", { path: "/" });
-    navigate("/checkout");
+    !login && cookie.save('redirectTo', '/checkout', { path: '/' });
+    navigate('/checkout');
   };
   if (loading) {
     return <LoadingSpinner />;
   }
   return (
     <>
-      <h1 className="text-align-center border-bottom d-block pb-2 mx-auto px-5 border-info w-fit-content">
-        {t("Cart".toUpperCase())}
+      <h1 className='text-align-center border-bottom d-block pb-2 mx-auto px-5 border-info w-fit-content'>
+        {t('Cart'.toUpperCase())}
       </h1>
-      <Row className="justify-content-center w-100 pb-5 ">
+      <Row className='justify-content-center w-100 pb-5 '>
         {cart.length > 0 ? (
           <>
-            {" "}
+            {' '}
             <Col xxl={10}>
-              <Table responsive striped bordered className="custom-table">
+              <Table responsive striped bordered className='custom-table'>
                 <thead>
                   <tr>
-                    <th>{t("PRODUCT_IMAGE")}</th>
-                    <th>{t("PRODUCT_NAME")}</th>
-                    <th>{t("Price".toUpperCase(), namespaces.PRODUCT)}</th>
-                    <th>{t("color".toUpperCase(), namespaces.PRODUCT)}</th>
-                    <th>{t("size".toUpperCase(), namespaces.PRODUCT)}</th>
-                    <th>{t("QUANTITY")}</th>
-                    <th>{t("SUBTOTAL")}</th>
+                    <th>{t('PRODUCT_IMAGE')}</th>
+                    <th>{t('PRODUCT_NAME')}</th>
+                    <th>{t('Price'.toUpperCase(), namespaces.PRODUCT)}</th>
+                    <th>{t('color'.toUpperCase(), namespaces.PRODUCT)}</th>
+                    <th>{t('size'.toUpperCase(), namespaces.PRODUCT)}</th>
+                    <th>{t('QUANTITY')}</th>
+                    <th>{t('SUBTOTAL')}</th>
                   </tr>
                 </thead>
 
@@ -73,7 +73,7 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                               item.pictures?.product_picture ??
                               image
                             }
-                            alt="img"
+                            alt='img'
                           />
                         </td>
                         <td>{item[`${i18n.language}title`]}</td>
@@ -81,15 +81,15 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                           item.currency.toUpperCase(),
                           namespaces.PRODUCT
                         )}`}</td>
-                        <td>{t(item.color, namespaces.COLOR) ?? "-"}</td>
-                        <td>{item.size ?? "-"}</td>
+                        <td>{t(item.color, namespaces.COLOR) ?? '-'}</td>
+                        <td>{item.size ?? '-'}</td>
                         <td>
-                          <Row className="justify-content-center align-items-center">
-                            <Col xs="auto">
+                          <Row className='justify-content-center align-items-center'>
+                            <Col xs='auto'>
                               <Button
-                                type="button"
-                                variant="light"
-                                className="border border-1"
+                                type='button'
+                                variant='light'
+                                className='border border-1'
                                 onClick={() => {
                                   qtyChangeHandler(item);
                                 }}
@@ -97,14 +97,14 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                                 <CIcon icon={cilMinus} />
                               </Button>
                             </Col>
-                            <Col xs="auto">
-                              <span className="in">{item.quantity ?? 1}</span>
+                            <Col xs='auto'>
+                              <span className='in'>{item.quantity ?? 1}</span>
                             </Col>
-                            <Col xs="auto">
+                            <Col xs='auto'>
                               <Button
-                                type="button"
-                                variant="light"
-                                className="border border-1"
+                                type='button'
+                                variant='light'
+                                className='border border-1'
                                 onClick={() => {
                                   updateCartItemHandler({
                                     ...item,
@@ -134,33 +134,33 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                     <th></th>
                     <th></th>
                     <th>
-                      <strong className="text-dark">
-                        {t("SUBTOTAL")}:{" "}
+                      <strong className='text-dark'>
+                        {t('SUBTOTAL')}:{' '}
                         {cart
                           .reduce((x, y) => {
                             return (x += Number(y.price) * y.quantity);
                           }, 0)
-                          .toFixed(2)}{" "}
-                        {t("JOD", namespaces.PRODUCT)}
+                          .toFixed(2)}{' '}
+                        {t('JOD', namespaces.PRODUCT)}
                       </strong>
                     </th>
                   </tr>
                 </tfoot>
               </Table>
             </Col>
-            <Col xl={3} md={6} xs={"12"}>
+            <Col xl={3} md={6} xs={'12'}>
               <Button
-                className="border-5 mx-5 text-light rounded-5"
-                variant="info"
+                className='border-5 mx-5 text-light rounded-5'
+                variant='info'
                 onClick={submitHandler}
               >
-                {t("PROCEED_TO_CHECKOUT")}
+                {t('PROCEED_TO_CHECKOUT')}
               </Button>
             </Col>
           </>
         ) : (
-          <Col xs="auto">
-            <h2>{t("EMPTY_CART")}</h2>
+          <Col xs='auto'>
+            <h2>{t('EMPTY_CART')}</h2>
           </Col>
         )}
       </Row>

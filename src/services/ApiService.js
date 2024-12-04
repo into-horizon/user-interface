@@ -60,7 +60,7 @@ export default class ApiService {
 
       return res.data;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.response.data.message);
     }
   }
 
@@ -75,11 +75,11 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.response.data.message);
     }
   }
 
-  async update(endpoint, data, params = null) {
+  async put(endpoint, data, params = null) {
     try {
       let res = await apiAxios({
         method: 'put',
@@ -89,7 +89,7 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.response.data.message);
     }
   }
 
@@ -103,7 +103,7 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.response.data.message);
     }
   }
   session() {
