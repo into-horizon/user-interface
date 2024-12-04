@@ -24,7 +24,7 @@ class Auth extends ApiService {
   }
   async updateProfileInfo(data) {
     try {
-      let response = await this.update(`${this.path}/update/profile`, data);
+      let response = await this.put(`${this.path}/update/profile`, data);
       return response;
     } catch (error) {
       return error;
@@ -32,7 +32,7 @@ class Auth extends ApiService {
   }
   async updateEmail(data) {
     try {
-      let response = await this.update(`${this.path}/user/email`, data);
+      let response = await this.put(`${this.path}/user/email`, data);
       return response;
     } catch (error) {
       return error;
@@ -40,7 +40,7 @@ class Auth extends ApiService {
   }
   async updateMobile(data) {
     try {
-      let response = await this.update(`${this.path}/user/mobile`, data);
+      let response = await this.put(`${this.path}/user/mobile`, data);
       return response;
     } catch (error) {
       return error;
@@ -64,7 +64,7 @@ class Auth extends ApiService {
   }
   async updateAddress(data) {
     try {
-      let response = await this.update(`${this.path2}/update/address`, data);
+      let response = await this.put(`${this.path2}/update/address`, data);
       return response;
     } catch (error) {
       return error;
@@ -72,7 +72,7 @@ class Auth extends ApiService {
   }
   async removeAddress(data) {
     try {
-      let response = await this.update(`${this.path2}/remove/address`, data);
+      let response = await this.put(`${this.path2}/remove/address`, data);
       return response;
     } catch (error) {
       return error;
@@ -80,7 +80,7 @@ class Auth extends ApiService {
   }
   async updatePicture(data) {
     try {
-      let response = await this.update(`${this.path2}/profile/picture`, data);
+      let response = await this.put(`${this.path2}/profile/picture`, data);
       return response;
     } catch (error) {
       return error;
@@ -96,7 +96,7 @@ class Auth extends ApiService {
   }
   async deactivate() {
     try {
-      let response = await this.update(`${this.path}/deactivate`, null);
+      let response = await this.put(`${this.path}/deactivate`, null);
       return response;
     } catch (error) {
       return error;
@@ -140,7 +140,7 @@ class Auth extends ApiService {
   }
   async changePassword(data) {
     try {
-      let response = await this.update(`${this.path}/user/password`, data);
+      let response = await this.put(`${this.path}/user/password`, data);
       return response;
     } catch (error) {
       return error;
@@ -162,7 +162,7 @@ class Auth extends ApiService {
   }
   async requestVerificationCode() {
     try {
-      return this.update(`${this.path}/verify-code`);
+      return this.put(`${this.path}/verify-code`);
     } catch (error) {
       throw new Error(error.message);
     }

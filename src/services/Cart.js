@@ -1,54 +1,27 @@
-import ApiService from "./ApiService";
-
+import ApiService from './ApiService';
 
 class Cart extends ApiService {
-    constructor() {
-        super();
-        this.path = 'api/v1/cart_item';
-        this.cartPath = 'api/v1/cart'
-    }
+  constructor() {
+    super();
+    this.path = 'api/v1/cart_item';
+    this.cartPath = 'api/v1/cart';
+  }
 
-    async addCartItem(data) {
-        try {
-            let result = await this.post(`${this.path}/add`, data);
-            return result
-        } catch (error) {
-            return error
-        }
-    }
-    async removeCartItem(data) {
-        try {
-            let result = await this.delete(`${this.path}/remove`, data);
-            return result;
-        } catch (error) {
-            return error
-        }
-    }
-    async getCartItems() {
-        try {
-            let result = await this.get(`${this.path}/getAll`);
-            return result;
-        } catch (error) {
-            return error
-        }
-    }
-    async updateCartItem(data) {
-        try {
-            let result = await this.update(`${this.path}/update`, data)
-            return result;
-        } catch (error) {
-            return error
-        }
-    }
-    async updateCart (data){
-        try {
-            let result = await this.update(`${this.cartPath}/update`, data)
-            return result;
-        } catch (error) {
-            return error
-        }
-    }
-
+  async addCartItem(data) {
+    return await this.post(`${this.path}/add`, data);
+  }
+  async removeCartItem(data) {
+    return await this.delete(`${this.path}/remove`, data);
+  }
+  async getCartItems() {
+    return await this.get(`${this.path}/getAll`);
+  }
+  async updateCartItem(data) {
+    return await await this.put(`${this.path}/update`, data);
+  }
+  async updateCart(data) {
+    return await this.put(`${this.cartPath}/update`, data);
+  }
 }
 const NewCart = new Cart();
-export default NewCart
+export default NewCart;
