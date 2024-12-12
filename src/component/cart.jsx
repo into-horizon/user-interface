@@ -105,6 +105,9 @@ const Cart = ({ updateCartItemHandler, deleteCartItemHandler, login }) => {
                                 type='button'
                                 variant='light'
                                 className='border border-1'
+                                disabled={
+                                  item.product_quantity <= item.quantity
+                                }
                                 onClick={() => {
                                   updateCartItemHandler({
                                     ...item,

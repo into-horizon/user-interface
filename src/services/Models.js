@@ -1,7 +1,15 @@
-import productDefaultImage from "../assets/no-image.png";
+import productDefaultImage from '../assets/no-image.png';
 
 export class WishlistItemModel {
-  constructor({ id, entitle, artitle, pictures, product_id, final_price, currency }) {
+  constructor({
+    id,
+    entitle,
+    artitle,
+    pictures,
+    product_id,
+    final_price,
+    currency,
+  }) {
     this.id = product_id ? id : crypto.randomUUID();
     this.product_id = product_id ?? id;
     this.entitle = entitle;
@@ -26,7 +34,8 @@ export class CartItemModel {
     price,
     currency,
     final_price,
-    store_id
+    store_id,
+    product_quantity,
   }) {
     this.id = product_id ? id : crypto.randomUUID();
     this.product_id = product_id ?? id;
@@ -41,5 +50,6 @@ export class CartItemModel {
     this.currency = currency;
     this.final_price = final_price?.toFixed(2);
     this.store_id = store_id;
+    this.product_quantity = product_quantity;
   }
 }

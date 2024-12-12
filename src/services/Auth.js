@@ -64,56 +64,28 @@ class Auth extends ApiService {
     }
   }
   async verifyCode(code) {
-    try {
-      return this.post(`${this.path}/verify-code`, { code });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return this.post(`${this.path}/verify-code`, { code });
   }
   async requestVerificationCode() {
-    try {
-      return this.update(`${this.path}/verify-code`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return this.update(`${this.path}/verify-code`);
   }
   async resetPasswordProvideReference(reference) {
-    try {
-      return this.post(`${this.path}/user/password/generateToken`, {
-        reference,
-        userType: 'user',
-      });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return this.post(`${this.path}/user/password/generateToken`, {
+      reference,
+      userType: 'user',
+    });
   }
   async resetPassword(data) {
-    try {
-      return this.post(`${this.path}/user/password/resetByToken`, data);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return this.post(`${this.path}/user/password/resetByToken`, data);
   }
   async validateResetToken(token) {
-    try {
-      return this.post(`${this.path}/user/password/validateToken`, { token });
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return this.post(`${this.path}/user/password/validateToken`, { token });
   }
   async signupWithGoogle(data) {
-    try {
-      return await this.get(`${this.path}/google/callback${data}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return await this.get(`${this.path}/google/callback${data}`);
   }
   async signupWithFacebook(data) {
-    try {
-      return await this.get(`${this.path}/facebook/callback${data}`);
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    return await this.get(`${this.path}/facebook/callback${data}`);
   }
 }
 

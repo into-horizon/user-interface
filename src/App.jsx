@@ -1,5 +1,11 @@
-import React, { Suspense, useEffect, lazy } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import React, { Suspense, useEffect, lazy, Children } from 'react';
+import {
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+  Navigate,
+} from 'react-router-dom';
 // import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +28,6 @@ import {
 } from './store/wishlist';
 import { myAddressHandler } from './store/address';
 import { getFollowingStores } from './store/following';
-import ApiService from './services/ApiService';
 import GlobalToast from './component/common/Toast';
 import { getTopStores } from './store/landingPage';
 
@@ -31,7 +36,8 @@ import MobileNavBar from './component/common/MobileNavBar';
 import AuthService from './services/Auth';
 import Page500 from './pages/page500/500';
 import GlobalDialog from './component/common/Dialog';
-import { authRoutes, unauthRoutes } from './routes/routes';
+import SettingsLayout from './layouts/SettingsLayout';
+import Verification from './pages/verification/verification';
 
 const Main = lazy(() => import('./pages/main'));
 const Page404 = lazy(() => import('./pages/Page404'));
@@ -40,13 +46,27 @@ const Wishlist = lazy(() => import('./component/wishlist'));
 const Product = lazy(() => import('./component/product'));
 const Products = lazy(() => import('./pages/products/products'));
 const Seller = lazy(() => import('./component/seller'));
-const Footer = lazy(() => import('./component/common/Footer'));
-const Header = lazy(() => import('./component/common/Header'));
+const SignInForm = lazy(() => import('./component/SignInForm'));
+const SignupForm = lazy(() => import('./component/SignupForm'));
+const MainLayout = lazy(() => import('./layouts/MainLayout'));
+const AuthLayout = lazy(() => import('./layouts/AuthLayout'));
+const Account = lazy(() =>
+  import('./pages/settings/components/account/account')
+);
+const Address = lazy(() =>
+  import('./pages/settings/components/address/address')
+);
+const Notification = lazy(() =>
+  import('./pages/settings/components/notification/notification')
+);
+const Orders = lazy(() => import('./pages/settings/components/Orders/Orders'));
+const OrdersDetails = lazy(() =>
+  import('./pages/settings/components/Orders/OrdersDetails')
+);
 
 const App = ({
   parentCategoryHandler,
   getCartItemsHandler,
-  getItemsHandler,
   getFollowingStores,
   getTopStores,
 }) => {
@@ -125,26 +145,9 @@ const App = ({
       document.documentElement.setAttribute('dir', 'rtl');
     }
   }, [i18n.language]);
-  const WithFooter = ({ Component }) => {
-    return (
-      <>
-        <Component />
-        <Footer />
-      </>
-    );
-  };
   useEffect(() => {
-    const { pathname } = location;
     if (token && !login) return;
-    if (
-      (pathname === '/verification' && user?.verified) ||
-      (login &&
-        (unauthRoutes.includes(pathname) || pathname.startsWith('/signup'))) ||
-      (!login &&
-        (authRoutes.includes(pathname) || pathname.startsWith('/settings')))
-    ) {
-      navigate('/');
-    } else if (login && !user?.verified) {
+    if (login && !user?.verified) {
       navigate('/verification');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -156,7 +159,6 @@ const App = ({
 
   return (
     <>
-      {/* <ThemeProvider> */}
       <GlobalToast />
       <GlobalDialog />
       <div
@@ -164,29 +166,30 @@ const App = ({
         style={{ maxWidth: '100vw' }}
       >
         <Suspense fallback={<Loader />}>
-          <div className=' -mb-lg-5 '>
-            <Header />
+          <div className='-mb-lg-5 '>
             <Suspense fallback={<Loader />}>
               <Routes>
-                <Route path='/' element={<WithFooter Component={Main} />} />
-                <Route path='/cart' element={<WithFooter Component={Cart} />} />
-                <Route
-                  path='/wishlist'
-                  element={<WithFooter Component={Wishlist} />}
-                />
-                <Route
-                  path='/products'
-                  element={<WithFooter Component={Products} />}
-                />
-                <Route
-                  path='/product/:id'
-                  element={<WithFooter Component={Product} />}
-                />
-                <Route
-                  path='/store/:id'
-                  element={<WithFooter Component={Seller} />}
-                />
-                <Route path='/*' element={<AuthRoutes />} />
+                <Route path='/' element={<MainLayout />}>
+                  <Route index element={<Main />} />
+                  <Route path='cart' element={<Cart />} />
+                  <Route path='wishlist' element={<Wishlist />} />
+                  <Route path='products' element={<Products />} />
+                  <Route path='product/:id' element={<Product />} />
+                  <Route path='store/:id' element={<Seller />} />
+                </Route>
+                <Route path='/verification' element={<Verification />} />
+                <Route path='settings' element={<SettingsLayout />}>
+                  <Route index element={<Navigate to='account' replace />} />
+                  <Route path='account' element={<Account />} />
+                  <Route path='address' element={<Address />} />
+                  <Route path='notification' element={<Notification />} />
+                  <Route path='orders' element={<Orders />} />
+                  <Route path='orderItems/:id' element={<OrdersDetails />} />
+                </Route>
+                <Route path='/' element={<AuthLayout />}>
+                  <Route path='signin' element={<SignInForm />} />
+                  <Route path='signUp' element={<SignupForm />} />
+                </Route>
                 <Route path='/500' element={<Page500 />} />
                 <Route path='*' element={<Page404 />} />
               </Routes>
@@ -195,7 +198,6 @@ const App = ({
           <MobileNavBar login={login} />
         </Suspense>
       </div>
-      {/* </ThemeProvider> */}
     </>
   );
 };
