@@ -1,23 +1,29 @@
-import React, { Children, Fragment, useEffect } from "react";
-import { connect, useSelector } from "react-redux";
-import { Row, Col, ListGroup, Placeholder } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { CButton, CTooltip } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { cilPen, cilPlus } from "@coreui/icons";
-import AddressModal from "./AddressModal";
-import Paginator from "../../../../component/common/Paginator";
-import DeleteModal from "../../../../component/common/DeleteModal";
+import React, { Children, Fragment, useEffect } from 'react';
+import { connect, useSelector } from 'react-redux';
+import {
+  CButton,
+  CCol,
+  CListGroup,
+  CListGroupItem,
+  CPlaceholder,
+  CRow,
+  CTooltip,
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilPen, cilPlus } from '@coreui/icons';
+import AddressModal from './AddressModal';
+import Paginator from '../../../../component/common/Paginator';
+import DeleteModal from '../../../../component/common/DeleteModal';
 import {
   updateAddressHandler,
   addAddressHandler,
   myAddressHandler,
   removeAddressHandler,
-} from "../../../../store/address";
-import { useState } from "react";
-import _ from "lodash";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../../../../i18n";
+} from '../../../../store/address';
+import { useState } from 'react';
+import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { namespaces } from '../../../../i18n';
 
 const Address = ({
   updateAddressHandler,
@@ -42,16 +48,16 @@ const Address = ({
   };
 
   const AddBtnComponent = (props) => (
-    <CTooltip content={t("ADD_ADDRESS_TOOLTIP")}>
-      <CButton className="my-2" {...props}>
+    <CTooltip content={t('ADD_ADDRESS_TOOLTIP')}>
+      <CButton className='my-2' {...props}>
         <CIcon icon={cilPlus} />
       </CButton>
     </CTooltip>
   );
   const UpdateBtnComponent = (props) => (
-    <CTooltip content={t("EDIT", namespaces.GLOBAL)}>
-      <CButton color="secondary" {...props} size="sm">
-        <CIcon icon={cilPen} size="sm" />
+    <CTooltip content={t('EDIT', namespaces.GLOBAL)}>
+      <CButton color='secondary' {...props} size='sm'>
+        <CIcon icon={cilPen} size='sm' />
       </CButton>
     </CTooltip>
   );
@@ -99,78 +105,79 @@ const Address = ({
         {loading ? (
           Children.toArray(
             _.range(0, 3).map(() => (
-              <ListGroup>
-                <ListGroup.Item
-                  action
-                  variant="info"
-                  as={"div"}
-                  className="col-12 my-1"
+              <CListGroup>
+                <CListGroupItem
+                  component={'div'}
+                  className='col-12 my-1 bg-light'
                 >
-                  <Row>
-                    <Col xs={"10"}>
-                      <Placeholder animation="glow" as={"p"}>
-                        <Placeholder xs={2} /> <Placeholder xs={9} />
-                      </Placeholder>
-                      <Placeholder animation="glow" as={"p"}>
-                        <Placeholder xs={2} /> <Placeholder xs={6} />
-                      </Placeholder>
-                      <Placeholder animation="glow" as={"p"}>
-                        <Placeholder xs={2} />{" "}
-                        <Placeholder as={"span"} xs={4} />
-                      </Placeholder>
-                    </Col>
-                    <Col xs={"2"}>
-                      <Placeholder.Button
-                        animation="wave"
-                        xs={3}
-                        variant="secondary"
-                      />
-                      <Placeholder.Button
-                        animation="wave"
-                        xs={3}
-                        variant="danger"
-                      />
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              </ListGroup>
+                  <CRow>
+                    <CCol xs={'10'}>
+                      <CPlaceholder animation='glow' as={'p'}>
+                        <CPlaceholder xs={2} /> <CPlaceholder xs={9} />
+                      </CPlaceholder>
+                      <CPlaceholder animation='glow' as={'p'}>
+                        <CPlaceholder xs={2} /> <CPlaceholder xs={6} />
+                      </CPlaceholder>
+                      <CPlaceholder animation='glow' as={'p'}>
+                        <CPlaceholder xs={2} />{' '}
+                        <CPlaceholder as={'span'} xs={4} />
+                      </CPlaceholder>
+                    </CCol>
+                    <CCol xs={2}>
+                      <CPlaceholder animation='wave'>
+                        <CPlaceholder
+                          as={CButton}
+                          xs={3}
+                          color='secondary'
+                          tabIndex={-1}
+                          className='mx-2'
+                        />
+                        <CPlaceholder
+                          as={CButton}
+                          xs={3}
+                          color='danger'
+                          tabIndex={-1}
+                        />
+                      </CPlaceholder>
+                    </CCol>
+                  </CRow>
+                </CListGroupItem>
+              </CListGroup>
             ))
           )
         ) : addresses.length === 0 ? (
-          <h3>{t("NO_ADDRESSES")}</h3>
+          <h3>{t('NO_ADDRESSES')}</h3>
         ) : (
           <>
-            <ListGroup>
+            <CListGroup>
               {Children.toArray(
                 addresses?.map((el) => (
-                  <ListGroup.Item
-                    action
-                    variant="info"
+                  <CListGroupItem
                     key={el.id}
-                    as={"div"}
-                    className="col-12 my-1"
+                    component={'div'}
+                    className='col-12 my-1 bg-light'
                   >
-                    <Row>
-                      <Col xs={"10"}>
+                    <CRow>
+                      <CCol xs={'10'}>
                         <p>
                           <AddressItem
                             value={`${el.first_name}  ${el.last_name}`}
-                            label={t("NAME")}
+                            label={t('NAME')}
                           />
                           <AddressItem
                             value={t(el.city, namespaces.SIGN_UP)}
-                            label={t("CITY")}
+                            label={t('CITY')}
                           />
-                          <AddressItem value={el.region} label={t("REGION")} />
+                          <AddressItem value={el.region} label={t('REGION')} />
                           <AddressItem
                             value={el.street_name}
-                            label={t("STREET")}
+                            label={t('STREET')}
                           />
-                          <AddressItem value={el.mobile} label={t("MOBILE")} />
+                          <AddressItem value={el.mobile} label={t('MOBILE')} />
                         </p>
-                      </Col>
+                      </CCol>
 
-                      <Col xs={"2"} className=" d-flex gap-1  ">
+                      <CCol xs={'2'} className=' d-flex gap-1  '>
                         <div>
                           <AddressModal
                             addressProp={el}
@@ -185,21 +192,18 @@ const Address = ({
                         <div>
                           <DeleteModal
                             onConfirm={() => handleDelete(el.id)}
-                            btnSize={"sm"}
+                            btnSize={'sm'}
                           />
                         </div>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
+                      </CCol>
+                    </CRow>
+                  </CListGroupItem>
                 ))
               )}
-            </ListGroup>
+            </CListGroup>
             <Paginator
               count={count}
               params={params}
-              // changeData={myAddressHandler}
-              // cookieName="addresses"
-              // updateParams={setParams}
               onPageChange={handlePageChange}
             />
           </>

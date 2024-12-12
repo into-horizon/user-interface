@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   checkVerificationCode,
   requestVerificationCode,
-  verificationHandler,
-  verifyHandler,
 } from '../../store/auth';
 import { useTranslation } from 'react-i18next';
 import {
@@ -23,12 +21,14 @@ import {
   CRow,
   CSpinner,
 } from '@coreui/react';
+import { Navigate } from 'react-router-dom';
+import Header from '../../component/common/Header';
 // import './verification.css';
 
 const Verification = () => {
   const { t } = useTranslation('verification');
   const dispatch = useDispatch();
-  const { loading, verificationCodeRequested } = useSelector(
+  const { loading, verificationCodeRequested, user } = useSelector(
     (state) => state.sign
   );
 
@@ -38,14 +38,18 @@ const Verification = () => {
   };
 
   useEffect(() => {
-    console.log('here');
     if (!verificationCodeRequested) {
       dispatch(requestVerificationCode());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verificationCodeRequested]);
+
+  if (user.verified) {
+    return <Navigate to={'/'} />;
+  }
   return (
     <div className=' min-vw-100 wrapper bg-light align-items-center  d-flex flex-row'>
+      <Header />
       <CContainer>
         <CRow className=' justify-content-center align-items-center '>
           <CCol xs={6}>

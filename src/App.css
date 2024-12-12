@@ -1,5 +1,5 @@
-@import "./css/responsive.css";
-@import "./css/rtl.css";
+@import './css/responsive.css';
+@import './css/rtl.css';
 
 :root {
   --btn-border-radius: 0.375rem;
@@ -26,7 +26,7 @@ a,
   cursor: pointer;
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=Roboto+Condensed:ital,wght@1,300&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&family=Roboto+Condensed:ital,wght@1,300&display=swap');
 
 .container2 {
   display: flex;
@@ -498,7 +498,7 @@ a,
 }
 
 .logo {
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   /* font-family: 'Roboto Condensed', sans-serif; */
   font-weight: 1000;
   font-size: 1.75rem;
@@ -735,7 +735,7 @@ a {
 .custom-table th,
 .custom-table tr {
   /* border:1px solid black; */
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: rgb(77, 72, 72);
 }
 
@@ -1178,7 +1178,7 @@ img {
 }
 
 .wrapper {
-  min-height: calc(100vh - 76px);
+  min-height: calc(100vh - 68px);
   background-size: cover;
   background-repeat: no-repeat;
   background: url(./assets/sigin.jpg);
@@ -1332,7 +1332,7 @@ select.form-control-input {
   text-align: right !important;
 }
 
-.main>div:nth-child(odd) {
+.main > div:nth-child(odd) {
   background-color: #e9e6e6 !important;
 }
 
@@ -1359,7 +1359,7 @@ select.form-control-input {
   margin-bottom: 350px;
 } */
 
-.main> :nth-child(odd) {
+.main > :nth-child(odd) {
   background-color: #fff;
 }
 
@@ -1376,7 +1376,7 @@ select.form-control-input {
 }
 
 .loader::before {
-  content: "";
+  content: '';
   position: absolute;
   background: var(--loader-color);
   top: 0;
@@ -1466,4 +1466,8 @@ select.form-control-input {
 
 .items-container {
   max-height: 90dvh;
+}
+
+.sidebar-nav .nav-link.active {
+  color: darkblue;
 }

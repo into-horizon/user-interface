@@ -7,14 +7,18 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  Link,
-  useLocation,
-  useNavigate,
   Navigate,
   Outlet,
+  NavLink,
 } from 'react-router-dom';
-import { Col, Row } from 'react-bootstrap';
-import { CSidebar, CSidebarBrand, CSidebarNav, CButton } from '@coreui/react';
+import {
+  CSidebar,
+  CSidebarBrand,
+  CSidebarNav,
+  CButton,
+  CCol,
+  CRow,
+} from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import {
   cilUser,
@@ -25,37 +29,37 @@ import {
   cilExpandRight,
 } from '@coreui/icons';
 import { useTranslation } from 'react-i18next';
-import { namespaces } from '../../i18n';
-import Header from '../../component/common/Header';
+import Header from '../component/common/Header';
+import { namespaces } from '../i18n';
 
 const routes = [
   {
-    path: '/account',
+    path: 'account',
     exact: true,
     sidebar: 'ACCOUNT',
     icon: cilUser,
   },
   {
-    path: '/address',
+    path: 'address',
     exact: true,
     sidebar: 'ADDRESSES',
     icon: cilMap,
   },
   {
-    path: '/notification',
+    path: 'notification',
     exact: true,
     sidebar: 'NOTIFICATIONS',
     icon: cilNotes,
   },
 
   {
-    path: '/orders',
+    path: 'orders',
     exact: true,
     sidebar: 'ORDERS',
     icon: cilTruck,
   },
   {
-    path: '/orderItems/:id',
+    path: 'orderItems/:id',
     exact: true,
     sidebar: 'Orders details',
     secondary: true,
@@ -63,9 +67,7 @@ const routes = [
 ];
 export const SideNavbar = ({ show, setShow, width }) => {
   const [narrow, setNarrow] = useState(false);
-  const location = useLocation();
   const { t, i18n } = useTranslation([namespaces.SETTINGS.ns]);
-  const navigate = useNavigate();
   const [icon, setIcon] = useState(cilExpandLeft);
   const [iconPosition, setIconPosition] = useState('text-end');
   const hideSidebar = useCallback(() => {
@@ -75,11 +77,6 @@ export const SideNavbar = ({ show, setShow, width }) => {
   useEffect(() => {
     width < 1000 && setNarrow(true);
   }, [width]);
-  useEffect(() => {
-    if (location.pathname === '/settings') {
-      navigate('/settings/account');
-    }
-  }, [location.pathname, navigate]);
   useEffect(() => {
     if (
       (narrow && i18n.language === 'ar') ||
@@ -106,14 +103,14 @@ export const SideNavbar = ({ show, setShow, width }) => {
             routes.map((route) =>
               route.secondary ? null : (
                 <li className='nav-item'>
-                  <Link className='nav-link' to={`/settings${route.path}`}>
+                  <NavLink className='nav-link' to={route.path}>
                     <CIcon
                       customClassName='nav-icon'
                       icon={route.icon}
                       className='mx-auto'
                     />
                     {t(route.sidebar)}
-                  </Link>
+                  </NavLink>
                 </li>
               )
             )
@@ -135,7 +132,7 @@ export const SideNavbar = ({ show, setShow, width }) => {
     </Fragment>
   );
 };
-const Settings = () => {
+const SettingsLayout = () => {
   const { t } = useTranslation([namespaces.SETTINGS.ns]);
   const { login } = useSelector((state) => state.sign);
 
@@ -155,7 +152,7 @@ const Settings = () => {
     return <Navigate to={'/signin'} />;
   }
   return (
-    <Row className='justify-content-start w-100 '>
+    <CRow className='justify-content-start w-100 w'>
       <Header />
       {!show && (
         <CButton
@@ -166,15 +163,15 @@ const Settings = () => {
           {t('SETTINGS_MENU')}
         </CButton>
       )}
-      <Col xs={'auto'}>
+      <CCol xs={'auto'}>
         <SideNavbar show={show} setShow={setShow} width={windowWidth} />
-      </Col>
+      </CCol>
 
-      <Col lg={6} md={9} sm={11} xs={12} className='m-3'>
+      <CCol lg={6} md={9} sm={11} xs={12} className='m-3'>
         <Outlet />
-      </Col>
-    </Row>
+      </CCol>
+    </CRow>
   );
 };
 
-export default Settings;
+export default SettingsLayout;

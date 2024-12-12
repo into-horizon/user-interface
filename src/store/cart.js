@@ -89,10 +89,12 @@ export const addCartItemHandler = (payload) => async (dispatch, state) => {
       if (status === 200) {
         dispatch(updateItemId({ currentId: payload.id, updateId: data.id }));
       } else {
+        dispatch(getCartItemsHandler());
         dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
       }
     }
   } catch (error) {
+    dispatch(getCartItemsHandler());
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
@@ -106,10 +108,12 @@ export const updateCartItemHandler = (payload) => async (dispatch, state) => {
       if (status === 200) {
         return;
       } else {
+        dispatch(getCartItemsHandler());
         dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
       }
     }
   } catch (error) {
+    dispatch(getCartItemsHandler());
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };
@@ -123,10 +127,12 @@ export const deleteCartItemHandler = (payload) => async (dispatch, state) => {
       if (status === 200) {
         return;
       } else {
+        dispatch(getCartItemsHandler());
         dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
       }
     }
   } catch (error) {
+    dispatch(getCartItemsHandler());
     dispatch(triggerToast({ message: error.message, type: ToastTypes.DANGER }));
   }
 };

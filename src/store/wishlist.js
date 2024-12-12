@@ -1,29 +1,29 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import cookie from "react-cookies";
-import NewWishlist from "../services/Wishlist";
-import { triggerToast } from "./toast";
-import { PopupType } from "react-custom-popup";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import cookie from 'react-cookies';
+import NewWishlist from '../services/Wishlist';
+import { triggerToast } from './toast';
+import { PopupType } from 'react-custom-popup';
 
-let cookieWishlist = () => cookie.load("wishlist") || [];
-const cookieWishlistIds = () => cookie.load("wishlist-ids") || [];
+let cookieWishlist = () => cookie.load('wishlist') || [];
+const cookieWishlistIds = () => cookie.load('wishlist-ids') || [];
 
 const initialState = {
-  message: "",
+  message: '',
   items: [...cookieWishlist()],
   ids: cookieWishlistIds(),
   loading: false,
   params: { limit: 5, offset: 0 },
 };
 const wishlist = createSlice({
-  name: "wishlist",
+  name: 'wishlist',
   initialState,
   reducers: {
     addProduct(state, action) {
       state.items = state.items.concat(action.payload);
       state.ids = state.ids.concat(action.payload.product_id);
       if (action.payload.cookie) {
-        cookie.save("wishlist", state.items, { path: "/" });
-        cookie.save("wishlist-ids", state.ids, { path: "/" });
+        cookie.save('wishlist', state.items, { path: '/' });
+        cookie.save('wishlist-ids', state.ids, { path: '/' });
       }
     },
     deleteProduct(state, action) {
@@ -33,8 +33,8 @@ const wishlist = createSlice({
       );
       state.ids = state.ids.filter((id) => id !== product_id);
       if (action.payload.cookie) {
-        cookie.save("wishlist", state.items, { path: "/" });
-        cookie.save("wishlist-ids", state.ids, { path: "/" });
+        cookie.save('wishlist', state.items, { path: '/' });
+        cookie.save('wishlist-ids', state.ids, { path: '/' });
       }
       // state.items = [...newState];
     },
@@ -93,19 +93,19 @@ export const addItemHandler = (payload) => async (dispatch, state) => {
 };
 
 export const getItemsHandler = createAsyncThunk(
-  "wishlist/getItems",
+  'wishlist/getItems',
   async (_, { dispatch, getState, rejectWithValue }) => {
     const { login } = getState().sign;
     const { ids } = getState().wishlist;
     try {
       if (login) {
-        const wishlistIds = cookie.load("wishlist-ids") ?? [];
+        const wishlistIds = cookie.load('wishlist-ids') ?? [];
         if (wishlistIds.filter((id) => !ids.includes(id)).length > 0) {
           await NewWishlist.addItem({
             product_id: wishlistIds.filter((id) => !ids.includes(id)),
           });
-          cookie.save("wishlist", [], { path: "/" });
-          cookie.save("wishlist-ids", [], { path: "/" });
+          cookie.save('wishlist', [], { path: '/' });
+          cookie.save('wishlist-ids', [], { path: '/' });
         }
         const { params } = getState().wishlist;
         const { status, message, result } = await NewWishlist.getItems(params);
@@ -126,7 +126,7 @@ export const getItemsHandler = createAsyncThunk(
 );
 
 export const getWishlistItemsIds = createAsyncThunk(
-  "wishlist/getIds",
+  'wishlist/getIds',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       const { message, status, data } = await NewWishlist.getItemsIds();

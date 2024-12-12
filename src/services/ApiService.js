@@ -60,7 +60,7 @@ export default class ApiService {
 
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message);
     }
   }
 
@@ -75,7 +75,7 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message);
     }
   }
 
@@ -89,7 +89,7 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message);
     }
   }
 
@@ -103,7 +103,7 @@ export default class ApiService {
       });
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      throw new Error(error.response?.data?.message);
     }
   }
   session() {

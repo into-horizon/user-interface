@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from 'react';
 // import "./productCard.0css";
-import { connect, useSelector } from "react-redux";
-import { addCartItemHandler, updateCartItemHandler } from "../store/cart";
-import StarRatings from "react-star-ratings";
-import { Link } from "react-router-dom";
-import image from "../assets/no-image.png";
-import { Card, Col, Row } from "react-bootstrap";
-import { addItemHandler, deleteItemHandler } from "../store/wishlist";
-import CIcon from "@coreui/icons-react";
-import { cilBasket, cilCheck } from "@coreui/icons";
-import { CButton, CFormSelect, CTooltip } from "@coreui/react";
-import { Heart, HeartFill } from "react-bootstrap-icons";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../i18n";
-import { CartItemModel, WishlistItemModel } from "../services/Models";
+import { connect, useSelector } from 'react-redux';
+import { addCartItemHandler, updateCartItemHandler } from '../store/cart';
+import StarRatings from 'react-star-ratings';
+import { Link } from 'react-router-dom';
+import image from '../assets/no-image.png';
+import { Card, Col, Row } from 'react-bootstrap';
+import { addItemHandler, deleteItemHandler } from '../store/wishlist';
+import CIcon from '@coreui/icons-react';
+import { cilBasket, cilCheck } from '@coreui/icons';
+import { CButton, CFormSelect, CTooltip } from '@coreui/react';
+import { Heart, HeartFill } from 'react-bootstrap-icons';
+import { useTranslation } from 'react-i18next';
+import { namespaces } from '../i18n';
+import { CartItemModel, WishlistItemModel } from '../services/Models';
 
 const ProductCard = ({
   cart,
@@ -28,6 +28,7 @@ const ProductCard = ({
     namespaces.COLOR.ns,
   ]);
   const { ids: wishlistIds } = useSelector((state) => state.wishlist);
+  const { data } = useSelector((state) => state.cart);
   const [heart, setHeart] = useState(1);
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
@@ -37,10 +38,23 @@ const ProductCard = ({
   const [success, setSuccess] = useState(false);
   const wishlistItem = { ...new WishlistItemModel(product) };
   const cartItem = useMemo(() => {
-    return { ...new CartItemModel({ ...product, size, color, quantity: 1 }) };
+    return {
+      ...new CartItemModel({
+        ...product,
+        size,
+        color,
+        quantity: 1,
+        product_quantity: product?.quantity,
+      }),
+    };
   }, [product, size, color]);
-  const AddBag = () => {
-    let item = cart.find(
+
+  const productCartItem = useMemo(
+    () => data.find((item) => item.product_id === product.id),
+    [data]
+  );
+  const addItem = () => {
+    const item = cart.find(
       (item) =>
         item.product_id === cartItem.product_id &&
         item.color === color &&
@@ -134,9 +148,9 @@ const ProductCard = ({
   }, [product]);
   return (
     <>
-      <Card className="position-relative m-auto w-100 h-100">
+      <Card className='position-relative m-auto w-100 h-100'>
         <small
-          className="position-absolute"
+          className='position-absolute'
           style={{ top: 10, left: 10 }}
           onClick={() => heartFunction(product)}
         >
@@ -145,49 +159,46 @@ const ProductCard = ({
             className={`fa ${heart ? "fa-heart-o" : "fa-heart"}`}
           ></i> */}
           {/* <CIcon icon={cilHeart}   /> */}
-          {heart ? <Heart color="red" /> : <HeartFill color="red" />}
+          {heart ? <Heart color='red' /> : <HeartFill color='red' />}
         </small>
         <Card.Img
-          variant="top"
+          variant='top'
           src={product.pictures?.[0] ?? image}
-          className="w-100 mx-auto"
+          className='w-100 mx-auto'
         />
         <Card.Header>
-          {" "}
+          {' '}
           <Link to={`/store/${product.store_id}`}>
             <small>{product.store_name}</small>
           </Link>
         </Card.Header>
         <Card.Body>
           <Card.Title>
-            {" "}
-            <Link to={`/product/${product.id}`} className="card-link">
+            {' '}
+            <Link to={`/product/${product.id}`} className='card-link'>
               {product[`${i18n.language}title`]}
             </Link>
           </Card.Title>
-          <Card.Subtitle>{t("description".toUpperCase())}</Card.Subtitle>
+          <Card.Subtitle>{t('description'.toUpperCase())}</Card.Subtitle>
           <Card.Text>{product[`${i18n.language}description`]}</Card.Text>
         </Card.Body>
         <Card.Body>
           <StarRatings
             rating={Number(product?.rate) || 0}
-            starDimension="1.5rem"
-            starSpacing=".05rem"
-            starRatedColor="yellow"
+            starDimension='1.5rem'
+            starSpacing='.05rem'
+            starRatedColor='yellow'
           />
         </Card.Body>
-        <Card.Body className="m-0 py-0">
-          <Row className=" justify-content-between  align-content-center ">
+        <Card.Body className='m-0 py-0'>
+          <Row className=' justify-content-between  align-content-center '>
             {sizes.length > 0 && (
-              <Col
-                xs='auto'
-                // xs={4} sm={4} md={5} lg={4} xl={4}
-              >
+              <Col xs='auto'>
                 <>
                   <CFormSelect
-                    id="size"
+                    id='size'
                     onChange={(e) => setSize(e.target.value)}
-                    floatingLabel={t("size".toUpperCase())}
+                    floatingLabel={t('size'.toUpperCase())}
                   >
                     {sizes.map((size, i) => (
                       <option key={`size${i}`} value={size}>
@@ -195,25 +206,16 @@ const ProductCard = ({
                       </option>
                     ))}
                   </CFormSelect>
-                  {/* <Form.Group className="mb-3">
-                    <Form.Label>{t("size".toUpperCase())}</Form.Label>
-                  </Form.Group> */}
                 </>
               </Col>
             )}
             {colors.length > 0 && (
-              <Col
-                xs="auto"
-                // xs={{ span: 5, offset: 3 }}
-                // md={{ span: 7, offset: 0 }}
-                // lg={{ span: 5, offset: 3 }}
-                // xl={{ span: 6, offset: 2 }}
-              >
+              <Col xs='auto'>
                 <>
                   <CFormSelect
-                    id="color"
+                    id='color'
                     onChange={(e) => setColor(e.target.value)}
-                    floatingLabel={t("Color".toUpperCase())}
+                    floatingLabel={t('Color'.toUpperCase())}
                   >
                     {colors.map((color, i) => (
                       <option key={`color${i}`} value={color}>
@@ -221,9 +223,6 @@ const ProductCard = ({
                       </option>
                     ))}
                   </CFormSelect>
-                  {/* <Form.Group className="mb-3">
-                    <Form.Label>{t("Color".toUpperCase())}</Form.Label>
-                  </Form.Group> */}
                 </>
               </Col>
             )}
@@ -231,60 +230,67 @@ const ProductCard = ({
         </Card.Body>
         <Card.Body
           as={Row}
-          className="justify-content-between align-items-center my-3 py-0"
+          className='justify-content-between align-items-center my-3 py-0'
         >
-          <Col xs="auto" className="my-3">
+          <Col xs='auto' className='my-3'>
             <Card.Link
-              as={"span"}
-              className="text-dark fw-bold bg-light p-3  border-1 rounded align-self-end"
+              as={'span'}
+              className='text-dark fw-bold bg-light p-3  border-1 rounded align-self-end'
             >
               {product.discount ? (
                 <>
-                  <sup className="text-decoration-line-through">
+                  <sup className='text-decoration-line-through'>
                     {`${(
                       product.final_price *
                       (1 + product.discount_rate)
                     )?.toFixed(2)} ${t(product.currency.toUpperCase())}`}
-                  </sup>{" "}
+                  </sup>{' '}
                   {`${product.final_price?.toFixed(2)} ${t(
                     product.currency.toUpperCase()
                   )}`}
                 </>
               ) : (
-                `${product.final_price?.toFixed(2)} ${t(product.currency.toUpperCase())}`
+                `${product.final_price?.toFixed(2)} ${t(
+                  product.currency.toUpperCase()
+                )}`
               )}
             </Card.Link>
           </Col>
-          <Col xs="auto">
+          <Col xs='auto'>
             <CTooltip
               content={
-                product.quantity <= 0 ? t("OUT_OF_STOCK") : t("ADD_TO_CART")
+                product.quantity <= 0 ? t('OUT_OF_STOCK') : t('ADD_TO_CART')
               }
             >
-              {/* <Card.Link
-                as={Button}
-                onClick={() => AddBag(product)}
-                disabled={product.quantity <= 0}
-              >
-                <CIcon icon={cilBasket} size="lg" />
-              </Card.Link> */}
               {success ? (
-                <CButton color="success" size="lg">
-                  <CIcon icon={cilCheck} size="xl" />
+                <CButton color='success' size='lg'>
+                  <CIcon icon={cilCheck} size='xl' />
                 </CButton>
               ) : (
                 <CButton
-                  onClick={() => AddBag(product)}
-                  disabled={product.quantity <= 0}
-                  size="lg"
-                  className=" text-light "
+                  onClick={() => addItem(product)}
+                  disabled={
+                    product.quantity <= 0 ||
+                    productCartItem?.quantity === product.quantity
+                  }
+                  size='lg'
+                  className=' text-light '
                 >
-                  <CIcon icon={cilBasket} size="xl" />
+                  <CIcon icon={cilBasket} size='xl' />
                 </CButton>
               )}
             </CTooltip>
           </Col>
         </Card.Body>
+        {productCartItem && (
+          <Card.Footer className=' bg-light p-0'>
+            <p className='text-center m-0'>
+              {productCartItem
+                ? t('IN_CART', { count: productCartItem.quantity })
+                : ''}
+            </p>
+          </Card.Footer>
+        )}
       </Card>
     </>
   );
