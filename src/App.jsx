@@ -38,6 +38,8 @@ import Page500 from './pages/page500/500';
 import GlobalDialog from './component/common/Dialog';
 import SettingsLayout from './layouts/SettingsLayout';
 import Verification from './pages/verification/verification';
+import Checkout from './pages/Checkout';
+import PlacedOrder from './component/PlacedOrder';
 
 const Main = lazy(() => import('./pages/main'));
 const Page404 = lazy(() => import('./pages/Page404'));
@@ -147,11 +149,11 @@ const App = ({
   }, [i18n.language]);
   useEffect(() => {
     if (token && !login) return;
-    if (login && !user?.verified) {
+    if (login && !user?.client?.verified) {
       navigate('/verification');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname, login, user?.verified]);
+  }, [location.pathname, login, user?.client?.verified]);
 
   if (globalLoading) {
     return <Loader />;
@@ -176,8 +178,12 @@ const App = ({
                   <Route path='products' element={<Products />} />
                   <Route path='product/:id' element={<Product />} />
                   <Route path='store/:id' element={<Seller />} />
+                  <Route path='checkout' element={<Checkout />} />
+                  <Route path='successOrder' element={<PlacedOrder />} />
                 </Route>
-                <Route path='/verification' element={<Verification />} />
+                <Route path='verification' element={<MainLayout />}>
+                  <Route index element={<Verification />} />
+                </Route>
                 <Route path='settings' element={<SettingsLayout />}>
                   <Route index element={<Navigate to='account' replace />} />
                   <Route path='account' element={<Account />} />

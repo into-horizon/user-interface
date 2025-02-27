@@ -1,4 +1,3 @@
-import { type } from 'os';
 import ProductService from '../services/Product';
 import { createSlice } from '@reduxjs/toolkit';
 

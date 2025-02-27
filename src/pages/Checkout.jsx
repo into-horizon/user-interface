@@ -49,7 +49,6 @@ export const Checkout = ({
     namespaces.GLOBAL.ns,
   ]);
   const { data: addresses } = useSelector((state) => state.address);
-  console.log("🚀 ~ addresses:", addresses)
   const { data: cart, loading } = useSelector((state) => state.cart);
   const { placedOrder, loading: orderLoading } = useSelector(
     (state) => state.order

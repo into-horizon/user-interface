@@ -16,7 +16,7 @@
 //     }
 //     async updateProfileInfo(data){
 //         try {
-//             let response =await this.update(`${this.path}/update/profile`,data,this.bearer(this.token));
+//             let response =await this.put(`${this.path}/update/profile`,data,this.bearer(this.token));
 //             return response;
 //         } catch (error) {
 //             return error;
@@ -24,7 +24,7 @@
 //     }
 //     async updateEmail(data){
 //         try {
-//             let response =await this.update(`${this.path}/user/email`,data,this.bearer(this.token));
+//             let response =await this.put(`${this.path}/user/email`,data,this.bearer(this.token));
 //             return response;
 //         } catch (error) {
 //             return error;
@@ -32,7 +32,7 @@
 //     }
 //     async updatePicture(data){
 //         try {
-//             let response =await this.update(`${this.path}/profile/picture`,data,this.bearer(this.token));
+//             let response =await this.put(`${this.path}/profile/picture`,data,this.bearer(this.token));
 //             return response;
 //         } catch (error) {
 //             return error;
@@ -40,7 +40,7 @@
 //     }
 //     async deactivate(){
 //         try {
-//             let response =await this.update(`${this.path}/deactivate`,null,this.bearer(this.token));
+//             let response =await this.put(`${this.path}/deactivate`,null,this.bearer(this.token));
 //             return response;
 //         } catch (error) {
 //             return error;

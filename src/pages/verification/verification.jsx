@@ -31,26 +31,25 @@ const Verification = () => {
   const { loading, verificationCodeRequested, user } = useSelector(
     (state) => state.sign
   );
-
   const handleVerification = async (e) => {
     e.preventDefault();
     dispatch(checkVerificationCode(e.target.code.value));
   };
 
   useEffect(() => {
-    if (!verificationCodeRequested) {
+    if (!verificationCodeRequested && !user?.client?.verified) {
       dispatch(requestVerificationCode());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [verificationCodeRequested]);
 
-  if (user.verified) {
+  if (user?.client?.verified) {
     return <Navigate to={'/'} />;
   }
   return (
-    <div className=' min-vw-100 wrapper bg-light align-items-center  d-flex flex-row'>
-      <Header />
-      <CContainer>
+    <div className=' min-vw-100 wrapper bg-light align-items-center justify-content-between   d-flex flex-column'>
+      {/* <Header /> */}
+      <CContainer className=' m-auto'>
         <CRow className=' justify-content-center align-items-center '>
           <CCol xs={6}>
             <CCard>

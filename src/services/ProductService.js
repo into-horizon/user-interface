@@ -34,7 +34,7 @@ export default class ProductService extends ApiService{
     }
     async updateProduct(data){
         try { 
-            let res = await this.update(`${this.path}`, data); 
+            let res = await this.put(`${this.path}`, data); 
             return res.data;
         } catch (error) {
             throw new Error(error.message); 

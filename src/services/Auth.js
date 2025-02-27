@@ -12,13 +12,13 @@ class Auth extends ApiService {
     return await this.get(`${this.path}/profile`);
   }
   async updateProfileInfo(data) {
-    return await this.update(`${this.path}/update/profile`, data);
+    return await this.put(`${this.path}/update/profile`, data);
   }
   async updateEmail(data) {
-    return await this.update(`${this.path}/user/email`, data);
+    return await this.put(`${this.path}/user/email`, data);
   }
   async updateMobile(data) {
-    return await this.update(`${this.path}/user/mobile`, data);
+    return await this.put(`${this.path}/user/mobile`, data);
   }
   async insertAddress(data) {
     return await this.post(`${this.path2}/add/address`, data);
@@ -27,19 +27,19 @@ class Auth extends ApiService {
     return await this.get(`${this.path2}/get/address`, data);
   }
   async updateAddress(data) {
-    return await this.update(`${this.path2}/update/address`, data);
+    return await this.put(`${this.path2}/update/address`, data);
   }
   async removeAddress(data) {
-    return await this.update(`${this.path2}/remove/address`, data);
+    return await this.put(`${this.path2}/remove/address`, data);
   }
   async updatePicture(data) {
-    return await this.update(`${this.path2}/profile/picture`, data);
+    return await this.put(`${this.path2}/profile/picture`, data);
   }
   async removePicture(data) {
     return await this.delete(`${this.path2}/profile/picture`, data);
   }
   async deactivate() {
-    return await this.update(`${this.path}/deactivate`, null);
+    return await this.put(`${this.path}/deactivate`, null);
   }
   async verification() {
     return await this.post(`${this.path}/user/verification`, null);
@@ -54,7 +54,7 @@ class Auth extends ApiService {
     return await this.post(`${this.path}/signout`, null);
   }
   async changePassword(data) {
-    return await this.update(`${this.path}/user/password`, data);
+    return await this.put(`${this.path}/user/password`, data);
   }
   async checkAPI() {
     try {
@@ -67,7 +67,7 @@ class Auth extends ApiService {
     return this.post(`${this.path}/verify-code`, { code });
   }
   async requestVerificationCode() {
-    return this.update(`${this.path}/verify-code`);
+    return this.put(`${this.path}/verify-code`);
   }
   async resetPasswordProvideReference(reference) {
     return this.post(`${this.path}/user/password/generateToken`, {
