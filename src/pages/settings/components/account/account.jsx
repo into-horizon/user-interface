@@ -1,5 +1,5 @@
 import React, { Children, useEffect, useState } from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   updateProfileHandler,
   updatePictureHandler,

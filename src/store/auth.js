@@ -447,7 +447,7 @@ export const deactivateProfileHandler = createAsyncThunk(
       }
     } catch (error) {
       dispatch(loginAction({ message: error.message }));
-      return rejectWithValue(data.message);
+      return rejectWithValue(error.message);
     }
   }
 );
