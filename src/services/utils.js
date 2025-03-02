@@ -1,15 +1,15 @@
-import i18next from "i18next";
-import { namespaces } from "../i18n";
+import i18next from 'i18next';
+import { namespaces } from '../i18n';
 
 export const ToastTypes = {
-  PRIMARY: "primary",
-  SECONDARY: "secondary",
-  SUCCESS: "success",
-  DANGER: "danger",
-  WARNING: "warning",
-  INFO: "info",
-  LIGHT: "light",
-  DARK: "dark",
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  SUCCESS: 'success',
+  DANGER: 'danger',
+  WARNING: 'warning',
+  INFO: 'info',
+  LIGHT: 'light',
+  DARK: 'dark',
 };
 
 export function validatePassword(password) {
@@ -22,34 +22,34 @@ export function validatePassword(password) {
     return true;
   } else {
     // Generate an error message based on the specific missing criteria
-    let errorMessage = i18next.t("INVALID_PASSWORD", namespaces.SIGN_UP);
+    let errorMessage = i18next.t('INVALID_PASSWORD', namespaces.SIGN_UP);
     if (!/(?=.*[0-9])/.test(password)) {
-      errorMessage += i18next.t("INVALID_NUMBER", namespaces.SIGN_UP);
+      errorMessage += i18next.t('INVALID_NUMBER', namespaces.SIGN_UP);
     }
     if (!/(?=.*[A-Z])/.test(password)) {
-      errorMessage += i18next.t("INVALID_CAPITAL_LETTER", namespaces.SIGN_UP);
+      errorMessage += i18next.t('INVALID_CAPITAL_LETTER', namespaces.SIGN_UP);
     }
     if (!/(?=.*[a-z])/.test(password)) {
-      errorMessage += i18next.t("INVALID_SMALL_LETTER", namespaces.SIGN_UP);
+      errorMessage += i18next.t('INVALID_SMALL_LETTER', namespaces.SIGN_UP);
     }
     if (!/(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])/.test(password)) {
-      errorMessage += i18next.t("INVALID_SPECIAL_CHARACTERS", {
-        ns: "sign-up",
+      errorMessage += i18next.t('INVALID_SPECIAL_CHARACTERS', {
+        ns: 'sign-up',
       });
     }
     if (password.length < 8) {
-      errorMessage += i18next.t("INVALID_LENGTH", namespaces.SIGN_UP);
+      errorMessage += i18next.t('INVALID_LENGTH', namespaces.SIGN_UP);
     }
     errorMessage = errorMessage.slice(0, -2); // Remove the trailing comma and space
-    errorMessage += ".";
+    errorMessage += '.';
 
     throw errorMessage;
   }
 }
 
 export const formatLocalizationKey = (key) => {
-  if (typeof key === "string") {
-    return key.toUpperCase().replaceAll(" ", "_");
+  if (typeof key === 'string') {
+    return key.toUpperCase().replaceAll(' ', '_');
   }
-  return "";
+  return '';
 };

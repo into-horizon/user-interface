@@ -23,6 +23,7 @@ const initialState = {
     isResetTokenInvalid: false,
     success: false,
   },
+  isUpdateProfile: false,
   changePassword: { isSuccess: undefined, feedback: '' },
 };
 const sign = createSlice({
@@ -160,6 +161,16 @@ const sign = createSlice({
       state.loading = false;
     });
     builder.addCase(updateProfileHandler.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updatePictureHandler.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.profile_picture = action.payload.profile_picture;
+    });
+    builder.addCase(updatePictureHandler.rejected, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updatePictureHandler.pending, (state) => {
       state.loading = true;
     });
   },
@@ -369,18 +380,33 @@ export const updateMobileHandler = (payload) => async (dispatch, state) => {
     dispatch(loginAction({ message: error.message }));
   }
 };
-export const updatePictureHandler = (payload) => async (dispatch, state) => {
-  try {
-    let { user, status, message } = await AuthService.updatePicture(payload);
-    if (status === 200) {
-      dispatch(loginAction({ user: user }));
-    } else {
-      dispatch(loginAction({ message: message }));
+
+export const updatePictureHandler = createAsyncThunk(
+  'profile/picture/update',
+  async (payload, { dispatch, rejectWithValue }) => {
+    try {
+      const {
+        message,
+        status,
+        user: data,
+      } = await AuthService.updatePicture(payload);
+      if (status === 200) {
+        dispatch(triggerToast({ message, type: ToastTypes.INFO }));
+        return data;
+      } else {
+        dispatch(triggerToast({ message, type: ToastTypes.DANGER }));
+        return rejectWithValue(message);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        dispatch(
+          triggerToast({ message: error.message, type: ToastTypes.DANGER })
+        );
+        return rejectWithValue(error.message);
+      }
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
 
 export const deleteProfilePicture = createAsyncThunk(
   'profile/picture/delete',
@@ -406,18 +432,25 @@ export const deleteProfilePicture = createAsyncThunk(
     }
   }
 );
-export const deactivateProfileHandler = () => async (dispatch, state) => {
-  try {
-    let data = await AuthService.deactivate();
-    if (data.status === 403) {
-      dispatch(loginAction({ message: data.message }));
-    } else {
-      dispatch(loginAction({ message: data.message }));
+
+export const deactivateProfileHandler = createAsyncThunk(
+  'auth/deactivate',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const data = await AuthService.deactivate();
+      if (data.status === 403) {
+        dispatch(loginAction({ message: data.message }));
+        dispatch(logOutHandler());
+      } else {
+        dispatch(loginAction({ message: data.message }));
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      dispatch(loginAction({ message: error.message }));
+      return rejectWithValue(data.message);
     }
-  } catch (error) {
-    dispatch(loginAction({ message: error.message }));
   }
-};
+);
 
 export const changePasswordHandler = createAsyncThunk(
   'auth/changePassword',

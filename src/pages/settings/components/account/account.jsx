@@ -1,20 +1,19 @@
-import React, { Children, useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import React, { Children, useEffect, useState } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import {
   updateProfileHandler,
   updatePictureHandler,
   deactivateProfileHandler,
-  logOutHandler,
   changePasswordHandler,
   deleteProfilePicture,
-} from "../../../../store/auth";
-import { Button, Row, Form, Col, Accordion } from "react-bootstrap";
-import { usePopup } from "react-custom-popup";
-import ChangeEmail from "./changeEmail";
-import CIcon from "@coreui/icons-react";
-import { cilCloudUpload } from "@coreui/icons";
-import DeleteModal from "../../../../component/common/DeleteModal";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+} from '../../../../store/auth';
+import { Button, Row, Form, Col, Accordion } from 'react-bootstrap';
+import { usePopup } from 'react-custom-popup';
+import ChangeEmail from './changeEmail';
+import CIcon from '@coreui/icons-react';
+import { cilCloudUpload } from '@coreui/icons';
+import DeleteModal from '../../../../component/common/DeleteModal';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import {
   CFormInput,
   CFormSelect,
@@ -22,22 +21,14 @@ import {
   CInputGroup,
   CRow,
   CSpinner,
-} from "@coreui/react";
-import { State } from "country-state-city";
-import { useTranslation } from "react-i18next";
-import { namespaces } from "../../../../i18n";
-import { Eye, EyeSlash } from "react-bootstrap-icons";
-import { validatePassword } from "../../../../services/utils";
+} from '@coreui/react';
+import { State } from 'country-state-city';
+import { useTranslation } from 'react-i18next';
+import { namespaces } from '../../../../i18n';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { validatePassword } from '../../../../services/utils';
 
-const Account = ({
-  updateProfileHandler,
-  updatePictureHandler,
-  profileData,
-  deactivateProfileHandler,
-  logOutHandler,
-  changePasswordHandler,
-  deleteProfilePicture,
-}) => {
+const Account = () => {
   const {
     loading,
     user: { first_name, last_name, city, profile_picture },
@@ -49,14 +40,15 @@ const Account = ({
     namespaces.GLOBAL.ns,
   ]);
   const { showOptionDialog } = usePopup();
+  const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
-  const [passwordType, setPasswordType] = useState("password");
-  const [newPasswordType, setNewPasswordType] = useState("password");
+  const [passwordType, setPasswordType] = useState('password');
+  const [newPasswordType, setNewPasswordType] = useState('password');
   const [invalidPasswordConfirmation, setInvalidPasswordConfirmation] =
     useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
     invalid: false,
-    message: "",
+    message: '',
   });
 
   let data;
@@ -67,7 +59,7 @@ const Account = ({
       last_name: e.target.last_name.value,
       city: e.target.city.value,
     };
-    updateProfileHandler(data);
+    dispatch(updateProfileHandler(data));
   };
   const deactivateHandler = () => {
     showPopup();
@@ -77,33 +69,32 @@ const Account = ({
     showOptionDialog({
       containerStyle: { width: 350 },
       text: (
-        <p className={i18n.language === "ar" ? " text-end" : ""}>
-          {t("DEACTIVATE_MESSAGE")}
+        <p className={i18n.language === 'ar' ? ' text-end' : ''}>
+          {t('DEACTIVATE_MESSAGE')}
         </p>
       ),
-      title: t("DEACTIVATE"),
+      title: t('DEACTIVATE'),
       options: [
         {
-          name: t("CANCEL", namespaces.GLOBAL),
-          type: "cancel",
+          name: t('CANCEL', namespaces.GLOBAL),
+          type: 'cancel',
         },
         {
-          name: t("CONFIRM", namespaces.GLOBAL),
-          type: "confirm",
-          style: { background: "lightcoral" },
+          name: t('CONFIRM', namespaces.GLOBAL),
+          type: 'confirm',
+          style: { background: 'lightcoral' },
         },
       ],
       onConfirm: () => {
-        deactivateProfileHandler();
-        logOutHandler();
+        dispatch(deactivateProfileHandler());
       },
     });
   };
 
   const changeHandler = (e) => {
     let formData = new FormData();
-    formData.append("image", e.target.files[0]);
-    updatePictureHandler(formData);
+    formData.append('image', e.target.files[0]);
+    dispatch(updatePictureHandler(formData));
   };
 
   const updatePasswordHandler = (e) => {
@@ -127,7 +118,7 @@ const Account = ({
       new: newPassword.value,
       repeatedPassword: repeatedPassword.value,
     };
-    changePasswordHandler(obj);
+    dispatch(changePasswordHandler(obj));
   };
 
   // const Error = ({ data }) => {
@@ -139,48 +130,48 @@ const Account = ({
   // };
 
   useEffect(() => {
-    setCities(State.getStatesOfCountry(String("JO")));
+    setCities(State.getStatesOfCountry(String('JO')));
   }, []);
   return (
     <div>
       <>
-        <Row className="justify-content-center align-content-center">
+        <Row className='justify-content-center align-content-center'>
           <>
-            <Col xs={"6"} className="justify-content-center row">
+            <Col xs={'6'} className='justify-content-center row'>
               <LazyLoadImage
-                className="w-50 h-50 mx-auto img-thumbnail"
+                className='w-50 h-50 mx-auto img-thumbnail'
                 src={profile_picture}
-                loading="lazy"
+                loading='lazy'
               />
-              <Col xs={"8"}>
-                <Row className="justify-content-between">
-                  <Col xs={"auto"}>
+              <Col xs={'8'}>
+                <Row className='justify-content-between'>
+                  <Col xs={'auto'}>
                     <Form>
                       <Form.Group>
                         <Form.Label
-                          htmlFor="file-input"
-                          className="btn btn-secondary"
+                          htmlFor='file-input'
+                          className='btn btn-secondary'
                         >
                           <CIcon icon={cilCloudUpload} />
                         </Form.Label>
                         <Form.Control
-                          id="file-input"
-                          type="file"
-                          name="file-input"
-                          accept="image/*"
+                          id='file-input'
+                          type='file'
+                          name='file-input'
+                          accept='image/*'
                           hidden
                           onChange={changeHandler}
                         />
                       </Form.Group>
                     </Form>
                   </Col>
-                  <Col xs={"auto"}>
+                  <Col xs={'auto'}>
                     <DeleteModal
                       onConfirm={(close) => {
-                        deleteProfilePicture();
+                        dispatch(deleteProfilePicture());
                         close();
                       }}
-                      disabled={profile_picture?.includes("default")}
+                      disabled={profile_picture?.includes('default')}
                     />
                   </Col>
                 </Row>
@@ -190,56 +181,56 @@ const Account = ({
         </Row>
       </>
 
-      <Row className="w-100">
+      <Row className='w-100'>
         <Col xs={12}>
-          <Accordion defaultActiveKey="0" className="w-100">
-            <Accordion.Item eventKey="0" className="w-100">
-              <Accordion.Header>{t("PERSONAL_INFO")}</Accordion.Header>
+          <Accordion defaultActiveKey='0' className='w-100'>
+            <Accordion.Item eventKey='0' className='w-100'>
+              <Accordion.Header>{t('PERSONAL_INFO')}</Accordion.Header>
               <Accordion.Body>
-                <Form onSubmit={updateHandler} className="w-100">
+                <Form onSubmit={updateHandler} className='w-100'>
                   <CRow xs={{ gutterY: 2 }}>
-                    <Col xs="12" lg="6">
+                    <Col xs='12' lg='6'>
                       <CFormInput
-                        floatingLabel={t("FIRST_NAME", namespaces.SIGN_UP)}
-                        placeholder={t("FIRST_NAME", namespaces.SIGN_UP)}
-                        id="first_name"
-                        value={first_name ?? ""}
+                        floatingLabel={t('FIRST_NAME', namespaces.SIGN_UP)}
+                        placeholder={t('FIRST_NAME', namespaces.SIGN_UP)}
+                        id='first_name'
+                        value={first_name ?? ''}
                       />
                     </Col>
-                    <Col xs="12" lg="6">
+                    <Col xs='12' lg='6'>
                       <CFormInput
                         floatingLabel={t(
-                          "last_name".toUpperCase(),
+                          'last_name'.toUpperCase(),
                           namespaces.SIGN_UP
                         )}
                         placeholder={t(
-                          "last_name".toUpperCase(),
+                          'last_name'.toUpperCase(),
                           namespaces.SIGN_UP
                         )}
-                        id="last_name"
-                        value={last_name ?? ""}
+                        id='last_name'
+                        value={last_name ?? ''}
                       />
                     </Col>
 
-                    <Col xs="12" lg="6">
+                    <Col xs='12' lg='6'>
                       <CFormSelect
                         floatingLabel={t(
-                          "city".toUpperCase(),
+                          'city'.toUpperCase(),
                           namespaces.SIGN_UP
                         )}
                         placeholder={t(
-                          "city".toUpperCase(),
+                          'city'.toUpperCase(),
                           namespaces.SIGN_UP
                         )}
-                        name="city"
-                        id="city"
-                        defaultValue={profileData ? city : "City"}
+                        name='city'
+                        id='city'
+                        defaultValue={city}
                       >
                         {Children.toArray(
                           cities.map((item) => (
-                            <option value={item.name.split(" ")[0]}>
+                            <option value={item.name.split(' ')[0]}>
                               {t(
-                                item.name.split(" ")[0].toUpperCase(),
+                                item.name.split(' ')[0].toUpperCase(),
                                 namespaces.SIGN_UP
                               )}
                             </option>
@@ -247,143 +238,124 @@ const Account = ({
                         )}
                       </CFormSelect>
                     </Col>
-                    {/* <Col xs="12" lg="6">
-                      <CFormSelect
-                        floatingLabel={t(
-                          "gender".toUpperCase(),
-                          namespaces.SIGN_UP
-                        )}
-                        placeholder="city"
-                        name="city"
-                        id="city"
-                        defaultValue={profileData ? profileData?.gender : ""}
-                      >
-                        <option value="male">
-                          {t("MALE", namespaces.SIGN_UP)}
-                        </option>
-                        <option value="female">
-                          {t("FEMALE", namespaces.SIGN_UP)}
-                        </option>
-                      </CFormSelect>
-                    </Col> */}
                   </CRow>
 
                   <Button
-                    variant="outline-primary"
-                    className="mt-2"
-                    type="submit"
+                    variant='outline-primary'
+                    className='mt-2'
+                    type='submit'
                     disabled={loading}
                   >
                     {loading ? (
-                      <CSpinner size="sm" variant="grow" />
+                      <CSpinner size='sm' variant='grow' />
                     ) : (
-                      t("SAVE_CHANGES", namespaces.GLOBAL)
+                      t('SAVE_CHANGES', namespaces.GLOBAL)
                     )}
                   </Button>
                 </Form>
               </Accordion.Body>
             </Accordion.Item>
-            <Accordion.Item eventKey="1">
-              <Accordion.Header>{t("ACCOUNT_INFO")}</Accordion.Header>
+            <Accordion.Item eventKey='1'>
+              <Accordion.Header>{t('ACCOUNT_INFO')}</Accordion.Header>
               <Accordion.Body>
                 <ChangeEmail />
               </Accordion.Body>
             </Accordion.Item>
-            <Accordion.Item eventKey="2">
-              <Accordion.Header>{t("CHANGE_PASSWORD")}</Accordion.Header>
+            <Accordion.Item eventKey='2'>
+              <Accordion.Header>{t('CHANGE_PASSWORD')}</Accordion.Header>
               <Accordion.Body>
-                <Form onSubmit={updatePasswordHandler} className="h-100">
-                  <Row className="gy-3">
-                    <Col xs="12">
+                <Form onSubmit={updatePasswordHandler} className='h-100'>
+                  <Row className='gy-3'>
+                    <Col xs='12'>
                       <CInputGroup>
                         <CFormInput
-                          placeholder={t("CURRENT_PASSWORD")}
-                          floatingLabel={t("CURRENT_PASSWORD")}
+                          placeholder={t('CURRENT_PASSWORD')}
+                          floatingLabel={t('CURRENT_PASSWORD')}
                           type={passwordType}
-                          id="password"
-                          name="password"
-                          autoComplete="true"
+                          id='password'
+                          name='password'
+                          autoComplete='true'
                           required
                         />
                         <Button
-                          className="bg-light"
-                          color="secondary"
-                          variant="outline"
+                          className='bg-light'
+                          color='secondary'
+                          variant='outline'
                           onClick={() =>
                             setPasswordType(
-                              passwordType === "password" ? "text" : "password"
+                              passwordType === 'password' ? 'text' : 'password'
                             )
                           }
                         >
-                          {passwordType === "password" ? (
-                            <Eye color="secondary" />
+                          {passwordType === 'password' ? (
+                            <Eye color='secondary' />
                           ) : (
-                            <EyeSlash color="secondary" />
+                            <EyeSlash color='secondary' />
                           )}
                         </Button>
                       </CInputGroup>
                     </Col>
-                    <Col xs="12">
+                    <Col xs='12'>
                       <CInputGroup>
                         <CFormInput
-                          placeholder={t("NEW_PASSWORD")}
-                          floatingLabel={t("NEW_PASSWORD")}
+                          placeholder={t('NEW_PASSWORD')}
+                          floatingLabel={t('NEW_PASSWORD')}
                           type={newPasswordType}
-                          id="newPassword"
+                          id='newPassword'
                           invalid={passwordValidation.invalid}
                           required
-                          autoComplete="true"
+                          autoComplete='true'
                         />
                         <Button
-                          className="bg-light"
-                          color="secondary"
-                          variant="outline"
+                          className='bg-light'
+                          color='secondary'
+                          variant='outline'
                           onClick={() =>
                             setNewPasswordType(
-                              newPasswordType === "password"
-                                ? "text"
-                                : "password"
+                              newPasswordType === 'password'
+                                ? 'text'
+                                : 'password'
                             )
                           }
                         >
-                          {newPasswordType === "password" ? (
-                            <Eye color="secondary" />
+                          {newPasswordType === 'password' ? (
+                            <Eye color='secondary' />
                           ) : (
-                            <EyeSlash color="secondary" />
+                            <EyeSlash color='secondary' />
                           )}
                         </Button>
                       </CInputGroup>
                       {passwordValidation.invalid && (
-                        <CFormText className=" text-danger mb-2 mt-0">
+                        <CFormText className=' text-danger mb-2 mt-0'>
                           {passwordValidation.message}
                         </CFormText>
                       )}
                     </Col>
-                    <Col xs="12">
+                    <Col xs='12'>
                       <CFormInput
-                        placeholder={t("CONFIRM_NEW_PASSWORD")}
-                        floatingLabel={t("CONFIRM_NEW_PASSWORD")}
+                        placeholder={t('CONFIRM_NEW_PASSWORD')}
+                        floatingLabel={t('CONFIRM_NEW_PASSWORD')}
                         type={newPasswordType}
-                        id="repeatedPassword"
+                        id='repeatedPassword'
                         required
                         invalid={invalidPasswordConfirmation}
-                        autoComplete="true"
+                        autoComplete='true'
                         feedbackInvalid={t(
-                          "INVALID_REPEATED_PASSWORD",
+                          'INVALID_REPEATED_PASSWORD',
                           namespaces.SIGN_UP
                         )}
                       />
                     </Col>
-                    <Col xs="12">
+                    <Col xs='12'>
                       <Button
-                        variant="outline-primary"
-                        type="submit"
+                        variant='outline-primary'
+                        type='submit'
                         disabled={loading}
                       >
                         {loading ? (
-                          <CSpinner size="sm" variant="grow" />
+                          <CSpinner size='sm' variant='grow' />
                         ) : (
-                          t("SAVE_CHANGES", namespaces.GLOBAL)
+                          t('SAVE_CHANGES', namespaces.GLOBAL)
                         )}
                       </Button>
                     </Col>
@@ -395,26 +367,15 @@ const Account = ({
         </Col>
       </Row>
       <Button
-        variant="danger"
-        className="my-2"
-        type="submit"
+        variant='danger'
+        className='my-2'
+        type='submit'
         onClick={deactivateHandler}
       >
-        {t("DEACTIVATE")}
+        {t('DEACTIVATE')}
       </Button>
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  profileData: state.sign ? state.sign : null,
-});
-const mapDispatchToProps = {
-  updateProfileHandler,
-  updatePictureHandler,
-  deactivateProfileHandler,
-  logOutHandler,
-  changePasswordHandler,
-  deleteProfilePicture,
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Account);
+export default Account;
